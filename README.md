@@ -201,33 +201,6 @@ $ python3 test/discrete/test_pg.py --seed 0 --render 0.03
   <img src="https://github.com/thu-ml/tianshou/raw/master/docs/_static/images/testpg.gif"></a>
 </div>
 
-## Contributing
-
-Tianshou is still under development. More algorithms and features are going to be added and we always welcome contributions to help make Tianshou better. If you would like to contribute, please check out [this link](https://tianshou.readthedocs.io/en/master/contributing.html).
-
-## Citing Tianshou
-
-If you find Tianshou useful, please cite it in your publications.
-
-```latex
-@article{tianshou,
-  author  = {Jiayi Weng and Huayu Chen and Dong Yan and Kaichao You and Alexis Duburcq and Minghao Zhang and Yi Su and Hang Su and Jun Zhu},
-  title   = {Tianshou: A Highly Modularized Deep Reinforcement Learning Library},
-  journal = {Journal of Machine Learning Research},
-  year    = {2022},
-  volume  = {23},
-  number  = {267},
-  pages   = {1--6},
-  url     = {http://jmlr.org/papers/v23/21-1127.html}
-}
-```
-
-## Acknowledgment
-
-Tianshou was previously a reinforcement learning platform based on TensorFlow. You can check out the branch [`priv`](https://github.com/thu-ml/tianshou/tree/priv) for more detail. Many thanks to [Haosheng Zou](https://github.com/HaoshengZou)'s pioneering work for Tianshou before version 0.1.1.
-
-We would like to thank [TSAIL](http://ml.cs.tsinghua.edu.cn/) and [Institute for Artificial Intelligence, Tsinghua University](http://ml.cs.tsinghua.edu.cn/thuai/) for providing such an excellent AI research platform.
-
 ## 参考
 
 <details><summary> 展开 </summary><p>
@@ -237,5 +210,7 @@ We would like to thank [TSAIL](http://ml.cs.tsinghua.edu.cn/) and [Institute for
 [2] [Welcome to Tianshou!](https://tianshou.readthedocs.io/en/master/)
 
 [3] [欢迎查看天授平台中文文档](https://tianshou.readthedocs.io/zh/master/)
+
+[4] [Tianshou: A Highly Modularized Deep Reinforcement Learning Library](https://jmlr.org/papers/v23/21-1127.html)
 
 </p></details>
