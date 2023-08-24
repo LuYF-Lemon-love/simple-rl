@@ -50,36 +50,34 @@ Here are Tianshou's other features:
 - Support multi-GPU training [Usage](https://tianshou.readthedocs.io/en/master/tutorials/cheatsheet.html#multi-gpu)
 - Comprehensive documentation, PEP8 code-style checking, type checking and thorough [tests](https://github.com/thu-ml/tianshou/actions)
 
-## Installation
+## 安装
 
-Tianshou is currently hosted on [PyPI](https://pypi.org/project/tianshou/) and [conda-forge](https://github.com/conda-forge/tianshou-feedstock). It requires Python >= 3.8.
-
-You can simply install Tianshou from PyPI with the following command:
+你能使用下面命令来安装：
 
 ```bash
-$ pip install tianshou
+$ git clone git@github.com:LuYF-Lemon-love/simple-rl.git
+$ cd simple-rl
+$ python -m venv env
+$ source env/bin/activate
+$ which python
+$ pip install --upgrade pip
+$ pip install .
 ```
 
-If you use Anaconda or Miniconda, you can install Tianshou from conda-forge through the following command:
+你也能直接从 GitHub 安装最新的版本：
 
 ```bash
-$ conda install tianshou -c conda-forge
+$ pip install git+https://github.com/LuYF-Lemon-love/simple-rl.git@main --upgrade
 ```
 
-You can also install with the newest version through GitHub:
-
-```bash
-$ pip install git+https://github.com/thu-ml/tianshou.git@master --upgrade
-```
-
-After installation, open your python console and type
+安装完成后，打开 Python 运行下面的代码：
 
 ```python
 import tianshou
 print(tianshou.__version__)
 ```
 
-If no error occurs, you have successfully installed Tianshou.
+如果没有错误发生，你已经安装成功了。
 
 ## Documentation
 
