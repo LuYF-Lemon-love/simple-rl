@@ -217,4 +217,6 @@ $ python3 test/discrete/test_pg.py --seed 0 --render 0.03
 
 [6] [Including Data Files](https://setuptools.pypa.io/en/latest/userguide/quickstart.html#including-data-files)
 
+[7] [thu-ml/tianshou](https://github.com/thu-ml/tianshou)
+
 </p></details>
