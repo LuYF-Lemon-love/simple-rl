@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tianshou.data.utils.segtree &mdash; Tianshou 0.5.1 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/style.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+        <script src="../../../../_static/js/copybutton.js?v=7db002fe"></script>
+        <script src="../../../../_static/js/benchmark.js?v=1091b9f3"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            Tianshou
+              <img src="../../../../_static/tianshou-logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.5.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/get_started.html">Get Started with Jupyter Notebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/dqn.html">Deep Q Network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/concepts.html">Basic concepts in Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/batch.html">Understand Batch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/tictactoe.html">Multi-Agent RL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/logger.html">Logging Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/benchmark.html">Benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/cheatsheet.html">Cheat Sheet</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.data.html">tianshou.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.env.html">tianshou.env</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.policy.html">tianshou.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.trainer.html">tianshou.trainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.exploration.html">tianshou.exploration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.utils.html">tianshou.utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing to Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributor.html">Contributor</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tianshou</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">tianshou.data.utils.segtree</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tianshou.data.utils.segtree</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">njit</span>
+
+
+<div class="viewcode-block" id="SegmentTree">
+<a class="viewcode-back" href="../../../../api/tianshou.data.html#tianshou.data.SegmentTree">[docs]</a>
+<span class="k">class</span> <span class="nc">SegmentTree</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implementation of Segment Tree.</span>
+
+<span class="sd">    The segment tree stores an array ``arr`` with size ``n``. It supports value</span>
+<span class="sd">    update and fast query of the sum for the interval ``[left, right)`` in</span>
+<span class="sd">    O(log n) time. The detailed procedure is as follows:</span>
+
+<span class="sd">    1. Pad the array to have length of power of 2, so that leaf nodes in the \</span>
+<span class="sd">    segment tree have the same depth.</span>
+<span class="sd">    2. Store the segment tree in a binary heap.</span>
+
+<span class="sd">    :param int size: the size of segment tree.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">bound</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">while</span> <span class="n">bound</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">:</span>
+            <span class="n">bound</span> <span class="o">*=</span> <span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_size</span> <span class="o">=</span> <span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bound</span> <span class="o">=</span> <span class="n">bound</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">bound</span> <span class="o">*</span> <span class="mi">2</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_compile</span><span class="p">()</span>
+
+<div class="viewcode-block" id="SegmentTree.__len__">
+<a class="viewcode-back" href="../../../../api/tianshou.data.html#tianshou.data.SegmentTree.__len__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_size</span></div>
+
+
+<div class="viewcode-block" id="SegmentTree.__getitem__">
+<a class="viewcode-back" href="../../../../api/tianshou.data.html#tianshou.data.SegmentTree.__getitem__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return self[index].&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">[</span><span class="n">index</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bound</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="SegmentTree.__setitem__">
+<a class="viewcode-back" href="../../../../api/tianshou.data.html#tianshou.data.SegmentTree.__setitem__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update values in segment tree.</span>
+
+<span class="sd">        Duplicate values in ``index`` are handled by numpy: later index</span>
+<span class="sd">        overwrites previous ones.</span>
+<span class="sd">        ::</span>
+
+<span class="sd">            &gt;&gt;&gt; a = np.array([1, 2, 3, 4])</span>
+<span class="sd">            &gt;&gt;&gt; a[[0, 1, 0, 1]] = [4, 5, 6, 7]</span>
+<span class="sd">            &gt;&gt;&gt; print(a)</span>
+<span class="sd">            [6 7 3 4]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">index</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">index</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">value</span><span class="p">])</span>
+        <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">index</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">index</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_size</span><span class="p">)</span>
+        <span class="n">_setitem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">,</span> <span class="n">index</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bound</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SegmentTree.reduce">
+<a class="viewcode-back" href="../../../../api/tianshou.data.html#tianshou.data.SegmentTree.reduce">[docs]</a>
+    <span class="k">def</span> <span class="nf">reduce</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return operation(value[start:end]).&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">start</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">end</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">end</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_size</span>
+        <span class="k">if</span> <span class="n">end</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">end</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_size</span>
+        <span class="k">return</span> <span class="n">_reduce</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">,</span> <span class="n">start</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bound</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">end</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bound</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SegmentTree.get_prefix_sum_idx">
+<a class="viewcode-back" href="../../../../api/tianshou.data.html#tianshou.data.SegmentTree.get_prefix_sum_idx">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_prefix_sum_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span>
+                                              <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Find the index with given value.</span>
+
+<span class="sd">        Return the minimum index for each ``v`` in ``value`` so that</span>
+<span class="sd">        :math:`v \le \mathrm{sums}_i`, where</span>
+<span class="sd">        :math:`\mathrm{sums}_i = \sum_{j = 0}^{i} \mathrm{arr}_j`.</span>
+
+<span class="sd">        .. warning::</span>
+
+<span class="sd">            Please make sure all of the values inside the segment tree are</span>
+<span class="sd">            non-negative when using this function.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">value</span> <span class="o">&gt;=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">value</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">single</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">value</span><span class="p">])</span>
+            <span class="n">single</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">_get_prefix_sum_idx</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bound</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">index</span><span class="o">.</span><span class="n">item</span><span class="p">()</span> <span class="k">if</span> <span class="n">single</span> <span class="k">else</span> <span class="n">index</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_compile</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">f64</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="n">f32</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">i64</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+        <span class="n">_setitem</span><span class="p">(</span><span class="n">f64</span><span class="p">,</span> <span class="n">i64</span><span class="p">,</span> <span class="n">f64</span><span class="p">)</span>
+        <span class="n">_setitem</span><span class="p">(</span><span class="n">f64</span><span class="p">,</span> <span class="n">i64</span><span class="p">,</span> <span class="n">f32</span><span class="p">)</span>
+        <span class="n">_reduce</span><span class="p">(</span><span class="n">f64</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">_get_prefix_sum_idx</span><span class="p">(</span><span class="n">f64</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">f64</span><span class="p">)</span>
+        <span class="n">_get_prefix_sum_idx</span><span class="p">(</span><span class="n">f32</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">f64</span><span class="p">)</span></div>
+
+
+
+<span class="nd">@njit</span>
+<span class="k">def</span> <span class="nf">_setitem</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Numba version, 4x faster: 0.1 -&gt; 0.024.&quot;&quot;&quot;</span>
+    <span class="n">tree</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="k">while</span> <span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">index</span> <span class="o">//=</span> <span class="mi">2</span>
+        <span class="n">tree</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">tree</span><span class="p">[</span><span class="n">index</span> <span class="o">*</span> <span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">tree</span><span class="p">[</span><span class="n">index</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+
+
+<span class="nd">@njit</span>
+<span class="k">def</span> <span class="nf">_reduce</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Numba version, 2x faster: 0.009 -&gt; 0.005.&quot;&quot;&quot;</span>
+    <span class="c1"># nodes in (start, end) should be aggregated</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">while</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># (start, end) interval is not empty</span>
+        <span class="k">if</span> <span class="n">start</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="n">tree</span><span class="p">[</span><span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">start</span> <span class="o">//=</span> <span class="mi">2</span>
+        <span class="k">if</span> <span class="n">end</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="n">tree</span><span class="p">[</span><span class="n">end</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">end</span> <span class="o">//=</span> <span class="mi">2</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="nd">@njit</span>
+<span class="k">def</span> <span class="nf">_get_prefix_sum_idx</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">bound</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">sums</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Numba version (v0.51), 5x speed up with size=100000 and bsz=64.</span>
+
+<span class="sd">    vectorized np: 0.0923 (numpy best) -&gt; 0.024 (now)</span>
+<span class="sd">    for-loop: 0.2914 -&gt; 0.019 (but not so stable)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">bound</span><span class="p">:</span>
+        <span class="n">index</span> <span class="o">*=</span> <span class="mi">2</span>
+        <span class="n">lsons</span> <span class="o">=</span> <span class="n">sums</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="n">direct</span> <span class="o">=</span> <span class="n">lsons</span> <span class="o">&lt;</span> <span class="n">value</span>
+        <span class="n">value</span> <span class="o">-=</span> <span class="n">lsons</span> <span class="o">*</span> <span class="n">direct</span>
+        <span class="n">index</span> <span class="o">+=</span> <span class="n">direct</span>
+    <span class="n">index</span> <span class="o">-=</span> <span class="n">bound</span>
+    <span class="k">return</span> <span class="n">index</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Tianshou contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tianshou.trainer &mdash; Tianshou 0.5.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/style.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/documentation_options.js?v=b9afe91b"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+        <script src="../_static/js/copybutton.js?v=7db002fe"></script>
+        <script src="../_static/js/benchmark.js?v=1091b9f3"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="tianshou.exploration" href="tianshou.exploration.html" />
+    <link rel="prev" title="tianshou.policy" href="tianshou.policy.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Tianshou
+              <img src="../_static/tianshou-logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.5.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/get_started.html">Get Started with Jupyter Notebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/dqn.html">Deep Q Network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/concepts.html">Basic concepts in Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/batch.html">Understand Batch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/tictactoe.html">Multi-Agent RL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/logger.html">Logging Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/benchmark.html">Benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/cheatsheet.html">Cheat Sheet</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="tianshou.data.html">tianshou.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tianshou.env.html">tianshou.env</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tianshou.policy.html">tianshou.policy</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">tianshou.trainer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#on-policy">On-policy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tianshou.trainer.OnpolicyTrainer"><code class="docutils literal notranslate"><span class="pre">OnpolicyTrainer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tianshou.trainer.OnpolicyTrainer.policy_update_fn"><code class="docutils literal notranslate"><span class="pre">OnpolicyTrainer.policy_update_fn()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#off-policy">Off-policy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tianshou.trainer.OffpolicyTrainer"><code class="docutils literal notranslate"><span class="pre">OffpolicyTrainer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tianshou.trainer.OffpolicyTrainer.policy_update_fn"><code class="docutils literal notranslate"><span class="pre">OffpolicyTrainer.policy_update_fn()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#offline">Offline</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tianshou.trainer.OfflineTrainer"><code class="docutils literal notranslate"><span class="pre">OfflineTrainer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tianshou.trainer.OfflineTrainer.policy_update_fn"><code class="docutils literal notranslate"><span class="pre">OfflineTrainer.policy_update_fn()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#utils">utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tianshou.trainer.test_episode"><code class="docutils literal notranslate"><span class="pre">test_episode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tianshou.trainer.gather_info"><code class="docutils literal notranslate"><span class="pre">gather_info()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tianshou.exploration.html">tianshou.exploration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tianshou.utils.html">tianshou.utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributor.html">Contributor</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Tianshou</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">tianshou.trainer</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/tianshou.trainer.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="tianshou-trainer">
+<h1>tianshou.trainer<a class="headerlink" href="#tianshou-trainer" title="Link to this heading">¶</a></h1>
+<section id="on-policy">
+<h2>On-policy<a class="headerlink" href="#on-policy" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="tianshou.trainer.OnpolicyTrainer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tianshou.trainer.</span></span><span class="sig-name descname"><span class="pre">OnpolicyTrainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">policy:</span> <span class="pre">~tianshou.policy.base.BasePolicy,</span> <span class="pre">max_epoch:</span> <span class="pre">int,</span> <span class="pre">batch_size:</span> <span class="pre">int,</span> <span class="pre">train_collector:</span> <span class="pre">~tianshou.data.collector.Collector</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">test_collector:</span> <span class="pre">~tianshou.data.collector.Collector</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">buffer:</span> <span class="pre">~tianshou.data.buffer.base.ReplayBuffer</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">step_per_epoch:</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">repeat_per_collect:</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">episode_per_test:</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">update_per_step:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">1.0,</span> <span class="pre">step_per_collect:</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">episode_per_collect:</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">train_fn:</span> <span class="pre">~typing.Callable[[int,</span> <span class="pre">int],</span> <span class="pre">None]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">test_fn:</span> <span class="pre">~typing.Callable[[int,</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">None],</span> <span class="pre">None]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">stop_fn:</span> <span class="pre">~typing.Callable[[float],</span> <span class="pre">bool]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">save_best_fn:</span> <span class="pre">~typing.Callable[[~tianshou.policy.base.BasePolicy],</span> <span class="pre">None]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">save_checkpoint_fn:</span> <span class="pre">~typing.Callable[[int,</span> <span class="pre">int,</span> <span class="pre">int],</span> <span class="pre">str]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">resume_from_log:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">reward_metric:</span> <span class="pre">~typing.Callable[[~numpy.ndarray],</span> <span class="pre">~numpy.ndarray]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">logger:</span> <span class="pre">~tianshou.utils.logger.base.BaseLogger</span> <span class="pre">=</span> <span class="pre">&lt;tianshou.utils.logger.base.LazyLogger</span> <span class="pre">object&gt;,</span> <span class="pre">verbose:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True,</span> <span class="pre">show_progress:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True,</span> <span class="pre">test_in_train:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True,</span> <span class="pre">save_fn:</span> <span class="pre">~typing.Callable[[~tianshou.policy.base.BasePolicy],</span> <span class="pre">None]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tianshou/trainer/base.html#OnpolicyTrainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tianshou.trainer.OnpolicyTrainer" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseTrainer</span></code></p>
+<p>An iterator class for onpolicy trainer procedure.</p>
+<blockquote>
+<div><p>Returns an iterator that yields a 3-tuple (epoch, stats, info) of
+train results on every epoch.</p>
+<p>The “step” in onpolicy trainer means an environment step (a.k.a. transition).</p>
+<p>Example usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span> <span class="o">=</span> <span class="n">OnpolicyTrainer</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">epoch_stat</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">trainer</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Epoch:&quot;</span><span class="p">,</span> <span class="n">epoch</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">epoch_stat</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+    <span class="n">do_something_with_policy</span><span class="p">()</span>
+    <span class="n">query_something_about_policy</span><span class="p">()</span>
+    <span class="n">make_a_plot_with</span><span class="p">(</span><span class="n">epoch_stat</span><span class="p">)</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>epoch int: the epoch number</p></li>
+<li><p>epoch_stat dict: a large collection of metrics of the current epoch</p></li>
+<li><p>info dict: result returned from <a class="reference internal" href="#tianshou.trainer.gather_info" title="tianshou.trainer.gather_info"><code class="xref py py-func docutils literal notranslate"><span class="pre">gather_info()</span></code></a></p></li>
+</ul>
+<p>You can even iterate on several trainers at the same time:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">trainer1</span> <span class="o">=</span> <span class="n">OnpolicyTrainer</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="n">trainer2</span> <span class="o">=</span> <span class="n">OnpolicyTrainer</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">result1</span><span class="p">,</span> <span class="n">result2</span><span class="p">,</span> <span class="o">...</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">trainer1</span><span class="p">,</span> <span class="n">trainer2</span><span class="p">,</span> <span class="o">...</span><span class="p">):</span>
+    <span class="n">compare_results</span><span class="p">(</span><span class="n">result1</span><span class="p">,</span> <span class="n">result2</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Returns an iterator that yields a 3-tuple (epoch, stats, info) of train results
+on every epoch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>policy</strong> – an instance of the <a class="reference internal" href="tianshou.policy.html#tianshou.policy.BasePolicy" title="tianshou.policy.BasePolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePolicy</span></code></a> class.</p></li>
+<li><p><strong>batch_size</strong> – the batch size of sample data, which is going to feed in
+the policy network.</p></li>
+<li><p><strong>train_collector</strong> – the collector used for training.</p></li>
+<li><p><strong>test_collector</strong> – the collector used for testing. If it’s None,
+then no testing will be performed.</p></li>
+<li><p><strong>max_epoch</strong> – the maximum number of epochs for training. The training
+process might be finished before reaching <code class="docutils literal notranslate"><span class="pre">max_epoch</span></code> if <code class="docutils literal notranslate"><span class="pre">stop_fn</span></code>
+is set.</p></li>
+<li><p><strong>step_per_epoch</strong> – the number of transitions collected per epoch.</p></li>
+<li><p><strong>repeat_per_collect</strong> – the number of repeat time for policy learning,
+for example, set it to 2 means the policy needs to learn each given batch
+data twice. Only used in on-policy algorithms</p></li>
+<li><p><strong>episode_per_test</strong> – the number of episodes for one policy evaluation.</p></li>
+<li><p><strong>update_per_step</strong> – only used in off-policy algorithms.
+How many gradient steps to perform per step in the environment
+(i.e., per sample added to the buffer).</p></li>
+<li><p><strong>step_per_collect</strong> – the number of transitions the collector would
+collect before the network update, i.e., trainer will collect
+“step_per_collect” transitions and do some policy network update repeatedly
+in each epoch.</p></li>
+<li><p><strong>episode_per_collect</strong> – the number of episodes the collector would
+collect before the network update, i.e., trainer will collect
+“episode_per_collect” episodes and do some policy network update repeatedly
+in each epoch.</p></li>
+<li><p><strong>train_fn</strong> – a hook called at the beginning of training in each
+epoch. It can be used to perform custom additional operations, with the
+signature <code class="docutils literal notranslate"><span class="pre">f(num_epoch:</span> <span class="pre">int,</span> <span class="pre">step_idx:</span> <span class="pre">int)</span> <span class="pre">-&gt;</span> <span class="pre">None</span></code>.</p></li>
+<li><p><strong>test_fn</strong> – a hook called at the beginning of testing in each
+epoch. It can be used to perform custom additional operations, with the
+signature <code class="docutils literal notranslate"><span class="pre">f(num_epoch:</span> <span class="pre">int,</span> <span class="pre">step_idx:</span> <span class="pre">int)</span> <span class="pre">-&gt;</span> <span class="pre">None</span></code>.</p></li>
+<li><p><strong>save_best_fn</strong> – a hook called when the undiscounted average mean
+reward in evaluation phase gets better, with the signature
+<code class="docutils literal notranslate"><span class="pre">f(policy:</span> <span class="pre">BasePolicy)</span> <span class="pre">-&gt;</span> <span class="pre">None</span></code>. It was <code class="docutils literal notranslate"><span class="pre">save_fn</span></code> previously.</p></li>
+<li><p><strong>save_checkpoint_fn</strong> – a function to save training process and
+return the saved checkpoint path, with the signature <code class="docutils literal notranslate"><span class="pre">f(epoch:</span> <span class="pre">int,</span>
+<span class="pre">env_step:</span> <span class="pre">int,</span> <span class="pre">gradient_step:</span> <span class="pre">int)</span> <span class="pre">-&gt;</span> <span class="pre">str</span></code>; you can save whatever you want.</p></li>
+<li><p><strong>resume_from_log</strong> – resume env_step/gradient_step and other metadata
+from existing tensorboard log. Default to False.</p></li>
+<li><p><strong>stop_fn</strong> – a function with signature <code class="docutils literal notranslate"><span class="pre">f(mean_rewards:</span> <span class="pre">float)</span> <span class="pre">-&gt;</span>
+<span class="pre">bool</span></code>, receives the average undiscounted returns of the testing result,
+returns a boolean which indicates whether reaching the goal.</p></li>
+<li><p><strong>reward_metric</strong> – a function with signature
+<code class="docutils literal notranslate"><span class="pre">f(rewards:</span> <span class="pre">np.ndarray</span> <span class="pre">with</span> <span class="pre">shape</span> <span class="pre">(num_episode,</span> <span class="pre">agent_num))</span> <span class="pre">-&gt;</span> <span class="pre">np.ndarray</span>
+<span class="pre">with</span> <span class="pre">shape</span> <span class="pre">(num_episode,)</span></code>, used in multi-agent RL. We need to return a
+single scalar for each episode’s result to monitor training in the
+multi-agent RL setting. This function specifies what is the desired metric,
+e.g., the reward of agent 1 or the average reward over all agents.</p></li>
+<li><p><strong>logger</strong> – A logger that logs statistics during
+training/testing/updating. Default to a logger that doesn’t log anything.</p></li>
+<li><p><strong>verbose</strong> – whether to print the information. Default to True.</p></li>
+<li><p><strong>show_progress</strong> – whether to display a progress bar when training.
+Default to True.</p></li>
+<li><p><strong>test_in_train</strong> – whether to test in the training phase.
+Default to True.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="tianshou.trainer.OnpolicyTrainer.policy_update_fn">
+<span class="sig-name descname"><span class="pre">policy_update_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/tianshou/trainer/base.html#OnpolicyTrainer.policy_update_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tianshou.trainer.OnpolicyTrainer.policy_update_fn" title="Link to this definition">¶</a></dt>
+<dd><p>Perform one on-policy update.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="off-policy">
+<h2>Off-policy<a class="headerlink" href="#off-policy" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="tianshou.trainer.OffpolicyTrainer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tianshou.trainer.</span></span><span class="sig-name descname"><span class="pre">OffpolicyTrainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">policy:</span> <span class="pre">~tianshou.policy.base.BasePolicy,</span> <span class="pre">max_epoch:</span> <span class="pre">int,</span> <span class="pre">batch_size:</span> <span class="pre">int,</span> <span class="pre">train_collector:</span> <span class="pre">~tianshou.data.collector.Collector</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">test_collector:</span> <span class="pre">~tianshou.data.collector.Collector</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">buffer:</span> <span class="pre">~tianshou.data.buffer.base.ReplayBuffer</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">step_per_epoch:</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">repeat_per_collect:</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">episode_per_test:</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">update_per_step:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">1.0,</span> <span class="pre">step_per_collect:</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">episode_per_collect:</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">train_fn:</span> <span class="pre">~typing.Callable[[int,</span> <span class="pre">int],</span> <span class="pre">None]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">test_fn:</span> <span class="pre">~typing.Callable[[int,</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">None],</span> <span class="pre">None]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">stop_fn:</span> <span class="pre">~typing.Callable[[float],</span> <span class="pre">bool]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">save_best_fn:</span> <span class="pre">~typing.Callable[[~tianshou.policy.base.BasePolicy],</span> <span class="pre">None]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">save_checkpoint_fn:</span> <span class="pre">~typing.Callable[[int,</span> <span class="pre">int,</span> <span class="pre">int],</span> <span class="pre">str]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">resume_from_log:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">reward_metric:</span> <span class="pre">~typing.Callable[[~numpy.ndarray],</span> <span class="pre">~numpy.ndarray]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">logger:</span> <span class="pre">~tianshou.utils.logger.base.BaseLogger</span> <span class="pre">=</span> <span class="pre">&lt;tianshou.utils.logger.base.LazyLogger</span> <span class="pre">object&gt;,</span> <span class="pre">verbose:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True,</span> <span class="pre">show_progress:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True,</span> <span class="pre">test_in_train:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True,</span> <span class="pre">save_fn:</span> <span class="pre">~typing.Callable[[~tianshou.policy.base.BasePolicy],</span> <span class="pre">None]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tianshou/trainer/base.html#OffpolicyTrainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tianshou.trainer.OffpolicyTrainer" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseTrainer</span></code></p>
+<p>Offpolicy trainer, samples mini-batches from buffer and passes them to update.</p>
+<p>Note that with this trainer, it is expected that the policy’s <cite>learn</cite> method
+does not perform additional mini-batching but just updates params from the received
+mini-batch.
+An iterator class for offpolicy trainer procedure.</p>
+<blockquote>
+<div><p>Returns an iterator that yields a 3-tuple (epoch, stats, info) of
+train results on every epoch.</p>
+<p>The “step” in offpolicy trainer means an environment step (a.k.a. transition).</p>
+<p>Example usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span> <span class="o">=</span> <span class="n">OffpolicyTrainer</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">epoch_stat</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">trainer</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Epoch:&quot;</span><span class="p">,</span> <span class="n">epoch</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">epoch_stat</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+    <span class="n">do_something_with_policy</span><span class="p">()</span>
+    <span class="n">query_something_about_policy</span><span class="p">()</span>
+    <span class="n">make_a_plot_with</span><span class="p">(</span><span class="n">epoch_stat</span><span class="p">)</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>epoch int: the epoch number</p></li>
+<li><p>epoch_stat dict: a large collection of metrics of the current epoch</p></li>
+<li><p>info dict: result returned from <a class="reference internal" href="#tianshou.trainer.gather_info" title="tianshou.trainer.gather_info"><code class="xref py py-func docutils literal notranslate"><span class="pre">gather_info()</span></code></a></p></li>
+</ul>
+<p>You can even iterate on several trainers at the same time:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">trainer1</span> <span class="o">=</span> <span class="n">OffpolicyTrainer</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="n">trainer2</span> <span class="o">=</span> <span class="n">OffpolicyTrainer</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">result1</span><span class="p">,</span> <span class="n">result2</span><span class="p">,</span> <span class="o">...</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">trainer1</span><span class="p">,</span> <span class="n">trainer2</span><span class="p">,</span> <span class="o">...</span><span class="p">):</span>
+    <span class="n">compare_results</span><span class="p">(</span><span class="n">result1</span><span class="p">,</span> <span class="n">result2</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Returns an iterator that yields a 3-tuple (epoch, stats, info) of train results
+on every epoch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>policy</strong> – an instance of the <a class="reference internal" href="tianshou.policy.html#tianshou.policy.BasePolicy" title="tianshou.policy.BasePolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePolicy</span></code></a> class.</p></li>
+<li><p><strong>batch_size</strong> – the batch size of sample data, which is going to feed in
+the policy network.</p></li>
+<li><p><strong>train_collector</strong> – the collector used for training.</p></li>
+<li><p><strong>test_collector</strong> – the collector used for testing. If it’s None,
+then no testing will be performed.</p></li>
+<li><p><strong>max_epoch</strong> – the maximum number of epochs for training. The training
+process might be finished before reaching <code class="docutils literal notranslate"><span class="pre">max_epoch</span></code> if <code class="docutils literal notranslate"><span class="pre">stop_fn</span></code>
+is set.</p></li>
+<li><p><strong>step_per_epoch</strong> – the number of transitions collected per epoch.</p></li>
+<li><p><strong>repeat_per_collect</strong> – the number of repeat time for policy learning,
+for example, set it to 2 means the policy needs to learn each given batch
+data twice. Only used in on-policy algorithms</p></li>
+<li><p><strong>episode_per_test</strong> – the number of episodes for one policy evaluation.</p></li>
+<li><p><strong>update_per_step</strong> – only used in off-policy algorithms.
+How many gradient steps to perform per step in the environment
+(i.e., per sample added to the buffer).</p></li>
+<li><p><strong>step_per_collect</strong> – the number of transitions the collector would
+collect before the network update, i.e., trainer will collect
+“step_per_collect” transitions and do some policy network update repeatedly
+in each epoch.</p></li>
+<li><p><strong>episode_per_collect</strong> – the number of episodes the collector would
+collect before the network update, i.e., trainer will collect
+“episode_per_collect” episodes and do some policy network update repeatedly
+in each epoch.</p></li>
+<li><p><strong>train_fn</strong> – a hook called at the beginning of training in each
+epoch. It can be used to perform custom additional operations, with the
+signature <code class="docutils literal notranslate"><span class="pre">f(num_epoch:</span> <span class="pre">int,</span> <span class="pre">step_idx:</span> <span class="pre">int)</span> <span class="pre">-&gt;</span> <span class="pre">None</span></code>.</p></li>
+<li><p><strong>test_fn</strong> – a hook called at the beginning of testing in each
+epoch. It can be used to perform custom additional operations, with the
+signature <code class="docutils literal notranslate"><span class="pre">f(num_epoch:</span> <span class="pre">int,</span> <span class="pre">step_idx:</span> <span class="pre">int)</span> <span class="pre">-&gt;</span> <span class="pre">None</span></code>.</p></li>
+<li><p><strong>save_best_fn</strong> – a hook called when the undiscounted average mean
+reward in evaluation phase gets better, with the signature
+<code class="docutils literal notranslate"><span class="pre">f(policy:</span> <span class="pre">BasePolicy)</span> <span class="pre">-&gt;</span> <span class="pre">None</span></code>. It was <code class="docutils literal notranslate"><span class="pre">save_fn</span></code> previously.</p></li>
+<li><p><strong>save_checkpoint_fn</strong> – a function to save training process and
+return the saved checkpoint path, with the signature <code class="docutils literal notranslate"><span class="pre">f(epoch:</span> <span class="pre">int,</span>
+<span class="pre">env_step:</span> <span class="pre">int,</span> <span class="pre">gradient_step:</span> <span class="pre">int)</span> <span class="pre">-&gt;</span> <span class="pre">str</span></code>; you can save whatever you want.</p></li>
+<li><p><strong>resume_from_log</strong> – resume env_step/gradient_step and other metadata
+from existing tensorboard log. Default to False.</p></li>
+<li><p><strong>stop_fn</strong> – a function with signature <code class="docutils literal notranslate"><span class="pre">f(mean_rewards:</span> <span class="pre">float)</span> <span class="pre">-&gt;</span>
+<span class="pre">bool</span></code>, receives the average undiscounted returns of the testing result,
+returns a boolean which indicates whether reaching the goal.</p></li>
+<li><p><strong>reward_metric</strong> – a function with signature
+<code class="docutils literal notranslate"><span class="pre">f(rewards:</span> <span class="pre">np.ndarray</span> <span class="pre">with</span> <span class="pre">shape</span> <span class="pre">(num_episode,</span> <span class="pre">agent_num))</span> <span class="pre">-&gt;</span> <span class="pre">np.ndarray</span>
+<span class="pre">with</span> <span class="pre">shape</span> <span class="pre">(num_episode,)</span></code>, used in multi-agent RL. We need to return a
+single scalar for each episode’s result to monitor training in the
+multi-agent RL setting. This function specifies what is the desired metric,
+e.g., the reward of agent 1 or the average reward over all agents.</p></li>
+<li><p><strong>logger</strong> – A logger that logs statistics during
+training/testing/updating. Default to a logger that doesn’t log anything.</p></li>
+<li><p><strong>verbose</strong> – whether to print the information. Default to True.</p></li>
+<li><p><strong>show_progress</strong> – whether to display a progress bar when training.
+Default to True.</p></li>
+<li><p><strong>test_in_train</strong> – whether to test in the training phase.
+Default to True.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="tianshou.trainer.OffpolicyTrainer.policy_update_fn">
+<span class="sig-name descname"><span class="pre">policy_update_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/tianshou/trainer/base.html#OffpolicyTrainer.policy_update_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tianshou.trainer.OffpolicyTrainer.policy_update_fn" title="Link to this definition">¶</a></dt>
+<dd><p>Perform off-policy updates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – </p></li>
+<li><p><strong>result</strong> – must contain <cite>n/st</cite> key, see documentation of
+<cite>:meth:~tianshou.data.collector.Collector.collect</cite> for the kind of
+data returned there. <cite>n/st</cite> stands for <cite>step_count</cite></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="offline">
+<h2>Offline<a class="headerlink" href="#offline" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="tianshou.trainer.OfflineTrainer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tianshou.trainer.</span></span><span class="sig-name descname"><span class="pre">OfflineTrainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">policy:</span> <span class="pre">~tianshou.policy.base.BasePolicy,</span> <span class="pre">max_epoch:</span> <span class="pre">int,</span> <span class="pre">batch_size:</span> <span class="pre">int,</span> <span class="pre">train_collector:</span> <span class="pre">~tianshou.data.collector.Collector</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">test_collector:</span> <span class="pre">~tianshou.data.collector.Collector</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">buffer:</span> <span class="pre">~tianshou.data.buffer.base.ReplayBuffer</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">step_per_epoch:</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">repeat_per_collect:</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">episode_per_test:</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">update_per_step:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">1.0,</span> <span class="pre">step_per_collect:</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">episode_per_collect:</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">train_fn:</span> <span class="pre">~typing.Callable[[int,</span> <span class="pre">int],</span> <span class="pre">None]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">test_fn:</span> <span class="pre">~typing.Callable[[int,</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">None],</span> <span class="pre">None]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">stop_fn:</span> <span class="pre">~typing.Callable[[float],</span> <span class="pre">bool]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">save_best_fn:</span> <span class="pre">~typing.Callable[[~tianshou.policy.base.BasePolicy],</span> <span class="pre">None]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">save_checkpoint_fn:</span> <span class="pre">~typing.Callable[[int,</span> <span class="pre">int,</span> <span class="pre">int],</span> <span class="pre">str]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">resume_from_log:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">reward_metric:</span> <span class="pre">~typing.Callable[[~numpy.ndarray],</span> <span class="pre">~numpy.ndarray]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">logger:</span> <span class="pre">~tianshou.utils.logger.base.BaseLogger</span> <span class="pre">=</span> <span class="pre">&lt;tianshou.utils.logger.base.LazyLogger</span> <span class="pre">object&gt;,</span> <span class="pre">verbose:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True,</span> <span class="pre">show_progress:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True,</span> <span class="pre">test_in_train:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True,</span> <span class="pre">save_fn:</span> <span class="pre">~typing.Callable[[~tianshou.policy.base.BasePolicy],</span> <span class="pre">None]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tianshou/trainer/base.html#OfflineTrainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tianshou.trainer.OfflineTrainer" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseTrainer</span></code></p>
+<p>Offline trainer, samples mini-batches from buffer and passes them to update.</p>
+<p>Uses a buffer directly and usually does not have a collector.
+An iterator class for offline trainer procedure.</p>
+<blockquote>
+<div><p>Returns an iterator that yields a 3-tuple (epoch, stats, info) of
+train results on every epoch.</p>
+<p>The “step” in offline trainer means a gradient step.</p>
+<p>Example usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span> <span class="o">=</span> <span class="n">OfflineTrainer</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">epoch_stat</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">trainer</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Epoch:&quot;</span><span class="p">,</span> <span class="n">epoch</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">epoch_stat</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+    <span class="n">do_something_with_policy</span><span class="p">()</span>
+    <span class="n">query_something_about_policy</span><span class="p">()</span>
+    <span class="n">make_a_plot_with</span><span class="p">(</span><span class="n">epoch_stat</span><span class="p">)</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>epoch int: the epoch number</p></li>
+<li><p>epoch_stat dict: a large collection of metrics of the current epoch</p></li>
+<li><p>info dict: result returned from <a class="reference internal" href="#tianshou.trainer.gather_info" title="tianshou.trainer.gather_info"><code class="xref py py-func docutils literal notranslate"><span class="pre">gather_info()</span></code></a></p></li>
+</ul>
+<p>You can even iterate on several trainers at the same time:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">trainer1</span> <span class="o">=</span> <span class="n">OfflineTrainer</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="n">trainer2</span> <span class="o">=</span> <span class="n">OfflineTrainer</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">result1</span><span class="p">,</span> <span class="n">result2</span><span class="p">,</span> <span class="o">...</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">trainer1</span><span class="p">,</span> <span class="n">trainer2</span><span class="p">,</span> <span class="o">...</span><span class="p">):</span>
+    <span class="n">compare_results</span><span class="p">(</span><span class="n">result1</span><span class="p">,</span> <span class="n">result2</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Returns an iterator that yields a 3-tuple (epoch, stats, info) of train results
+on every epoch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>policy</strong> – an instance of the <a class="reference internal" href="tianshou.policy.html#tianshou.policy.BasePolicy" title="tianshou.policy.BasePolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePolicy</span></code></a> class.</p></li>
+<li><p><strong>batch_size</strong> – the batch size of sample data, which is going to feed in
+the policy network.</p></li>
+<li><p><strong>train_collector</strong> – the collector used for training.</p></li>
+<li><p><strong>test_collector</strong> – the collector used for testing. If it’s None,
+then no testing will be performed.</p></li>
+<li><p><strong>max_epoch</strong> – the maximum number of epochs for training. The training
+process might be finished before reaching <code class="docutils literal notranslate"><span class="pre">max_epoch</span></code> if <code class="docutils literal notranslate"><span class="pre">stop_fn</span></code>
+is set.</p></li>
+<li><p><strong>step_per_epoch</strong> – the number of transitions collected per epoch.</p></li>
+<li><p><strong>repeat_per_collect</strong> – the number of repeat time for policy learning,
+for example, set it to 2 means the policy needs to learn each given batch
+data twice. Only used in on-policy algorithms</p></li>
+<li><p><strong>episode_per_test</strong> – the number of episodes for one policy evaluation.</p></li>
+<li><p><strong>update_per_step</strong> – only used in off-policy algorithms.
+How many gradient steps to perform per step in the environment
+(i.e., per sample added to the buffer).</p></li>
+<li><p><strong>step_per_collect</strong> – the number of transitions the collector would
+collect before the network update, i.e., trainer will collect
+“step_per_collect” transitions and do some policy network update repeatedly
+in each epoch.</p></li>
+<li><p><strong>episode_per_collect</strong> – the number of episodes the collector would
+collect before the network update, i.e., trainer will collect
+“episode_per_collect” episodes and do some policy network update repeatedly
+in each epoch.</p></li>
+<li><p><strong>train_fn</strong> – a hook called at the beginning of training in each
+epoch. It can be used to perform custom additional operations, with the
+signature <code class="docutils literal notranslate"><span class="pre">f(num_epoch:</span> <span class="pre">int,</span> <span class="pre">step_idx:</span> <span class="pre">int)</span> <span class="pre">-&gt;</span> <span class="pre">None</span></code>.</p></li>
+<li><p><strong>test_fn</strong> – a hook called at the beginning of testing in each
+epoch. It can be used to perform custom additional operations, with the
+signature <code class="docutils literal notranslate"><span class="pre">f(num_epoch:</span> <span class="pre">int,</span> <span class="pre">step_idx:</span> <span class="pre">int)</span> <span class="pre">-&gt;</span> <span class="pre">None</span></code>.</p></li>
+<li><p><strong>save_best_fn</strong> – a hook called when the undiscounted average mean
+reward in evaluation phase gets better, with the signature
+<code class="docutils literal notranslate"><span class="pre">f(policy:</span> <span class="pre">BasePolicy)</span> <span class="pre">-&gt;</span> <span class="pre">None</span></code>. It was <code class="docutils literal notranslate"><span class="pre">save_fn</span></code> previously.</p></li>
+<li><p><strong>save_checkpoint_fn</strong> – a function to save training process and
+return the saved checkpoint path, with the signature <code class="docutils literal notranslate"><span class="pre">f(epoch:</span> <span class="pre">int,</span>
+<span class="pre">env_step:</span> <span class="pre">int,</span> <span class="pre">gradient_step:</span> <span class="pre">int)</span> <span class="pre">-&gt;</span> <span class="pre">str</span></code>; you can save whatever you want.</p></li>
+<li><p><strong>resume_from_log</strong> – resume env_step/gradient_step and other metadata
+from existing tensorboard log. Default to False.</p></li>
+<li><p><strong>stop_fn</strong> – a function with signature <code class="docutils literal notranslate"><span class="pre">f(mean_rewards:</span> <span class="pre">float)</span> <span class="pre">-&gt;</span>
+<span class="pre">bool</span></code>, receives the average undiscounted returns of the testing result,
+returns a boolean which indicates whether reaching the goal.</p></li>
+<li><p><strong>reward_metric</strong> – a function with signature
+<code class="docutils literal notranslate"><span class="pre">f(rewards:</span> <span class="pre">np.ndarray</span> <span class="pre">with</span> <span class="pre">shape</span> <span class="pre">(num_episode,</span> <span class="pre">agent_num))</span> <span class="pre">-&gt;</span> <span class="pre">np.ndarray</span>
+<span class="pre">with</span> <span class="pre">shape</span> <span class="pre">(num_episode,)</span></code>, used in multi-agent RL. We need to return a
+single scalar for each episode’s result to monitor training in the
+multi-agent RL setting. This function specifies what is the desired metric,
+e.g., the reward of agent 1 or the average reward over all agents.</p></li>
+<li><p><strong>logger</strong> – A logger that logs statistics during
+training/testing/updating. Default to a logger that doesn’t log anything.</p></li>
+<li><p><strong>verbose</strong> – whether to print the information. Default to True.</p></li>
+<li><p><strong>show_progress</strong> – whether to display a progress bar when training.
+Default to True.</p></li>
+<li><p><strong>test_in_train</strong> – whether to test in the training phase.
+Default to True.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="tianshou.trainer.OfflineTrainer.policy_update_fn">
+<span class="sig-name descname"><span class="pre">policy_update_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/tianshou/trainer/base.html#OfflineTrainer.policy_update_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tianshou.trainer.OfflineTrainer.policy_update_fn" title="Link to this definition">¶</a></dt>
+<dd><p>Perform one off-line policy update.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="utils">
+<h2>utils<a class="headerlink" href="#utils" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="tianshou.trainer.test_episode">
+<span class="sig-prename descclassname"><span class="pre">tianshou.trainer.</span></span><span class="sig-name descname"><span class="pre">test_episode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">policy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="tianshou.policy.html#tianshou.policy.BasePolicy" title="tianshou.policy.base.BasePolicy"><span class="pre">BasePolicy</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">collector</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="tianshou.data.html#tianshou.data.Collector" title="tianshou.data.collector.Collector"><span class="pre">Collector</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_episode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="tianshou.utils.html#tianshou.utils.BaseLogger" title="tianshou.utils.logger.base.BaseLogger"><span class="pre">BaseLogger</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reward_metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/tianshou/trainer/utils.html#test_episode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tianshou.trainer.test_episode" title="Link to this definition">¶</a></dt>
+<dd><p>A simple wrapper of testing policy in collector.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tianshou.trainer.gather_info">
+<span class="sig-prename descclassname"><span class="pre">tianshou.trainer.</span></span><span class="sig-name descname"><span class="pre">gather_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_collector</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="tianshou.data.html#tianshou.data.Collector" title="tianshou.data.collector.Collector"><span class="pre">Collector</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_collector</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="tianshou.data.html#tianshou.data.Collector" title="tianshou.data.collector.Collector"><span class="pre">Collector</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">best_reward</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">best_reward_std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/tianshou/trainer/utils.html#gather_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tianshou.trainer.gather_info" title="Link to this definition">¶</a></dt>
+<dd><p>A simple wrapper of gathering information from collectors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><p>A dictionary with the following keys:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">train_step</span></code> the total collected step of training collector;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">train_episode</span></code> the total collected episode of training collector;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">train_time/collector</span></code> the time for collecting transitions in the             training collector;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">train_time/model</span></code> the time for training models;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">train_speed</span></code> the speed of training (env_step per second);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_step</span></code> the total collected step of test collector;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_episode</span></code> the total collected episode of test collector;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_time</span></code> the time for testing;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_speed</span></code> the speed of testing (env_step per second);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">best_reward</span></code> the best reward over the test results;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">duration</span></code> the total elapsed time.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tianshou.policy.html" class="btn btn-neutral float-left" title="tianshou.policy" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tianshou.exploration.html" class="btn btn-neutral float-right" title="tianshou.exploration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Tianshou contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

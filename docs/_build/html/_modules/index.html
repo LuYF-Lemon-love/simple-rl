@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Overview: module code &mdash; Tianshou 0.5.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/style.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/documentation_options.js?v=b9afe91b"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+        <script src="../_static/js/copybutton.js?v=7db002fe"></script>
+        <script src="../_static/js/benchmark.js?v=1091b9f3"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Tianshou
+              <img src="../_static/tianshou-logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.5.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/get_started.html">Get Started with Jupyter Notebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/dqn.html">Deep Q Network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/concepts.html">Basic concepts in Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/batch.html">Understand Batch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/tictactoe.html">Multi-Agent RL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/logger.html">Logging Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/benchmark.html">Benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/cheatsheet.html">Cheat Sheet</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/tianshou.data.html">tianshou.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/tianshou.env.html">tianshou.env</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/tianshou.policy.html">tianshou.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/tianshou.trainer.html">tianshou.trainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/tianshou.exploration.html">tianshou.exploration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/tianshou.utils.html">tianshou.utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributor.html">Contributor</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Tianshou</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Overview: module code</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>All modules for which code is available</h1>
+<ul><li><a href="tianshou/data/batch.html">tianshou.data.batch</a></li>
+<li><a href="tianshou/data/buffer/base.html">tianshou.data.buffer.base</a></li>
+<li><a href="tianshou/data/buffer/cached.html">tianshou.data.buffer.cached</a></li>
+<li><a href="tianshou/data/buffer/her.html">tianshou.data.buffer.her</a></li>
+<li><a href="tianshou/data/buffer/manager.html">tianshou.data.buffer.manager</a></li>
+<li><a href="tianshou/data/buffer/prio.html">tianshou.data.buffer.prio</a></li>
+<li><a href="tianshou/data/buffer/vecbuf.html">tianshou.data.buffer.vecbuf</a></li>
+<li><a href="tianshou/data/collector.html">tianshou.data.collector</a></li>
+<li><a href="tianshou/data/utils/converter.html">tianshou.data.utils.converter</a></li>
+<li><a href="tianshou/data/utils/segtree.html">tianshou.data.utils.segtree</a></li>
+<li><a href="tianshou/env/gym_wrappers.html">tianshou.env.gym_wrappers</a></li>
+<li><a href="tianshou/env/pettingzoo_env.html">tianshou.env.pettingzoo_env</a></li>
+<li><a href="tianshou/env/venv_wrappers.html">tianshou.env.venv_wrappers</a></li>
+<li><a href="tianshou/env/venvs.html">tianshou.env.venvs</a></li>
+<li><a href="tianshou/env/worker/base.html">tianshou.env.worker.base</a></li>
+<li><a href="tianshou/env/worker/dummy.html">tianshou.env.worker.dummy</a></li>
+<li><a href="tianshou/env/worker/ray.html">tianshou.env.worker.ray</a></li>
+<li><a href="tianshou/env/worker/subproc.html">tianshou.env.worker.subproc</a></li>
+<li><a href="tianshou/exploration/random.html">tianshou.exploration.random</a></li>
+<li><a href="tianshou/policy/base.html">tianshou.policy.base</a></li>
+<li><a href="tianshou/policy/imitation/base.html">tianshou.policy.imitation.base</a></li>
+<li><a href="tianshou/policy/imitation/bcq.html">tianshou.policy.imitation.bcq</a></li>
+<li><a href="tianshou/policy/imitation/cql.html">tianshou.policy.imitation.cql</a></li>
+<li><a href="tianshou/policy/imitation/discrete_bcq.html">tianshou.policy.imitation.discrete_bcq</a></li>
+<li><a href="tianshou/policy/imitation/discrete_cql.html">tianshou.policy.imitation.discrete_cql</a></li>
+<li><a href="tianshou/policy/imitation/discrete_crr.html">tianshou.policy.imitation.discrete_crr</a></li>
+<li><a href="tianshou/policy/imitation/gail.html">tianshou.policy.imitation.gail</a></li>
+<li><a href="tianshou/policy/imitation/td3_bc.html">tianshou.policy.imitation.td3_bc</a></li>
+<li><a href="tianshou/policy/modelbased/icm.html">tianshou.policy.modelbased.icm</a></li>
+<li><a href="tianshou/policy/modelbased/psrl.html">tianshou.policy.modelbased.psrl</a></li>
+<li><a href="tianshou/policy/modelfree/a2c.html">tianshou.policy.modelfree.a2c</a></li>
+<li><a href="tianshou/policy/modelfree/bdq.html">tianshou.policy.modelfree.bdq</a></li>
+<li><a href="tianshou/policy/modelfree/c51.html">tianshou.policy.modelfree.c51</a></li>
+<li><a href="tianshou/policy/modelfree/ddpg.html">tianshou.policy.modelfree.ddpg</a></li>
+<li><a href="tianshou/policy/modelfree/discrete_sac.html">tianshou.policy.modelfree.discrete_sac</a></li>
+<li><a href="tianshou/policy/modelfree/dqn.html">tianshou.policy.modelfree.dqn</a></li>
+<li><a href="tianshou/policy/modelfree/fqf.html">tianshou.policy.modelfree.fqf</a></li>
+<li><a href="tianshou/policy/modelfree/iqn.html">tianshou.policy.modelfree.iqn</a></li>
+<li><a href="tianshou/policy/modelfree/npg.html">tianshou.policy.modelfree.npg</a></li>
+<li><a href="tianshou/policy/modelfree/pg.html">tianshou.policy.modelfree.pg</a></li>
+<li><a href="tianshou/policy/modelfree/ppo.html">tianshou.policy.modelfree.ppo</a></li>
+<li><a href="tianshou/policy/modelfree/qrdqn.html">tianshou.policy.modelfree.qrdqn</a></li>
+<li><a href="tianshou/policy/modelfree/rainbow.html">tianshou.policy.modelfree.rainbow</a></li>
+<li><a href="tianshou/policy/modelfree/redq.html">tianshou.policy.modelfree.redq</a></li>
+<li><a href="tianshou/policy/modelfree/sac.html">tianshou.policy.modelfree.sac</a></li>
+<li><a href="tianshou/policy/modelfree/td3.html">tianshou.policy.modelfree.td3</a></li>
+<li><a href="tianshou/policy/modelfree/trpo.html">tianshou.policy.modelfree.trpo</a></li>
+<li><a href="tianshou/policy/multiagent/mapolicy.html">tianshou.policy.multiagent.mapolicy</a></li>
+<li><a href="tianshou/policy/random.html">tianshou.policy.random</a></li>
+<li><a href="tianshou/trainer/base.html">tianshou.trainer.base</a></li>
+<li><a href="tianshou/trainer/utils.html">tianshou.trainer.utils</a></li>
+<li><a href="tianshou/utils/logger/base.html">tianshou.utils.logger.base</a></li>
+<li><a href="tianshou/utils/logger/tensorboard.html">tianshou.utils.logger.tensorboard</a></li>
+<li><a href="tianshou/utils/logger/wandb.html">tianshou.utils.logger.wandb</a></li>
+<li><a href="tianshou/utils/lr_scheduler.html">tianshou.utils.lr_scheduler</a></li>
+<li><a href="tianshou/utils/net/common.html">tianshou.utils.net.common</a></li>
+<li><a href="tianshou/utils/net/continuous.html">tianshou.utils.net.continuous</a></li>
+<li><a href="tianshou/utils/net/discrete.html">tianshou.utils.net.discrete</a></li>
+<li><a href="tianshou/utils/progress_bar.html">tianshou.utils.progress_bar</a></li>
+<li><a href="tianshou/utils/statistics.html">tianshou.utils.statistics</a></li>
+<li><a href="tianshou/utils/warning.html">tianshou.utils.warning</a></li>
+</ul>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Tianshou contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

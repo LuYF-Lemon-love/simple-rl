@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cheat Sheet &mdash; Tianshou 0.5.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/style.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/documentation_options.js?v=b9afe91b"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+        <script src="../_static/js/copybutton.js?v=7db002fe"></script>
+        <script src="../_static/js/benchmark.js?v=1091b9f3"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="tianshou.data" href="../api/tianshou.data.html" />
+    <link rel="prev" title="Benchmark" href="benchmark.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Tianshou
+              <img src="../_static/tianshou-logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.5.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="get_started.html">Get Started with Jupyter Notebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dqn.html">Deep Q Network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">Basic concepts in Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="batch.html">Understand Batch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tictactoe.html">Multi-Agent RL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logger.html">Logging Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="benchmark.html">Benchmark</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Cheat Sheet</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#build-policy-network">Build Policy Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build-new-policy">Build New Policy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#manually-evaluate-policy">Manually Evaluate Policy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#customize-training-process">Customize Training Process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#resume-training-process">Resume Training Process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parallel-sampling">Parallel Sampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#envpool-integration">EnvPool Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#handle-batched-data-stream-in-collector">Handle Batched Data Stream in Collector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rnn-style-training">RNN-style Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#multi-gpu-training">Multi-GPU Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#user-defined-environment-and-different-state-representation">User-defined Environment and Different State Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#multi-agent-reinforcement-learning">Multi-Agent Reinforcement Learning</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/tianshou.data.html">tianshou.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/tianshou.env.html">tianshou.env</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/tianshou.policy.html">tianshou.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/tianshou.trainer.html">tianshou.trainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/tianshou.exploration.html">tianshou.exploration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/tianshou.utils.html">tianshou.utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributor.html">Contributor</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Tianshou</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Cheat Sheet</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tutorials/cheatsheet.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cheat-sheet">
+<h1>Cheat Sheet<a class="headerlink" href="#cheat-sheet" title="Link to this heading">¶</a></h1>
+<p>This page shows some code snippets of how to use Tianshou to develop new
+algorithms / apply algorithms to new scenarios.</p>
+<p>By the way, some of these issues can be resolved by using a <code class="docutils literal notranslate"><span class="pre">gymnasium.Wrapper</span></code>.
+It could be a universal solution in the policy-environment interaction. But
+you can also use the batch processor <a class="reference internal" href="#preprocess-fn"><span class="std std-ref">Handle Batched Data Stream in Collector</span></a> or vectorized
+environment wrapper <a class="reference internal" href="../api/tianshou.env.html#tianshou.env.VectorEnvWrapper" title="tianshou.env.VectorEnvWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">VectorEnvWrapper</span></code></a>.</p>
+<section id="build-policy-network">
+<span id="network-api"></span><h2>Build Policy Network<a class="headerlink" href="#build-policy-network" title="Link to this heading">¶</a></h2>
+<p>See <a class="reference internal" href="dqn.html#build-the-network"><span class="std std-ref">Build the Network</span></a>.</p>
+</section>
+<section id="build-new-policy">
+<span id="new-policy"></span><h2>Build New Policy<a class="headerlink" href="#build-new-policy" title="Link to this heading">¶</a></h2>
+<p>See <a class="reference internal" href="../api/tianshou.policy.html#tianshou.policy.BasePolicy" title="tianshou.policy.BasePolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePolicy</span></code></a>.</p>
+</section>
+<section id="manually-evaluate-policy">
+<span id="eval-policy"></span><h2>Manually Evaluate Policy<a class="headerlink" href="#manually-evaluate-policy" title="Link to this heading">¶</a></h2>
+<p>If you’d like to manually see the action generated by a well-trained agent:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># assume obs is a single environment observation</span>
+<span class="n">action</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">Batch</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">obs</span><span class="p">])))</span><span class="o">.</span><span class="n">act</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="customize-training-process">
+<span id="customize-training"></span><h2>Customize Training Process<a class="headerlink" href="#customize-training-process" title="Link to this heading">¶</a></h2>
+<p>See <a class="reference internal" href="dqn.html#customized-trainer"><span class="std std-ref">Train a Policy with Customized Codes</span></a>.</p>
+</section>
+<section id="resume-training-process">
+<span id="resume-training"></span><h2>Resume Training Process<a class="headerlink" href="#resume-training-process" title="Link to this heading">¶</a></h2>
+<p>This is related to <a class="reference external" href="https://github.com/thu-ml/tianshou/issues/349">Issue 349</a>.</p>
+<p>To resume training process from an existing checkpoint, you need to do the following things in the training process:</p>
+<ol class="arabic simple">
+<li><p>Make sure you write <code class="docutils literal notranslate"><span class="pre">save_checkpoint_fn</span></code> which saves everything needed in the training process, i.e., policy, optim, buffer; pass it to trainer;</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">TensorboardLogger</span></code>;</p></li>
+<li><p>To adjust the save frequency, specify <code class="docutils literal notranslate"><span class="pre">save_interval</span></code> when initializing TensorboardLogger.</p></li>
+</ol>
+<p>And to successfully resume from a checkpoint:</p>
+<ol class="arabic simple">
+<li><p>Load everything needed in the training process <strong>before trainer initialization</strong>, i.e., policy, optim, buffer;</p></li>
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">resume_from_log=True</span></code> with trainer;</p></li>
+</ol>
+<p>We provide an example to show how these steps work: checkout <a class="reference external" href="https://github.com/thu-ml/tianshou/blob/master/test/discrete/test_c51.py">test_c51.py</a>, <a class="reference external" href="https://github.com/thu-ml/tianshou/blob/master/test/continuous/test_ppo.py">test_ppo.py</a> or <a class="reference external" href="https://github.com/thu-ml/tianshou/blob/master/test/offline/test_discrete_bcq.py">test_discrete_bcq.py</a> by running</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>test/discrete/test_c51.py<span class="w">  </span><span class="c1"># train some epoch</span>
+<span class="gp">$ </span>python3<span class="w"> </span>test/discrete/test_c51.py<span class="w"> </span>--resume<span class="w">  </span><span class="c1"># restore from existing log and continuing training</span>
+</pre></div>
+</div>
+<p>To correctly render the data (including several tfevent files), we highly recommend using <code class="docutils literal notranslate"><span class="pre">tensorboard</span> <span class="pre">&gt;=</span> <span class="pre">2.5.0</span></code> (see <a class="reference external" href="https://github.com/thu-ml/tianshou/pull/350#issuecomment-829123378">here</a> for the reason). Otherwise, it may cause overlapping issue that you need to manually handle with.</p>
+</section>
+<section id="parallel-sampling">
+<span id="id1"></span><h2>Parallel Sampling<a class="headerlink" href="#parallel-sampling" title="Link to this heading">¶</a></h2>
+<p>Tianshou provides the following classes for vectorized environment:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../api/tianshou.env.html#tianshou.env.DummyVectorEnv" title="tianshou.env.DummyVectorEnv"><code class="xref py py-class docutils literal notranslate"><span class="pre">DummyVectorEnv</span></code></a> is for pseudo-parallel simulation (implemented with a for-loop, useful for debugging).</p></li>
+<li><p><a class="reference internal" href="../api/tianshou.env.html#tianshou.env.SubprocVectorEnv" title="tianshou.env.SubprocVectorEnv"><code class="xref py py-class docutils literal notranslate"><span class="pre">SubprocVectorEnv</span></code></a> uses multiple processes for parallel simulation. This is the most often choice for parallel simulation.</p></li>
+<li><p><a class="reference internal" href="../api/tianshou.env.html#tianshou.env.ShmemVectorEnv" title="tianshou.env.ShmemVectorEnv"><code class="xref py py-class docutils literal notranslate"><span class="pre">ShmemVectorEnv</span></code></a> has a similar implementation to <a class="reference internal" href="../api/tianshou.env.html#tianshou.env.SubprocVectorEnv" title="tianshou.env.SubprocVectorEnv"><code class="xref py py-class docutils literal notranslate"><span class="pre">SubprocVectorEnv</span></code></a>, but is optimized (in terms of both memory footprint and simulation speed) for environments with large observations such as images.</p></li>
+<li><p><a class="reference internal" href="../api/tianshou.env.html#tianshou.env.RayVectorEnv" title="tianshou.env.RayVectorEnv"><code class="xref py py-class docutils literal notranslate"><span class="pre">RayVectorEnv</span></code></a> is currently the only choice for parallel simulation in a cluster with multiple machines.</p></li>
+</ul>
+<p>Although these classes are optimized for different scenarios, they have exactly the same APIs because they are sub-classes of <a class="reference internal" href="../api/tianshou.env.html#tianshou.env.BaseVectorEnv" title="tianshou.env.BaseVectorEnv"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseVectorEnv</span></code></a>. Just provide a list of functions who return environments upon called, and it is all set.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">env_fns</span> <span class="o">=</span> <span class="p">[</span><span class="k">lambda</span> <span class="n">x</span><span class="o">=</span><span class="n">i</span><span class="p">:</span> <span class="n">MyTestEnv</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]]</span>
+<span class="n">venv</span> <span class="o">=</span> <span class="n">SubprocVectorEnv</span><span class="p">(</span><span class="n">env_fns</span><span class="p">)</span>  <span class="c1"># DummyVectorEnv, ShmemVectorEnv, or RayVectorEnv, whichever you like.</span>
+<span class="n">venv</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>  <span class="c1"># returns the initial observations of each environment</span>
+<span class="n">venv</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>  <span class="c1"># provide actions for each environment and get their results</span>
+</pre></div>
+</div>
+<aside class="sidebar">
+<p class="sidebar-title">An example of sync/async VectorEnv (steps with the same color end up in one batch that is disposed by the policy at the same time).</p>
+<figure class="align-default">
+<img alt="../_images/async.png" src="../_images/async.png" />
+</figure>
+</aside>
+<p>By default, parallel environment simulation is synchronous: a step is done after all environments have finished a step. Synchronous simulation works well if each step of environments costs roughly the same time.</p>
+<p>In case the time cost of environments varies a lot (e.g. 90% step cost 1s, but 10% cost 10s) where slow environments lag fast environments behind, async simulation can be used (related to <a class="reference external" href="https://github.com/thu-ml/tianshou/issues/103">Issue 103</a>). The idea is to start those finished environments without waiting for slow environments.</p>
+<p>Asynchronous simulation is a built-in functionality of
+<a class="reference internal" href="../api/tianshou.env.html#tianshou.env.BaseVectorEnv" title="tianshou.env.BaseVectorEnv"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseVectorEnv</span></code></a>. Just provide <code class="docutils literal notranslate"><span class="pre">wait_num</span></code> or <code class="docutils literal notranslate"><span class="pre">timeout</span></code>
+(or both) and async simulation works.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">env_fns</span> <span class="o">=</span> <span class="p">[</span><span class="k">lambda</span> <span class="n">x</span><span class="o">=</span><span class="n">i</span><span class="p">:</span> <span class="n">MyTestEnv</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">sleep</span><span class="o">=</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]]</span>
+<span class="c1"># DummyVectorEnv, ShmemVectorEnv, or RayVectorEnv, whichever you like.</span>
+<span class="n">venv</span> <span class="o">=</span> <span class="n">SubprocVectorEnv</span><span class="p">(</span><span class="n">env_fns</span><span class="p">,</span> <span class="n">wait_num</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">venv</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>  <span class="c1"># returns the initial observations of each environment</span>
+<span class="c1"># returns &quot;wait_num&quot; steps or finished steps after &quot;timeout&quot; seconds,</span>
+<span class="c1"># whichever occurs first.</span>
+<span class="n">venv</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">actions</span><span class="p">,</span> <span class="n">ready_id</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If we have 4 envs and set <code class="docutils literal notranslate"><span class="pre">wait_num</span> <span class="pre">=</span> <span class="pre">3</span></code>, each of the step only returns 3 results of these 4 envs.</p>
+<p>You can treat the <code class="docutils literal notranslate"><span class="pre">timeout</span></code> parameter as a dynamic <code class="docutils literal notranslate"><span class="pre">wait_num</span></code>. In each vectorized step it only returns the environments finished within the given time. If there is no such environment, it will wait until any of them finished.</p>
+<p>The figure in the right gives an intuitive comparison among synchronous/asynchronous simulation.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The async simulation collector would cause some exceptions when used as
+<code class="docutils literal notranslate"><span class="pre">test_collector</span></code> in <a class="reference internal" href="../api/tianshou.trainer.html"><span class="doc">tianshou.trainer</span></a> (related to
+<a class="reference external" href="https://github.com/thu-ml/tianshou/issues/700">Issue 700</a>). Please use
+sync version for <code class="docutils literal notranslate"><span class="pre">test_collector</span></code> instead.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If you use your own environment, please make sure the <code class="docutils literal notranslate"><span class="pre">seed</span></code> method is set up properly, e.g.,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="p">):</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Otherwise, the outputs of these envs may be the same with each other.</p>
+</div>
+</section>
+<section id="envpool-integration">
+<span id="id2"></span><h2>EnvPool Integration<a class="headerlink" href="#envpool-integration" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://github.com/sail-sg/envpool/">EnvPool</a> is a C++-based vectorized environment implementation and is way faster than the above solutions. The APIs are almost the same as above four classes, so that means you can directly switch the vectorized environment to envpool and get immediate speed-up.</p>
+<p>Currently it supports
+<a class="reference external" href="https://github.com/thu-ml/tianshou/tree/master/examples/atari#envpool">Atari</a>,
+<a class="reference external" href="https://github.com/thu-ml/tianshou/tree/master/examples/mujoco#envpool">Mujoco</a>,
+<a class="reference external" href="https://github.com/thu-ml/tianshou/tree/master/examples/vizdoom#envpool">VizDoom</a>,
+toy_text and classic_control environments. For more information, please refer to <a class="reference external" href="https://envpool.readthedocs.io/en/latest/">EnvPool’s documentation</a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># install envpool: pip3 install envpool</span>
+
+<span class="kn">import</span> <span class="nn">envpool</span>
+<span class="n">envs</span> <span class="o">=</span> <span class="n">envpool</span><span class="o">.</span><span class="n">make_gymnasium</span><span class="p">(</span><span class="s2">&quot;CartPole-v0&quot;</span><span class="p">,</span> <span class="n">num_envs</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">collector</span> <span class="o">=</span> <span class="n">Collector</span><span class="p">(</span><span class="n">policy</span><span class="p">,</span> <span class="n">envs</span><span class="p">,</span> <span class="n">buffer</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here are some other <a class="reference external" href="https://github.com/sail-sg/envpool/tree/master/examples/tianshou_examples">examples</a>.</p>
+</section>
+<section id="handle-batched-data-stream-in-collector">
+<span id="preprocess-fn"></span><h2>Handle Batched Data Stream in Collector<a class="headerlink" href="#handle-batched-data-stream-in-collector" title="Link to this heading">¶</a></h2>
+<p>This is related to <a class="reference external" href="https://github.com/thu-ml/tianshou/issues/42">Issue 42</a>.</p>
+<p>If you want to get log stat from data stream / pre-process batch-image / modify the reward with given env info, use <code class="docutils literal notranslate"><span class="pre">preproces_fn</span></code> in <a class="reference internal" href="../api/tianshou.data.html#tianshou.data.Collector" title="tianshou.data.Collector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Collector</span></code></a>. This is a hook which will be called before the data adding into the buffer.</p>
+<p>It will receive with “obs” and “env_id” when the collector resets the environment, and will receive six keys “obs_next”, “rew”, “done”, “info”, “policy”, “env_id” in a normal env step. It returns either a dict or a <a class="reference internal" href="../api/tianshou.data.html#tianshou.data.Batch" title="tianshou.data.Batch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Batch</span></code></a> with the modified keys and values.</p>
+<p>These variables are intended to gather all the information requires to keep track of a simulation step, namely the (observation, action, reward, done flag, next observation, info, intermediate result of the policy) at time t, for the whole duration of the simulation.</p>
+<p>For example, you can write your hook as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">deque</span>
+
+
+<span class="k">class</span> <span class="nc">MyProcessor</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">episode_log</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">main_log</span> <span class="o">=</span> <span class="n">deque</span><span class="p">(</span><span class="n">maxlen</span><span class="o">=</span><span class="n">size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">main_log</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">baseline</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">preprocess_fn</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;change reward to zero mean&quot;&quot;&quot;</span>
+        <span class="c1"># if obs &amp;&amp; env_id exist -&gt; reset</span>
+        <span class="c1"># if obs_next/act/rew/done/policy/env_id exist -&gt; normal step</span>
+        <span class="k">if</span> <span class="s1">&#39;rew&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="c1"># means that it is called after env.reset(), it can only process the obs</span>
+            <span class="k">return</span> <span class="n">Batch</span><span class="p">()</span>  <span class="c1"># none of the variables are needed to be updated</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;rew&#39;</span><span class="p">])</span>  <span class="c1"># the number of envs in collector</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">episode_log</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">episode_log</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">episode_log</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;rew&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;rew&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">baseline</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;done&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">main_log</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">episode_log</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">episode_log</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">baseline</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">main_log</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">Batch</span><span class="p">(</span><span class="n">rew</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;rew&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>And finally,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">test_processor</span> <span class="o">=</span> <span class="n">MyProcessor</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">collector</span> <span class="o">=</span> <span class="n">Collector</span><span class="p">(</span><span class="n">policy</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">preprocess_fn</span><span class="o">=</span><span class="n">test_processor</span><span class="o">.</span><span class="n">preprocess_fn</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Some examples are in <a class="reference external" href="https://github.com/thu-ml/tianshou/blob/master/test/base/test_collector.py">test/base/test_collector.py</a>.</p>
+<p>Another solution is to create a vector environment wrapper through <a class="reference internal" href="../api/tianshou.env.html#tianshou.env.VectorEnvWrapper" title="tianshou.env.VectorEnvWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">VectorEnvWrapper</span></code></a>, e.g.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">deque</span>
+<span class="kn">from</span> <span class="nn">tianshou.env</span> <span class="kn">import</span> <span class="n">VectorEnvWrapper</span>
+
+<span class="k">class</span> <span class="nc">MyWrapper</span><span class="p">(</span><span class="n">VectorEnvWrapper</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">venv</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">episode_log</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">main_log</span> <span class="o">=</span> <span class="n">deque</span><span class="p">(</span><span class="n">maxlen</span><span class="o">=</span><span class="n">size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">main_log</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">baseline</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">env_id</span><span class="p">):</span>
+        <span class="n">obs</span><span class="p">,</span> <span class="n">rew</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">venv</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="n">env_id</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rew</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">episode_log</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">episode_log</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">episode_log</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rew</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">rew</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">baseline</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">done</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">main_log</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">episode_log</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">episode_log</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">baseline</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">main_log</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">obs</span><span class="p">,</span> <span class="n">rew</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">info</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">MyWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">collector</span> <span class="o">=</span> <span class="n">Collector</span><span class="p">(</span><span class="n">policy</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">buffer</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We provide an observation normalization vector env wrapper: <a class="reference internal" href="../api/tianshou.env.html#tianshou.env.VectorEnvNormObs" title="tianshou.env.VectorEnvNormObs"><code class="xref py py-class docutils literal notranslate"><span class="pre">VectorEnvNormObs</span></code></a>.</p>
+</section>
+<section id="rnn-style-training">
+<span id="rnn-training"></span><h2>RNN-style Training<a class="headerlink" href="#rnn-style-training" title="Link to this heading">¶</a></h2>
+<p>This is related to <a class="reference external" href="https://github.com/thu-ml/tianshou/issues/19">Issue 19</a>.</p>
+<p>First, add an argument “stack_num” to <a class="reference internal" href="../api/tianshou.data.html#tianshou.data.ReplayBuffer" title="tianshou.data.ReplayBuffer"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReplayBuffer</span></code></a>, <a class="reference internal" href="../api/tianshou.data.html#tianshou.data.VectorReplayBuffer" title="tianshou.data.VectorReplayBuffer"><code class="xref py py-class docutils literal notranslate"><span class="pre">VectorReplayBuffer</span></code></a>, or other types of buffer you are using, like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">buf</span> <span class="o">=</span> <span class="n">ReplayBuffer</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">stack_num</span><span class="o">=</span><span class="n">stack_num</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then, change the network to recurrent-style, for example, <a class="reference internal" href="../api/tianshou.utils.html#tianshou.utils.net.common.Recurrent" title="tianshou.utils.net.common.Recurrent"><code class="xref py py-class docutils literal notranslate"><span class="pre">Recurrent</span></code></a>, <a class="reference internal" href="../api/tianshou.utils.html#tianshou.utils.net.continuous.RecurrentActorProb" title="tianshou.utils.net.continuous.RecurrentActorProb"><code class="xref py py-class docutils literal notranslate"><span class="pre">RecurrentActorProb</span></code></a> and <a class="reference internal" href="../api/tianshou.utils.html#tianshou.utils.net.continuous.RecurrentCritic" title="tianshou.utils.net.continuous.RecurrentCritic"><code class="xref py py-class docutils literal notranslate"><span class="pre">RecurrentCritic</span></code></a>.</p>
+<p>The above code supports only stacked-observation. If you want to use stacked-action (for Q(stacked-s, stacked-a)), stacked-reward, or other stacked variables, you can add a <code class="docutils literal notranslate"><span class="pre">gym.Wrapper</span></code> to modify the state representation. For example, if we add a wrapper that map <code class="docutils literal notranslate"><span class="pre">[s,</span> <span class="pre">a]</span></code> pair to a new state:</p>
+<ul class="simple">
+<li><p>Before: <code class="docutils literal notranslate"><span class="pre">(s,</span> <span class="pre">a,</span> <span class="pre">s',</span> <span class="pre">r,</span> <span class="pre">d)</span></code> stored in replay buffer, and get stacked s;</p></li>
+<li><p>After applying wrapper: <code class="docutils literal notranslate"><span class="pre">([s,</span> <span class="pre">a],</span> <span class="pre">a,</span> <span class="pre">[s',</span> <span class="pre">a'],</span> <span class="pre">r,</span> <span class="pre">d)</span></code> stored in replay buffer, and get both stacked s and a.</p></li>
+</ul>
+</section>
+<section id="multi-gpu-training">
+<span id="multi-gpu"></span><h2>Multi-GPU Training<a class="headerlink" href="#multi-gpu-training" title="Link to this heading">¶</a></h2>
+<p>To enable training an RL agent with multiple GPUs for a standard environment (i.e., without nested observation) with default networks provided by Tianshou:</p>
+<ol class="arabic simple">
+<li><p>Import <a class="reference internal" href="../api/tianshou.utils.html#tianshou.utils.net.common.DataParallelNet" title="tianshou.utils.net.common.DataParallelNet"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataParallelNet</span></code></a> from <code class="docutils literal notranslate"><span class="pre">tianshou.utils.net.common</span></code>;</p></li>
+<li><p>Change the <code class="docutils literal notranslate"><span class="pre">device</span></code> argument to <code class="docutils literal notranslate"><span class="pre">None</span></code> in the existing networks such as <code class="docutils literal notranslate"><span class="pre">Net</span></code>, <code class="docutils literal notranslate"><span class="pre">Actor</span></code>, <code class="docutils literal notranslate"><span class="pre">Critic</span></code>, <code class="docutils literal notranslate"><span class="pre">ActorProb</span></code></p></li>
+<li><p>Apply <code class="docutils literal notranslate"><span class="pre">DataParallelNet</span></code> wrapper to these networks.</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tianshou.utils.net.common</span> <span class="kn">import</span> <span class="n">Net</span><span class="p">,</span> <span class="n">DataParallelNet</span>
+<span class="kn">from</span> <span class="nn">tianshou.utils.net.discrete</span> <span class="kn">import</span> <span class="n">Actor</span><span class="p">,</span> <span class="n">Critic</span>
+
+<span class="n">actor</span> <span class="o">=</span> <span class="n">DataParallelNet</span><span class="p">(</span><span class="n">Actor</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">action_shape</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">device</span><span class="p">))</span>
+<span class="n">critic</span> <span class="o">=</span> <span class="n">DataParallelNet</span><span class="p">(</span><span class="n">Critic</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">device</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Yes, that’s all! This general approach can be applied to almost all kinds of algorithms implemented in Tianshou.
+We provide a complete script to show how to run multi-GPU: <a class="reference external" href="https://github.com/thu-ml/tianshou/blob/master/test/discrete/test_ppo.py">test/discrete/test_ppo.py</a></p>
+<p>As for other cases such as customized network or environments that have a nested observation, here are the rules:</p>
+<ol class="arabic simple">
+<li><p>The data format transformation (numpy -&gt; cuda) is done in the <code class="docutils literal notranslate"><span class="pre">DataParallelNet</span></code> wrapper; your customized network should not apply any kinds of data format transformation;</p></li>
+<li><p>Create a similar class that inherit <code class="docutils literal notranslate"><span class="pre">DataParallelNet</span></code>, which is only in charge of data format transformation (numpy -&gt; cuda);</p></li>
+<li><p>Do the same things above.</p></li>
+</ol>
+</section>
+<section id="user-defined-environment-and-different-state-representation">
+<span id="self-defined-env"></span><h2>User-defined Environment and Different State Representation<a class="headerlink" href="#user-defined-environment-and-different-state-representation" title="Link to this heading">¶</a></h2>
+<p>This is related to <a class="reference external" href="https://github.com/thu-ml/tianshou/issues/38">Issue 38</a> and <a class="reference external" href="https://github.com/thu-ml/tianshou/issues/69">Issue 69</a>.</p>
+<p>First of all, your self-defined environment must follow the Gym’s API, some of them are listed below:</p>
+<ul class="simple">
+<li><p>reset() -&gt; state</p></li>
+<li><p>step(action) -&gt; state, reward, done, info</p></li>
+<li><p>seed(s) -&gt; List[int]</p></li>
+<li><p>render(mode) -&gt; Any</p></li>
+<li><p>close() -&gt; None</p></li>
+<li><p>observation_space: gym.Space</p></li>
+<li><p>action_space: gym.Space</p></li>
+</ul>
+<p>The state can be a <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> or a Python dictionary. Take “FetchReach-v1” as an example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s1">&#39;FetchReach-v1&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="go">{&#39;observation&#39;: array([ 1.34183265e+00,  7.49100387e-01,  5.34722720e-01,  1.97805133e-04,</span>
+<span class="go">         7.15193042e-05,  7.73933014e-06,  5.51992816e-08, -2.42927453e-06,</span>
+<span class="go">         4.73325650e-06, -2.28455228e-06]),</span>
+<span class="go"> &#39;achieved_goal&#39;: array([1.34183265, 0.74910039, 0.53472272]),</span>
+<span class="go"> &#39;desired_goal&#39;: array([1.24073906, 0.77753463, 0.63457791])}</span>
+</pre></div>
+</div>
+<p>It shows that the state is a dictionary which has 3 keys. It will stored in <a class="reference internal" href="../api/tianshou.data.html#tianshou.data.ReplayBuffer" title="tianshou.data.ReplayBuffer"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReplayBuffer</span></code></a> as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tianshou.data</span> <span class="kn">import</span> <span class="n">Batch</span><span class="p">,</span> <span class="n">ReplayBuffer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">ReplayBuffer</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Batch</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="n">e</span><span class="o">.</span><span class="n">reset</span><span class="p">(),</span> <span class="n">act</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rew</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">done</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="go">ReplayBuffer(</span>
+<span class="go">    act: array([0, 0, 0]),</span>
+<span class="go">    done: array([False, False, False]),</span>
+<span class="go">    obs: Batch(</span>
+<span class="go">             achieved_goal: array([[1.34183265, 0.74910039, 0.53472272],</span>
+<span class="go">                                   [0.        , 0.        , 0.        ],</span>
+<span class="go">                                   [0.        , 0.        , 0.        ]]),</span>
+<span class="go">             desired_goal: array([[1.42154265, 0.62505137, 0.62929863],</span>
+<span class="go">                                  [0.        , 0.        , 0.        ],</span>
+<span class="go">                                  [0.        , 0.        , 0.        ]]),</span>
+<span class="go">             observation: array([[ 1.34183265e+00,  7.49100387e-01,  5.34722720e-01,</span>
+<span class="go">                                   1.97805133e-04,  7.15193042e-05,  7.73933014e-06,</span>
+<span class="go">                                   5.51992816e-08, -2.42927453e-06,  4.73325650e-06,</span>
+<span class="go">                                  -2.28455228e-06],</span>
+<span class="go">                                 [ 0.00000000e+00,  0.00000000e+00,  0.00000000e+00,</span>
+<span class="go">                                   0.00000000e+00,  0.00000000e+00,  0.00000000e+00,</span>
+<span class="go">                                   0.00000000e+00,  0.00000000e+00,  0.00000000e+00,</span>
+<span class="go">                                   0.00000000e+00],</span>
+<span class="go">                                 [ 0.00000000e+00,  0.00000000e+00,  0.00000000e+00,</span>
+<span class="go">                                   0.00000000e+00,  0.00000000e+00,  0.00000000e+00,</span>
+<span class="go">                                   0.00000000e+00,  0.00000000e+00,  0.00000000e+00,</span>
+<span class="go">                                   0.00000000e+00]]),</span>
+<span class="go">         ),</span>
+<span class="go">    rew: array([0, 0, 0]),</span>
+<span class="go">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">achieved_goal</span><span class="p">)</span>
+<span class="go">[[1.34183265 0.74910039 0.53472272]</span>
+<span class="go"> [0.         0.         0.        ]</span>
+<span class="go"> [0.         0.         0.        ]]</span>
+</pre></div>
+</div>
+<p>And the data batch sampled from this replay buffer:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">batch</span><span class="p">,</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">batch</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">[&#39;act&#39;, &#39;done&#39;, &#39;info&#39;, &#39;obs&#39;, &#39;obs_next&#39;, &#39;policy&#39;, &#39;rew&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">batch</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">Batch(</span>
+<span class="go">    achieved_goal: array([1.34183265, 0.74910039, 0.53472272]),</span>
+<span class="go">    desired_goal: array([1.42154265, 0.62505137, 0.62929863]),</span>
+<span class="go">    observation: array([ 1.34183265e+00,  7.49100387e-01,  5.34722720e-01,  1.97805133e-04,</span>
+<span class="go">                         7.15193042e-05,  7.73933014e-06,  5.51992816e-08, -2.42927453e-06,</span>
+<span class="go">                         4.73325650e-06, -2.28455228e-06]),</span>
+<span class="go">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">batch</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">desired_goal</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># recommended</span>
+<span class="go">array([1.42154265, 0.62505137, 0.62929863])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">batch</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">desired_goal</span>  <span class="c1"># not recommended</span>
+<span class="go">array([1.42154265, 0.62505137, 0.62929863])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">batch</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">desired_goal</span>  <span class="c1"># not recommended</span>
+<span class="go">array([1.42154265, 0.62505137, 0.62929863])</span>
+</pre></div>
+</div>
+<p>Thus, in your self-defined network, just change the <code class="docutils literal notranslate"><span class="pre">forward</span></code> function as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="o">...</span><span class="p">):</span>
+    <span class="c1"># s is a batch</span>
+    <span class="n">observation</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">observation</span>
+    <span class="n">achieved_goal</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">achieved_goal</span>
+    <span class="n">desired_goal</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">desired_goal</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p>For self-defined class, the replay buffer will store the reference into a <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">ReplayBuffer</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Batch</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">(),</span> <span class="n">act</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rew</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">done</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="go">ReplayBuffer(</span>
+<span class="go">    act: array([0, 0, 0]),</span>
+<span class="go">    done: array([0, 0, 0]),</span>
+<span class="go">    info: Batch(),</span>
+<span class="go">    obs: array([&lt;networkx.classes.graph.Graph object at 0x7f5c607826a0&gt;, None,</span>
+<span class="go">                None], dtype=object),</span>
+<span class="go">    policy: Batch(),</span>
+<span class="go">    rew: array([0, 0, 0]),</span>
+<span class="go">)</span>
+</pre></div>
+</div>
+<p>But the state stored in the buffer may be a shallow-copy. To make sure each of your state stored in the buffer is distinct, please return the deep-copy version of your state in your env:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">reset</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="n">action</span><span class="p">):</span>
+    <span class="o">...</span>
+    <span class="k">return</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">),</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="p">{}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please make sure this variable is numpy-compatible, e.g., np.array([variable]) will not result in an empty array. Otherwise, ReplayBuffer cannot create an numpy array to store it.</p>
+</div>
+</section>
+<section id="multi-agent-reinforcement-learning">
+<span id="marl-example"></span><h2>Multi-Agent Reinforcement Learning<a class="headerlink" href="#multi-agent-reinforcement-learning" title="Link to this heading">¶</a></h2>
+<p>This is related to <a class="reference external" href="https://github.com/thu-ml/tianshou/issues/121">Issue 121</a>. The discussion is still goes on.</p>
+<p>With the flexible core APIs, Tianshou can support multi-agent reinforcement learning with minimal efforts.</p>
+<p>Currently, we support three types of multi-agent reinforcement learning paradigms:</p>
+<ol class="arabic simple">
+<li><p>Simultaneous move: at each timestep, all the agents take their actions (example: MOBA games)</p></li>
+<li><p>Cyclic move: players take action in turn (example: Go game)</p></li>
+<li><p>Conditional move, at each timestep, the environment conditionally selects an agent to take action. (example: <a class="reference external" href="https://en.wikipedia.org/wiki/Pig_(dice_game)">Pig Game</a>)</p></li>
+</ol>
+<p>We mainly address these multi-agent RL problems by converting them into traditional RL formulations.</p>
+<p>For simultaneous move, the solution is simple: we can just add a <code class="docutils literal notranslate"><span class="pre">num_agent</span></code> dimension to state, action, and reward. Nothing else is going to change.</p>
+<p>For 2 &amp; 3 (cyclic move and conditional move), they can be unified into a single framework: at each timestep, the environment selects an agent with id <code class="docutils literal notranslate"><span class="pre">agent_id</span></code> to play. Since multi-agents are usually wrapped into one object (which we call “abstract agent”), we can pass the <code class="docutils literal notranslate"><span class="pre">agent_id</span></code> to the “abstract agent”, leaving it to further call the specific agent.</p>
+<p>In addition, legal actions in multi-agent RL often vary with timestep (just like Go games), so the environment should also passes the legal action mask to the “abstract agent”, where the mask is a boolean array that “True” for available actions and “False” for illegal actions at the current step. Below is a figure that explains the abstract agent.</p>
+<a class="reference internal image-reference" href="../_images/marl.png"><img alt="../_images/marl.png" class="align-center" src="../_images/marl.png" style="height: 300px;" /></a>
+<p>The above description gives rise to the following formulation of multi-agent RL:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">act</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">agent_id</span><span class="p">,</span> <span class="n">mask</span><span class="p">)</span>
+<span class="p">(</span><span class="n">next_state</span><span class="p">,</span> <span class="n">next_agent_id</span><span class="p">,</span> <span class="n">next_mask</span><span class="p">),</span> <span class="n">reward</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">act</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>By constructing a new state <code class="docutils literal notranslate"><span class="pre">state_</span> <span class="pre">=</span> <span class="pre">(state,</span> <span class="pre">agent_id,</span> <span class="pre">mask)</span></code>, essentially we can return to the typical formulation of RL:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">act</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">state_</span><span class="p">)</span>
+<span class="n">next_state_</span><span class="p">,</span> <span class="n">reward</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">act</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Following this idea, we write a tiny example of playing <a class="reference external" href="https://en.wikipedia.org/wiki/Tic-tac-toe">Tic Tac Toe</a> against a random player by using a Q-learning algorithm. The tutorial is at <a class="reference internal" href="tictactoe.html"><span class="doc">Multi-Agent RL</span></a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="benchmark.html" class="btn btn-neutral float-left" title="Benchmark" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../api/tianshou.data.html" class="btn btn-neutral float-right" title="tianshou.data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Tianshou contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tianshou.data.buffer.her &mdash; Tianshou 0.5.1 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/style.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+        <script src="../../../../_static/js/copybutton.js?v=7db002fe"></script>
+        <script src="../../../../_static/js/benchmark.js?v=1091b9f3"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            Tianshou
+              <img src="../../../../_static/tianshou-logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.5.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/get_started.html">Get Started with Jupyter Notebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/dqn.html">Deep Q Network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/concepts.html">Basic concepts in Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/batch.html">Understand Batch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/tictactoe.html">Multi-Agent RL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/logger.html">Logging Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/benchmark.html">Benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/cheatsheet.html">Cheat Sheet</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.data.html">tianshou.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.env.html">tianshou.env</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.policy.html">tianshou.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.trainer.html">tianshou.trainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.exploration.html">tianshou.exploration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.utils.html">tianshou.utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing to Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributor.html">Contributor</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tianshou</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">tianshou.data.buffer.her</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tianshou.data.buffer.her</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">tianshou.data</span> <span class="kn">import</span> <span class="n">Batch</span><span class="p">,</span> <span class="n">ReplayBuffer</span>
+<span class="kn">from</span> <span class="nn">tianshou.data.batch</span> <span class="kn">import</span> <span class="n">BatchProtocol</span>
+<span class="kn">from</span> <span class="nn">tianshou.data.types</span> <span class="kn">import</span> <span class="n">RolloutBatchProtocol</span>
+
+
+<div class="viewcode-block" id="HERReplayBuffer">
+<a class="viewcode-back" href="../../../../api/tianshou.data.html#tianshou.data.HERReplayBuffer">[docs]</a>
+<span class="k">class</span> <span class="nc">HERReplayBuffer</span><span class="p">(</span><span class="n">ReplayBuffer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implementation of Hindsight Experience Replay. arXiv:1707.01495.</span>
+
+<span class="sd">    HERReplayBuffer is to be used with goal-based environment where the</span>
+<span class="sd">    observation is a dictionary with keys ``observation``, ``achieved_goal`` and</span>
+<span class="sd">    ``desired_goal``. Currently support only HER&#39;s future strategy, online sampling.</span>
+
+<span class="sd">    :param int size: the size of the replay buffer.</span>
+<span class="sd">    :param compute_reward_fn: a function that takes 2 ``np.array`` arguments,</span>
+<span class="sd">        ``acheived_goal`` and ``desired_goal``, and returns rewards as ``np.array``.</span>
+<span class="sd">        The two arguments are of shape (batch_size, ...original_shape) and the returned</span>
+<span class="sd">        rewards must be of shape (batch_size,).</span>
+<span class="sd">    :param int horizon: the maximum number of steps in an episode.</span>
+<span class="sd">    :param int future_k: the &#39;k&#39; parameter introduced in the paper. In short, there</span>
+<span class="sd">        will be at most k episodes that are re-written for every 1 unaltered episode</span>
+<span class="sd">        during the sampling.</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        Please refer to :class:`~tianshou.data.ReplayBuffer` for other APIs&#39; usage.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">compute_reward_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+        <span class="n">horizon</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">future_k</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">8.0</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">horizon</span> <span class="o">=</span> <span class="n">horizon</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">future_p</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">future_k</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_reward_fn</span> <span class="o">=</span> <span class="n">compute_reward_fn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_original_meta</span> <span class="o">=</span> <span class="n">Batch</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_altered_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+
+    <span class="k">def</span> <span class="nf">_restore_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Write cached original meta back to `self._meta`.</span>
+
+<span class="sd">        It&#39;s called everytime before &#39;writing&#39;, &#39;sampling&#39; or &#39;saving&#39; the buffer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_altered_indices&#39;</span><span class="p">):</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_altered_indices</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_altered_indices</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_original_meta</span>
+        <span class="c1"># Clean</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_original_meta</span> <span class="o">=</span> <span class="n">Batch</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_altered_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+
+<div class="viewcode-block" id="HERReplayBuffer.reset">
+<a class="viewcode-back" href="../../../../api/tianshou.data.html#tianshou.data.HERReplayBuffer.reset">[docs]</a>
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keep_statistics</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_restore_cache</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">keep_statistics</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="HERReplayBuffer.save_hdf5">
+<a class="viewcode-back" href="../../../../api/tianshou.data.html#tianshou.data.HERReplayBuffer.save_hdf5">[docs]</a>
+    <span class="k">def</span> <span class="nf">save_hdf5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">compression</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_restore_cache</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">save_hdf5</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">compression</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="HERReplayBuffer.set_batch">
+<a class="viewcode-back" href="../../../../api/tianshou.data.html#tianshou.data.HERReplayBuffer.set_batch">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="n">RolloutBatchProtocol</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_restore_cache</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">set_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="HERReplayBuffer.update">
+<a class="viewcode-back" href="../../../../api/tianshou.data.html#tianshou.data.HERReplayBuffer.update">[docs]</a>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="s2">&quot;HERReplayBuffer&quot;</span><span class="p">,</span> <span class="s2">&quot;ReplayBuffer&quot;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_restore_cache</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="HERReplayBuffer.add">
+<a class="viewcode-back" href="../../../../api/tianshou.data.html#tianshou.data.HERReplayBuffer.add">[docs]</a>
+    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">batch</span><span class="p">:</span> <span class="n">RolloutBatchProtocol</span><span class="p">,</span>
+        <span class="n">buffer_ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_restore_cache</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">buffer_ids</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="HERReplayBuffer.sample_indices">
+<a class="viewcode-back" href="../../../../api/tianshou.data.html#tianshou.data.HERReplayBuffer.sample_indices">[docs]</a>
+    <span class="k">def</span> <span class="nf">sample_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a random sample of index with size = batch_size.</span>
+
+<span class="sd">        Return all available indices in the buffer if batch_size is 0; return an \</span>
+<span class="sd">        empty numpy array if batch_size &lt; 0 or no available index can be sampled. \</span>
+<span class="sd">        Additionally, some episodes of the sampled transitions will be re-written \</span>
+<span class="sd">        according to HER.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_restore_cache</span><span class="p">()</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">sample_indices</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rewrite_transitions</span><span class="p">(</span><span class="n">indices</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">indices</span></div>
+
+
+<div class="viewcode-block" id="HERReplayBuffer.rewrite_transitions">
+<a class="viewcode-back" href="../../../../api/tianshou.data.html#tianshou.data.HERReplayBuffer.rewrite_transitions">[docs]</a>
+    <span class="k">def</span> <span class="nf">rewrite_transitions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Re-write the goal of some sampled transitions&#39; episodes according to HER.</span>
+
+<span class="sd">        Currently applies only HER&#39;s &#39;future&#39; strategy. The new goals will be written \</span>
+<span class="sd">        directly to the internal batch data temporarily and will be restored right \</span>
+<span class="sd">        before the next sampling or when using some of the buffer&#39;s method (e.g. \</span>
+<span class="sd">        `add`, `save_hdf5`, etc.). This is to make sure that n-step returns \</span>
+<span class="sd">        calculation etc., performs correctly without additional alteration.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">indices</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Sort indices keeping chronological order</span>
+        <span class="n">indices</span><span class="p">[</span><span class="n">indices</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxsize</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+        <span class="n">indices</span><span class="p">[</span><span class="n">indices</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxsize</span><span class="p">]</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxsize</span>
+
+        <span class="c1"># Construct episode trajectories</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">horizon</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">next</span><span class="p">(</span><span class="n">indices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+
+        <span class="c1"># Calculate future timestep to use</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">terminal</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">episodes_len</span> <span class="o">=</span> <span class="p">(</span><span class="n">terminal</span> <span class="o">-</span> <span class="n">current</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxsize</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxsize</span>
+        <span class="n">future_offset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> <span class="o">*</span> <span class="n">episodes_len</span>
+        <span class="n">future_offset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">future_offset</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">future_t</span> <span class="o">=</span> <span class="p">(</span><span class="n">current</span> <span class="o">+</span> <span class="n">future_offset</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxsize</span>
+
+        <span class="c1"># Compute indices</span>
+        <span class="c1">#   open indices are used to find longest, unique trajectories among</span>
+        <span class="c1">#   presented episodes</span>
+        <span class="n">unique_ep_open_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">terminal</span><span class="p">,</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">unique_ep_indices</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[:,</span> <span class="n">unique_ep_open_indices</span><span class="p">]</span>
+        <span class="c1">#   close indices are used to find max future_t among presented episodes</span>
+        <span class="n">unique_ep_close_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span>
+            <span class="p">[(</span><span class="n">unique_ep_open_indices</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">:],</span>
+             <span class="nb">len</span><span class="p">(</span><span class="n">terminal</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="c1">#   episode indices that will be altered</span>
+        <span class="n">her_ep_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">unique_ep_open_indices</span><span class="p">),</span>
+            <span class="n">size</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">unique_ep_open_indices</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">future_p</span><span class="p">),</span>
+            <span class="n">replace</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Cache original meta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_altered_indices</span> <span class="o">=</span> <span class="n">unique_ep_indices</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_original_meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_altered_indices</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="c1"># Copy original obs, ep_rew (and obs_next), and obs of future time step</span>
+        <span class="n">ep_obs</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">unique_ep_indices</span><span class="p">]</span><span class="o">.</span><span class="n">obs</span>
+        <span class="c1"># to satisfy mypy</span>
+        <span class="c1"># TODO: add protocol covering these batches</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ep_obs</span><span class="p">,</span> <span class="n">BatchProtocol</span><span class="p">)</span>
+        <span class="n">ep_rew</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">unique_ep_indices</span><span class="p">]</span><span class="o">.</span><span class="n">rew</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_save_obs_next</span><span class="p">:</span>
+            <span class="n">ep_obs_next</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">unique_ep_indices</span><span class="p">]</span><span class="o">.</span><span class="n">obs_next</span>
+            <span class="c1"># to satisfy mypy</span>
+            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ep_obs_next</span><span class="p">,</span> <span class="n">BatchProtocol</span><span class="p">)</span>
+            <span class="n">future_obs</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">future_t</span><span class="p">[</span><span class="n">unique_ep_close_indices</span><span class="p">]]</span><span class="o">.</span><span class="n">obs_next</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">future_obs</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">next</span><span class="p">(</span><span class="n">future_t</span><span class="p">[</span><span class="n">unique_ep_close_indices</span><span class="p">])]</span><span class="o">.</span><span class="n">obs</span>
+
+        <span class="c1"># Re-assign goals and rewards via broadcast assignment</span>
+        <span class="n">ep_obs</span><span class="o">.</span><span class="n">desired_goal</span><span class="p">[:,</span> <span class="n">her_ep_indices</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="n">future_obs</span><span class="o">.</span><span class="n">achieved_goal</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">her_ep_indices</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_save_obs_next</span><span class="p">:</span>
+            <span class="n">ep_obs_next</span><span class="o">.</span><span class="n">desired_goal</span><span class="p">[:,</span> <span class="n">her_ep_indices</span><span class="p">]</span> <span class="o">=</span> \
+                <span class="n">future_obs</span><span class="o">.</span><span class="n">achieved_goal</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">her_ep_indices</span><span class="p">]</span>
+            <span class="n">ep_rew</span><span class="p">[:,</span> <span class="n">her_ep_indices</span><span class="p">]</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">_compute_reward</span><span class="p">(</span><span class="n">ep_obs_next</span><span class="p">)[:,</span> <span class="n">her_ep_indices</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tmp_ep_obs_next</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">next</span><span class="p">(</span><span class="n">unique_ep_indices</span><span class="p">)]</span><span class="o">.</span><span class="n">obs</span>
+            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tmp_ep_obs_next</span><span class="p">,</span> <span class="n">BatchProtocol</span><span class="p">)</span>
+            <span class="n">ep_rew</span><span class="p">[:,</span> <span class="n">her_ep_indices</span><span class="p">]</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">_compute_reward</span><span class="p">(</span><span class="n">tmp_ep_obs_next</span><span class="p">)[:,</span> <span class="n">her_ep_indices</span><span class="p">]</span>
+
+        <span class="c1"># Sanity check</span>
+        <span class="k">assert</span> <span class="n">ep_obs</span><span class="o">.</span><span class="n">desired_goal</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="n">unique_ep_indices</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">assert</span> <span class="n">ep_obs</span><span class="o">.</span><span class="n">achieved_goal</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="n">unique_ep_indices</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">assert</span> <span class="n">ep_rew</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">unique_ep_indices</span><span class="o">.</span><span class="n">shape</span>
+
+        <span class="c1"># Re-write meta</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">obs</span><span class="p">,</span> <span class="n">BatchProtocol</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="n">unique_ep_indices</span><span class="p">]</span> <span class="o">=</span> <span class="n">ep_obs</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_save_obs_next</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">obs_next</span><span class="p">[</span><span class="n">unique_ep_indices</span><span class="p">]</span> <span class="o">=</span> <span class="n">ep_obs_next</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">rew</span><span class="p">[</span><span class="n">unique_ep_indices</span><span class="p">]</span> <span class="o">=</span> <span class="n">ep_rew</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_compute_reward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">:</span> <span class="n">BatchProtocol</span><span class="p">,</span> <span class="n">lead_dims</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="n">lead_shape</span> <span class="o">=</span> <span class="n">obs</span><span class="o">.</span><span class="n">observation</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="n">lead_dims</span><span class="p">]</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">obs</span><span class="o">.</span><span class="n">desired_goal</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="n">obs</span><span class="o">.</span><span class="n">desired_goal</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">lead_dims</span><span class="p">:])</span>
+        <span class="n">ag</span> <span class="o">=</span> <span class="n">obs</span><span class="o">.</span><span class="n">achieved_goal</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="n">obs</span><span class="o">.</span><span class="n">achieved_goal</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">lead_dims</span><span class="p">:])</span>
+        <span class="n">rewards</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_reward_fn</span><span class="p">(</span><span class="n">ag</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">rewards</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">*</span><span class="n">lead_shape</span><span class="p">,</span> <span class="o">*</span><span class="n">rewards</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Tianshou contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

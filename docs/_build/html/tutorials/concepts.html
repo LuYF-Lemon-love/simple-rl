@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Basic concepts in Tianshou &mdash; Tianshou 0.5.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/style.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/documentation_options.js?v=b9afe91b"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+        <script src="../_static/js/copybutton.js?v=7db002fe"></script>
+        <script src="../_static/js/benchmark.js?v=1091b9f3"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Understand Batch" href="batch.html" />
+    <link rel="prev" title="Deep Q Network" href="dqn.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Tianshou
+              <img src="../_static/tianshou-logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.5.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="get_started.html">Get Started with Jupyter Notebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dqn.html">Deep Q Network</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Basic concepts in Tianshou</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#batch">Batch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#buffer">Buffer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#policy">Policy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#states-for-policy">States for policy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#policy-forward">policy.forward</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#policy-process-fn">policy.process_fn</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#collector">Collector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#trainer">Trainer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#a-high-level-explanation">A High-level Explanation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="batch.html">Understand Batch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tictactoe.html">Multi-Agent RL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logger.html">Logging Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="benchmark.html">Benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheat Sheet</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/tianshou.data.html">tianshou.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/tianshou.env.html">tianshou.env</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/tianshou.policy.html">tianshou.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/tianshou.trainer.html">tianshou.trainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/tianshou.exploration.html">tianshou.exploration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/tianshou.utils.html">tianshou.utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributor.html">Contributor</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Tianshou</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Basic concepts in Tianshou</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tutorials/concepts.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="basic-concepts-in-tianshou">
+<h1>Basic concepts in Tianshou<a class="headerlink" href="#basic-concepts-in-tianshou" title="Link to this heading">¶</a></h1>
+<p>Tianshou splits a Reinforcement Learning agent training procedure into these parts: trainer, collector, policy, and data buffer. The general control flow can be described as:</p>
+<a class="reference internal image-reference" href="../_images/concepts_arch.png"><img alt="../_images/concepts_arch.png" class="align-center" src="../_images/concepts_arch.png" style="height: 300px;" /></a>
+<p>Here is a more detailed description, where <code class="docutils literal notranslate"><span class="pre">Env</span></code> is the environment and <code class="docutils literal notranslate"><span class="pre">Model</span></code> is the neural network:</p>
+<a class="reference internal image-reference" href="../_images/concepts_arch2.png"><img alt="../_images/concepts_arch2.png" class="align-center" src="../_images/concepts_arch2.png" style="height: 300px;" /></a>
+<section id="batch">
+<h2>Batch<a class="headerlink" href="#batch" title="Link to this heading">¶</a></h2>
+<p>Tianshou provides <a class="reference internal" href="../api/tianshou.data.html#tianshou.data.Batch" title="tianshou.data.Batch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Batch</span></code></a> as the internal data structure to pass any kind of data to other methods, for example, a collector gives a <a class="reference internal" href="../api/tianshou.data.html#tianshou.data.Batch" title="tianshou.data.Batch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Batch</span></code></a> to policy for learning. Let’s take a look at this script:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch</span><span class="o">,</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tianshou.data</span> <span class="kn">import</span> <span class="n">Batch</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">Batch</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;2312312&#39;</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># the list will automatically be converted to numpy array</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">b</span>
+<span class="go">array([5, 5])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">Batch(</span>
+<span class="go">    a: 4,</span>
+<span class="go">    b: array([3, 4, 5]),</span>
+<span class="go">    c: &#39;2312312&#39;,</span>
+<span class="go">    d: array([&#39;a&#39;, &#39;-2&#39;, &#39;-3&#39;], dtype=object),</span>
+<span class="go">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">Batch</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;index&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))},</span> <span class="n">act</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="go">Batch(</span>
+<span class="go">    obs: Batch(</span>
+<span class="go">             index: array([0., 6., 0.]),</span>
+<span class="go">         ),</span>
+<span class="go">    act: tensor([0., 6.]),</span>
+<span class="go">)</span>
+</pre></div>
+</div>
+<p>In short, you can define a <a class="reference internal" href="../api/tianshou.data.html#tianshou.data.Batch" title="tianshou.data.Batch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Batch</span></code></a> with any key-value pair, and perform some common operations over it.</p>
+<p><a class="reference internal" href="batch.html#batch-concept"><span class="std std-ref">Understand Batch</span></a> is a dedicated tutorial for <a class="reference internal" href="../api/tianshou.data.html#tianshou.data.Batch" title="tianshou.data.Batch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Batch</span></code></a>. We strongly recommend every user to read it so as to correctly understand and use <a class="reference internal" href="../api/tianshou.data.html#tianshou.data.Batch" title="tianshou.data.Batch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Batch</span></code></a>.</p>
+</section>
+<section id="buffer">
+<h2>Buffer<a class="headerlink" href="#buffer" title="Link to this heading">¶</a></h2>
+<p><a class="reference internal" href="../api/tianshou.data.html#tianshou.data.ReplayBuffer" title="tianshou.data.ReplayBuffer"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReplayBuffer</span></code></a> stores data generated from interaction between the policy and environment. ReplayBuffer can be considered as a specialized form (or management) of <a class="reference internal" href="../api/tianshou.data.html#tianshou.data.Batch" title="tianshou.data.Batch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Batch</span></code></a>. It stores all the data in a batch with circular-queue style.</p>
+<p>The current implementation of Tianshou typically use the following reserved keys in
+<a class="reference internal" href="../api/tianshou.data.html#tianshou.data.Batch" title="tianshou.data.Batch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Batch</span></code></a>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">obs</span></code> the observation of step <span class="math notranslate nohighlight">\(t\)</span> ;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">act</span></code> the action of step <span class="math notranslate nohighlight">\(t\)</span> ;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rew</span></code> the reward of step <span class="math notranslate nohighlight">\(t\)</span> ;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">terminated</span></code> the terminated flag of step <span class="math notranslate nohighlight">\(t\)</span> ;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">truncated</span></code> the truncated flag of step <span class="math notranslate nohighlight">\(t\)</span> ;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">done</span></code> the done flag of step <span class="math notranslate nohighlight">\(t\)</span> (can be inferred as <code class="docutils literal notranslate"><span class="pre">terminated</span> <span class="pre">or</span> <span class="pre">truncated</span></code>);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">obs_next</span></code> the observation of step <span class="math notranslate nohighlight">\(t+1\)</span> ;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">info</span></code> the info of step <span class="math notranslate nohighlight">\(t\)</span> (in <code class="docutils literal notranslate"><span class="pre">gym.Env</span></code>, the <code class="docutils literal notranslate"><span class="pre">env.step()</span></code> function returns 4 arguments, and the last one is <code class="docutils literal notranslate"><span class="pre">info</span></code>);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">policy</span></code> the data computed by policy in step <span class="math notranslate nohighlight">\(t\)</span>;</p></li>
+</ul>
+<p>When adding data to a replay buffer, the done flag will be inferred automatically from <code class="docutils literal notranslate"><span class="pre">terminated``and</span> <span class="pre">``truncated</span></code>.</p>
+<p>The following code snippet illustrates the usage, including:</p>
+<ul class="simple">
+<li><p>the basic data storage: <code class="docutils literal notranslate"><span class="pre">add()</span></code>;</p></li>
+<li><p>get attribute, get slicing data, …;</p></li>
+<li><p>sample from buffer: <code class="docutils literal notranslate"><span class="pre">sample_indices(batch_size)</span></code> and <code class="docutils literal notranslate"><span class="pre">sample(batch_size)</span></code>;</p></li>
+<li><p>get previous/next transition index within episodes: <code class="docutils literal notranslate"><span class="pre">prev(index)</span></code> and <code class="docutils literal notranslate"><span class="pre">next(index)</span></code>;</p></li>
+<li><p>save/load data from buffer: pickle and HDF5;</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pickle</span><span class="o">,</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tianshou.data</span> <span class="kn">import</span> <span class="n">Batch</span><span class="p">,</span> <span class="n">ReplayBuffer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buf</span> <span class="o">=</span> <span class="n">ReplayBuffer</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">buf</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Batch</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">act</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">rew</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">terminated</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">truncated</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">obs_next</span><span class="o">=</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="p">{}))</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buf</span><span class="o">.</span><span class="n">obs</span>
+<span class="go"># since we set size = 20, len(buf.obs) == 20.</span>
+<span class="go">array([0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># but there are only three valid items, so len(buf) == 3.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># save to file &quot;buf.pkl&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;buf.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># save to HDF5 file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buf</span><span class="o">.</span><span class="n">save_hdf5</span><span class="p">(</span><span class="s1">&#39;buf.hdf5&#39;</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buf2</span> <span class="o">=</span> <span class="n">ReplayBuffer</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">15</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">terminated</span> <span class="o">=</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">4</span> <span class="o">==</span> <span class="mi">0</span>
+<span class="gp">... </span>    <span class="n">buf2</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Batch</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">act</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">rew</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">terminated</span><span class="o">=</span><span class="n">terminated</span><span class="p">,</span> <span class="n">truncated</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">obs_next</span><span class="o">=</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="p">{}))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">buf2</span><span class="p">)</span>
+<span class="go">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buf2</span><span class="o">.</span><span class="n">obs</span>
+<span class="go"># since its size = 10, it only stores the last 10 steps&#39; result.</span>
+<span class="go">array([10, 11, 12, 13, 14,  5,  6,  7,  8,  9])</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># move buf2&#39;s result into buf (meanwhile keep it chronologically)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buf</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">buf2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buf</span><span class="o">.</span><span class="n">obs</span>
+<span class="go">array([ 0,  1,  2,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,  0,  0,  0,</span>
+<span class="go">        0,  0,  0,  0])</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># get all available index by using batch_size = 0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">indices</span> <span class="o">=</span> <span class="n">buf</span><span class="o">.</span><span class="n">sample_indices</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">indices</span>
+<span class="go">array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># get one step previous/next transition</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buf</span><span class="o">.</span><span class="n">prev</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+<span class="go">array([ 0,  0,  1,  2,  3,  4,  5,  7,  7,  8,  9, 11, 11])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buf</span><span class="o">.</span><span class="n">next</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+<span class="go">array([ 1,  2,  3,  4,  5,  6,  6,  8,  9, 10, 10, 12, 12])</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># get a random sample from buffer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># the batch_data is equal to buf[indices].</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">batch_data</span><span class="p">,</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">buf</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">batch_data</span><span class="o">.</span><span class="n">obs</span> <span class="o">==</span> <span class="n">buf</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span><span class="o">.</span><span class="n">obs</span>
+<span class="go">array([ True,  True,  True,  True])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+<span class="go">13</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buf</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;buf.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>  <span class="c1"># load from &quot;buf.pkl&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># load complete buffer from HDF5 file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buf</span> <span class="o">=</span> <span class="n">ReplayBuffer</span><span class="o">.</span><span class="n">load_hdf5</span><span class="p">(</span><span class="s1">&#39;buf.hdf5&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="../api/tianshou.data.html#tianshou.data.ReplayBuffer" title="tianshou.data.ReplayBuffer"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReplayBuffer</span></code></a> also supports frame_stack sampling (typically for RNN usage, see issue#19), ignoring storing the next observation (save memory in Atari tasks), and multi-modal observation (see issue#38):</p>
+<details>
+<summary>Advance usage of ReplayBuffer</summary><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">buf</span> <span class="o">=</span> <span class="n">ReplayBuffer</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">stack_num</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">ignore_obs_next</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">16</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">terminated</span> <span class="o">=</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span>
+<span class="gp">... </span>    <span class="n">ptr</span><span class="p">,</span> <span class="n">ep_rew</span><span class="p">,</span> <span class="n">ep_len</span><span class="p">,</span> <span class="n">ep_idx</span> <span class="o">=</span> <span class="n">buf</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="n">Batch</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">i</span><span class="p">},</span> <span class="n">act</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">rew</span><span class="o">=</span><span class="n">i</span><span class="p">,</span>
+<span class="gp">... </span>              <span class="n">terminated</span><span class="o">=</span><span class="n">terminated</span><span class="p">,</span> <span class="n">truncated</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">obs_next</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">}))</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">ep_len</span><span class="p">,</span> <span class="n">ep_rew</span><span class="p">)</span>
+<span class="go">0 [1] [0.]</span>
+<span class="go">1 [0] [0.]</span>
+<span class="go">2 [0] [0.]</span>
+<span class="go">3 [0] [0.]</span>
+<span class="go">4 [0] [0.]</span>
+<span class="go">5 [5] [15.]</span>
+<span class="go">6 [0] [0.]</span>
+<span class="go">7 [0] [0.]</span>
+<span class="go">8 [0] [0.]</span>
+<span class="go">9 [0] [0.]</span>
+<span class="go">10 [5] [40.]</span>
+<span class="go">11 [0] [0.]</span>
+<span class="go">12 [0] [0.]</span>
+<span class="go">13 [0] [0.]</span>
+<span class="go">14 [0] [0.]</span>
+<span class="go">15 [5] [65.]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>  <span class="c1"># you can see obs_next is not saved in buf</span>
+<span class="go">ReplayBuffer(</span>
+<span class="go">    obs: Batch(</span>
+<span class="go">             id: array([ 9, 10, 11, 12, 13, 14, 15,  7,  8]),</span>
+<span class="go">         ),</span>
+<span class="go">    act: array([ 9, 10, 11, 12, 13, 14, 15,  7,  8]),</span>
+<span class="go">    rew: array([ 9., 10., 11., 12., 13., 14., 15.,  7.,  8.]),</span>
+<span class="go">    done: array([False, True, False, False, False, False, True, False,</span>
+<span class="go">                 False]),</span>
+<span class="go">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">buf</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">buf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="s1">&#39;obs&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<span class="go">[[ 7  7  8  9]</span>
+<span class="go"> [ 7  8  9 10]</span>
+<span class="go"> [11 11 11 11]</span>
+<span class="go"> [11 11 11 12]</span>
+<span class="go"> [11 11 12 13]</span>
+<span class="go"> [11 12 13 14]</span>
+<span class="go"> [12 13 14 15]</span>
+<span class="go"> [ 7  7  7  7]</span>
+<span class="go"> [ 7  7  7  8]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># here is another way to get the stacked data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># (stack only for obs and obs_next)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">abs</span><span class="p">(</span><span class="n">buf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="s1">&#39;obs&#39;</span><span class="p">)[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">buf</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># we can get obs_next through __getitem__, even if it doesn&#39;t exist</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># however, [:] will select the item according to timestamp,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># that equals to index == [7, 8, 0, 1, 2, 3, 4, 5, 6]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">buf</span><span class="p">[:]</span><span class="o">.</span><span class="n">obs_next</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<span class="go">[[ 7  7  7  8]</span>
+<span class="go"> [ 7  7  8  9]</span>
+<span class="go"> [ 7  8  9 10]</span>
+<span class="go"> [ 7  8  9 10]</span>
+<span class="go"> [11 11 11 12]</span>
+<span class="go"> [11 11 12 13]</span>
+<span class="go"> [11 12 13 14]</span>
+<span class="go"> [12 13 14 15]</span>
+<span class="go"> [12 13 14 15]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">full_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">buf</span><span class="p">[:]</span><span class="o">.</span><span class="n">obs_next</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">buf</span><span class="p">[</span><span class="n">full_index</span><span class="p">]</span><span class="o">.</span><span class="n">obs_next</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</details><br><p>Tianshou provides other type of data buffer such as <a class="reference internal" href="../api/tianshou.data.html#tianshou.data.PrioritizedReplayBuffer" title="tianshou.data.PrioritizedReplayBuffer"><code class="xref py py-class docutils literal notranslate"><span class="pre">PrioritizedReplayBuffer</span></code></a> (based on Segment Tree and <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) and <a class="reference internal" href="../api/tianshou.data.html#tianshou.data.VectorReplayBuffer" title="tianshou.data.VectorReplayBuffer"><code class="xref py py-class docutils literal notranslate"><span class="pre">VectorReplayBuffer</span></code></a> (add different episodes’ data but without losing chronological order). Check out <a class="reference internal" href="../api/tianshou.data.html#tianshou.data.ReplayBuffer" title="tianshou.data.ReplayBuffer"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReplayBuffer</span></code></a> for more detail.</p>
+</section>
+<section id="policy">
+<h2>Policy<a class="headerlink" href="#policy" title="Link to this heading">¶</a></h2>
+<p>Tianshou aims to modularize RL algorithms. It comes into several classes of policies in Tianshou. All of the policy classes must inherit <a class="reference internal" href="../api/tianshou.policy.html#tianshou.policy.BasePolicy" title="tianshou.policy.BasePolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePolicy</span></code></a>.</p>
+<p>A policy class typically has the following parts:</p>
+<ul class="simple">
+<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__()</span></code>: initialize the policy, including copying the target network and so on;</p></li>
+<li><p><a class="reference internal" href="../api/tianshou.policy.html#tianshou.policy.BasePolicy.forward" title="tianshou.policy.BasePolicy.forward"><code class="xref py py-meth docutils literal notranslate"><span class="pre">forward()</span></code></a>: compute action with given observation;</p></li>
+<li><p><a class="reference internal" href="../api/tianshou.policy.html#tianshou.policy.BasePolicy.process_fn" title="tianshou.policy.BasePolicy.process_fn"><code class="xref py py-meth docutils literal notranslate"><span class="pre">process_fn()</span></code></a>: pre-process data from the replay buffer;</p></li>
+<li><p><a class="reference internal" href="../api/tianshou.policy.html#tianshou.policy.BasePolicy.learn" title="tianshou.policy.BasePolicy.learn"><code class="xref py py-meth docutils literal notranslate"><span class="pre">learn()</span></code></a>: update policy with a given batch of data.</p></li>
+<li><p><a class="reference internal" href="../api/tianshou.policy.html#tianshou.policy.BasePolicy.post_process_fn" title="tianshou.policy.BasePolicy.post_process_fn"><code class="xref py py-meth docutils literal notranslate"><span class="pre">post_process_fn()</span></code></a>: update the buffer with a given batch of data.</p></li>
+<li><p><a class="reference internal" href="../api/tianshou.policy.html#tianshou.policy.BasePolicy.update" title="tianshou.policy.BasePolicy.update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">update()</span></code></a>: the main interface for training. This function samples data from buffer, pre-process data (such as computing n-step return), learn with the data, and finally post-process the data (such as updating prioritized replay buffer); in short, <code class="docutils literal notranslate"><span class="pre">process_fn</span> <span class="pre">-&gt;</span> <span class="pre">learn</span> <span class="pre">-&gt;</span> <span class="pre">post_process_fn</span></code>.</p></li>
+</ul>
+<section id="states-for-policy">
+<span id="policy-state"></span><h3>States for policy<a class="headerlink" href="#states-for-policy" title="Link to this heading">¶</a></h3>
+<p>During the training process, the policy has two main states: training state and testing state. The training state can be further divided into the collecting state and updating state.</p>
+<p>The meaning of training and testing state is obvious: the agent interacts with environment, collects training data and performs update, that’s training state; the testing state is to evaluate the performance of the current policy during training process.</p>
+<p>As for the collecting state, it is defined as interacting with environments and collecting training data into the buffer;
+we define the updating state as performing a model update by <a class="reference internal" href="../api/tianshou.policy.html#tianshou.policy.BasePolicy.update" title="tianshou.policy.BasePolicy.update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">update()</span></code></a> during training process.</p>
+<p>In order to distinguish these states, you can check the policy state by <code class="docutils literal notranslate"><span class="pre">policy.training</span></code> and <code class="docutils literal notranslate"><span class="pre">policy.updating</span></code>. The state setting is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head" colspan="2"><p>State for policy</p></th>
+<th class="head"><p>policy.training</p></th>
+<th class="head"><p>policy.updating</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="2"><p>Training state</p></td>
+<td><p>Collecting state</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+</tr>
+<tr class="row-odd"><td><p>Updating state</p></td>
+<td><p>True</p></td>
+<td><p>True</p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p>Testing state</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">policy.updating</span></code> is helpful to distinguish the different exploration state, for example, in DQN we don’t have to use epsilon-greedy in a pure network update, so <code class="docutils literal notranslate"><span class="pre">policy.updating</span></code> is helpful for setting epsilon in this case.</p>
+</section>
+<section id="policy-forward">
+<h3>policy.forward<a class="headerlink" href="#policy-forward" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">forward</span></code> function computes the action over given observations. The input and output is algorithm-specific but generally, the function is a mapping of <code class="docutils literal notranslate"><span class="pre">(batch,</span> <span class="pre">state,</span> <span class="pre">...)</span> <span class="pre">-&gt;</span> <span class="pre">batch</span></code>.</p>
+<p>The input batch is the environment data (e.g., observation, reward, done flag and info). It comes from either <a class="reference internal" href="../api/tianshou.data.html#tianshou.data.Collector.collect" title="tianshou.data.Collector.collect"><code class="xref py py-meth docutils literal notranslate"><span class="pre">collect()</span></code></a> or <a class="reference internal" href="../api/tianshou.data.html#tianshou.data.ReplayBuffer.sample" title="tianshou.data.ReplayBuffer.sample"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sample()</span></code></a>. The first dimension of all variables in the input <code class="docutils literal notranslate"><span class="pre">batch</span></code> should be equal to the batch-size.</p>
+<p>The output is also a Batch which must contain “act” (action) and may contain “state” (hidden state of policy), “policy” (the intermediate result of policy which needs to save into the buffer, see <a class="reference internal" href="../api/tianshou.policy.html#tianshou.policy.BasePolicy.forward" title="tianshou.policy.BasePolicy.forward"><code class="xref py py-meth docutils literal notranslate"><span class="pre">forward()</span></code></a>), and some other algorithm-specific keys.</p>
+<p>For example, if you try to use your policy to evaluate one episode (and don’t want to use <a class="reference internal" href="../api/tianshou.data.html#tianshou.data.Collector.collect" title="tianshou.data.Collector.collect"><code class="xref py py-meth docutils literal notranslate"><span class="pre">collect()</span></code></a>), use the following code-snippet:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># assume env is a gym.Env</span>
+<span class="n">obs</span><span class="p">,</span> <span class="n">done</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(),</span> <span class="kc">False</span>
+<span class="k">while</span> <span class="ow">not</span> <span class="n">done</span><span class="p">:</span>
+    <span class="n">batch</span> <span class="o">=</span> <span class="n">Batch</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="p">[</span><span class="n">obs</span><span class="p">])</span>  <span class="c1"># the first dimension is batch-size</span>
+    <span class="n">act</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span><span class="o">.</span><span class="n">act</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># policy.forward return a batch, use &quot;.act&quot; to extract the action</span>
+    <span class="n">obs</span><span class="p">,</span> <span class="n">rew</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">act</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here, <code class="docutils literal notranslate"><span class="pre">Batch(obs=[obs])</span></code> will automatically create the 0-dimension to be the batch-size. Otherwise, the network cannot determine the batch-size.</p>
+</section>
+<section id="policy-process-fn">
+<span id="process-fn"></span><h3>policy.process_fn<a class="headerlink" href="#policy-process-fn" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">process_fn</span></code> function computes some variables that depends on time-series. For example, compute the N-step or GAE returns.</p>
+<p>Take 2-step return DQN as an example. The 2-step return DQN compute each transition’s return as:</p>
+<div class="math notranslate nohighlight">
+\[G_t = r_t + \gamma r_{t + 1} + \gamma^2 \max_a Q(s_{t + 2}, a)\]</div>
+<p>where <span class="math notranslate nohighlight">\(\gamma\)</span> is the discount factor, <span class="math notranslate nohighlight">\(\gamma \in [0, 1]\)</span>. Here is the pseudocode showing the training process <strong>without Tianshou framework</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># pseudocode, cannot work</span>
+<span class="n">obs</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+<span class="n">agent</span> <span class="o">=</span> <span class="n">DQN</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="mf">1e6</span><span class="p">)):</span>
+    <span class="n">act</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">compute_action</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
+    <span class="n">obs_next</span><span class="p">,</span> <span class="n">rew</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">act</span><span class="p">)</span>
+    <span class="n">buffer</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">act</span><span class="p">,</span> <span class="n">obs_next</span><span class="p">,</span> <span class="n">rew</span><span class="p">,</span> <span class="n">done</span><span class="p">)</span>
+    <span class="n">obs</span> <span class="o">=</span> <span class="n">obs_next</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">1000</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">b_s</span><span class="p">,</span> <span class="n">b_a</span><span class="p">,</span> <span class="n">b_s_</span><span class="p">,</span> <span class="n">b_r</span><span class="p">,</span> <span class="n">b_d</span> <span class="o">=</span> <span class="n">buffer</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span>
+        <span class="c1"># compute 2-step returns. How?</span>
+        <span class="n">b_ret</span> <span class="o">=</span> <span class="n">compute_2_step_return</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">b_r</span><span class="p">,</span> <span class="n">b_d</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+        <span class="c1"># update DQN policy</span>
+        <span class="n">agent</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">b_s</span><span class="p">,</span> <span class="n">b_a</span><span class="p">,</span> <span class="n">b_s_</span><span class="p">,</span> <span class="n">b_r</span><span class="p">,</span> <span class="n">b_d</span><span class="p">,</span> <span class="n">b_ret</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Thus, we need a time-related interface for calculating the 2-step return. <a class="reference internal" href="../api/tianshou.policy.html#tianshou.policy.BasePolicy.process_fn" title="tianshou.policy.BasePolicy.process_fn"><code class="xref py py-meth docutils literal notranslate"><span class="pre">process_fn()</span></code></a> finishes this work by providing the replay buffer, the sample index, and the sample batch data. Since we store all the data in the order of time, you can simply compute the 2-step return as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">DQN_2step</span><span class="p">(</span><span class="n">BasePolicy</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;some code&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">process_fn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
+        <span class="n">buffer_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+        <span class="n">batch_2</span> <span class="o">=</span> <span class="n">buffer</span><span class="p">[(</span><span class="n">indices</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">%</span> <span class="n">buffer_len</span><span class="p">]</span>
+        <span class="c1"># this will return a batch data where batch_2.obs is s_t+2</span>
+        <span class="c1"># we can also get s_t+2 through:</span>
+        <span class="c1">#   batch_2_obs = buffer.obs[(indices + 2) % buffer_len]</span>
+        <span class="c1"># in short, buffer.obs[i] is equal to buffer[i].obs, but the former is more effecient.</span>
+        <span class="n">Q</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">batch_2</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># shape: [batchsize, action_shape]</span>
+        <span class="n">maxQ</span> <span class="o">=</span> <span class="n">Q</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">batch</span><span class="o">.</span><span class="n">returns</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">rew</span> \
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gamma</span> <span class="o">*</span> <span class="n">buffer</span><span class="o">.</span><span class="n">rew</span><span class="p">[(</span><span class="n">indices</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">buffer_len</span><span class="p">]</span> \
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gamma</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">maxQ</span>
+        <span class="k">return</span> <span class="n">batch</span>
+</pre></div>
+</div>
+<p>This code does not consider the done flag, so it may not work very well. It shows two ways to get <span class="math notranslate nohighlight">\(s_{t + 2}\)</span> from the replay buffer easily in <a class="reference internal" href="../api/tianshou.policy.html#tianshou.policy.BasePolicy.process_fn" title="tianshou.policy.BasePolicy.process_fn"><code class="xref py py-meth docutils literal notranslate"><span class="pre">process_fn()</span></code></a>.</p>
+<p>For other method, you can check out <a class="reference internal" href="../api/tianshou.policy.html"><span class="doc">tianshou.policy</span></a>. We give the usage of policy class a high-level explanation in <a class="reference internal" href="#pseudocode"><span class="std std-ref">A High-level Explanation</span></a>.</p>
+</section>
+</section>
+<section id="collector">
+<h2>Collector<a class="headerlink" href="#collector" title="Link to this heading">¶</a></h2>
+<p>The <a class="reference internal" href="../api/tianshou.data.html#tianshou.data.Collector" title="tianshou.data.Collector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Collector</span></code></a> enables the policy to interact with different types of environments conveniently.</p>
+<p><a class="reference internal" href="../api/tianshou.data.html#tianshou.data.Collector.collect" title="tianshou.data.Collector.collect"><code class="xref py py-meth docutils literal notranslate"><span class="pre">collect()</span></code></a> is the main method of Collector: it let the policy perform a specified number of step <code class="docutils literal notranslate"><span class="pre">n_step</span></code> or episode <code class="docutils literal notranslate"><span class="pre">n_episode</span></code> and store the data in the replay buffer, then return the statistics of the collected data such as episode’s total reward.</p>
+<p>The general explanation is listed in <a class="reference internal" href="#pseudocode"><span class="std std-ref">A High-level Explanation</span></a>. Other usages of collector are listed in <a class="reference internal" href="../api/tianshou.data.html#tianshou.data.Collector" title="tianshou.data.Collector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Collector</span></code></a> documentation. Here are some example usages:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">policy</span> <span class="o">=</span> <span class="n">PGPolicy</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>  <span class="c1"># or other policies if you wish</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s2">&quot;CartPole-v0&quot;</span><span class="p">)</span>
+
+<span class="n">replay_buffer</span> <span class="o">=</span> <span class="n">ReplayBuffer</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+
+<span class="c1"># here we set up a collector with a single environment</span>
+<span class="n">collector</span> <span class="o">=</span> <span class="n">Collector</span><span class="p">(</span><span class="n">policy</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">buffer</span><span class="o">=</span><span class="n">replay_buffer</span><span class="p">)</span>
+
+<span class="c1"># the collector supports vectorized environments as well</span>
+<span class="n">vec_buffer</span> <span class="o">=</span> <span class="n">VectorReplayBuffer</span><span class="p">(</span><span class="n">total_size</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">buffer_num</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="c1"># buffer_num should be equal to (suggested) or larger than #envs</span>
+<span class="n">envs</span> <span class="o">=</span> <span class="n">DummyVectorEnv</span><span class="p">([</span><span class="k">lambda</span><span class="p">:</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s2">&quot;CartPole-v0&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)])</span>
+<span class="n">collector</span> <span class="o">=</span> <span class="n">Collector</span><span class="p">(</span><span class="n">policy</span><span class="p">,</span> <span class="n">envs</span><span class="p">,</span> <span class="n">buffer</span><span class="o">=</span><span class="n">vec_buffer</span><span class="p">)</span>
+
+<span class="c1"># collect 3 episodes</span>
+<span class="n">collector</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="n">n_episode</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="c1"># collect at least 2 steps</span>
+<span class="n">collector</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="n">n_step</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># collect episodes with visual rendering (&quot;render&quot; is the sleep time between</span>
+<span class="c1"># rendering consecutive frames)</span>
+<span class="n">collector</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="n">n_episode</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">render</span><span class="o">=</span><span class="mf">0.03</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>There is also another type of collector <a class="reference internal" href="../api/tianshou.data.html#tianshou.data.AsyncCollector" title="tianshou.data.AsyncCollector"><code class="xref py py-class docutils literal notranslate"><span class="pre">AsyncCollector</span></code></a> which supports asynchronous environment setting (for those taking a long time to step). However, AsyncCollector only supports <strong>at least</strong> <code class="docutils literal notranslate"><span class="pre">n_step</span></code> or <code class="docutils literal notranslate"><span class="pre">n_episode</span></code> collection due to the property of asynchronous environments.</p>
+</section>
+<section id="trainer">
+<h2>Trainer<a class="headerlink" href="#trainer" title="Link to this heading">¶</a></h2>
+<p>Once you have a collector and a policy, you can start writing the training method for your RL agent. Trainer, to be honest, is a simple wrapper. It helps you save energy for writing the training loop. You can also construct your own trainer: <a class="reference internal" href="dqn.html#customized-trainer"><span class="std std-ref">Train a Policy with Customized Codes</span></a>.</p>
+<p>Tianshou has three types of trainer: <code class="xref py py-func docutils literal notranslate"><span class="pre">onpolicy_trainer()</span></code> for on-policy algorithms such as Policy Gradient, <code class="xref py py-func docutils literal notranslate"><span class="pre">offpolicy_trainer()</span></code> for off-policy algorithms such as DQN, and <code class="xref py py-func docutils literal notranslate"><span class="pre">offline_trainer()</span></code> for offline algorithms such as BCQ. Please check out <a class="reference internal" href="../api/tianshou.trainer.html"><span class="doc">tianshou.trainer</span></a> for the usage.</p>
+<p>We also provide the corresponding iterator-based trainer classes <a class="reference internal" href="../api/tianshou.trainer.html#tianshou.trainer.OnpolicyTrainer" title="tianshou.trainer.OnpolicyTrainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">OnpolicyTrainer</span></code></a>, <a class="reference internal" href="../api/tianshou.trainer.html#tianshou.trainer.OffpolicyTrainer" title="tianshou.trainer.OffpolicyTrainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">OffpolicyTrainer</span></code></a>, <a class="reference internal" href="../api/tianshou.trainer.html#tianshou.trainer.OfflineTrainer" title="tianshou.trainer.OfflineTrainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">OfflineTrainer</span></code></a> to facilitate users writing more flexible training logic:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span> <span class="o">=</span> <span class="n">OnpolicyTrainer</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">epoch_stat</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">trainer</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Epoch: </span><span class="si">{</span><span class="n">epoch</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">epoch_stat</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+    <span class="n">do_something_with_policy</span><span class="p">()</span>
+    <span class="n">query_something_about_policy</span><span class="p">()</span>
+    <span class="n">make_a_plot_with</span><span class="p">(</span><span class="n">epoch_stat</span><span class="p">)</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+
+<span class="c1"># or even iterate on several trainers at the same time</span>
+
+<span class="n">trainer1</span> <span class="o">=</span> <span class="n">OnpolicyTrainer</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="n">trainer2</span> <span class="o">=</span> <span class="n">OnpolicyTrainer</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">result1</span><span class="p">,</span> <span class="n">result2</span><span class="p">,</span> <span class="o">...</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">trainer1</span><span class="p">,</span> <span class="n">trainer2</span><span class="p">,</span> <span class="o">...</span><span class="p">):</span>
+    <span class="n">compare_results</span><span class="p">(</span><span class="n">result1</span><span class="p">,</span> <span class="n">result2</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="a-high-level-explanation">
+<span id="pseudocode"></span><h2>A High-level Explanation<a class="headerlink" href="#a-high-level-explanation" title="Link to this heading">¶</a></h2>
+<p>We give a high-level explanation through the pseudocode used in section <a class="reference internal" href="#process-fn"><span class="std std-ref">policy.process_fn</span></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># pseudocode, cannot work                                       # methods in tianshou</span>
+<span class="n">obs</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">buffer</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>                                     <span class="c1"># buffer = tianshou.data.ReplayBuffer(size=10000)</span>
+<span class="n">agent</span> <span class="o">=</span> <span class="n">DQN</span><span class="p">()</span>                                                   <span class="c1"># policy.__init__(...)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="mf">1e6</span><span class="p">)):</span>                                       <span class="c1"># done in trainer</span>
+    <span class="n">act</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">compute_action</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>                             <span class="c1"># act = policy(batch, ...).act</span>
+    <span class="n">obs_next</span><span class="p">,</span> <span class="n">rew</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">act</span><span class="p">)</span>                      <span class="c1"># collector.collect(...)</span>
+    <span class="n">buffer</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">act</span><span class="p">,</span> <span class="n">obs_next</span><span class="p">,</span> <span class="n">rew</span><span class="p">,</span> <span class="n">done</span><span class="p">)</span>                 <span class="c1"># collector.collect(...)</span>
+    <span class="n">obs</span> <span class="o">=</span> <span class="n">obs_next</span>                                              <span class="c1"># collector.collect(...)</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">1000</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>                                           <span class="c1"># done in trainer</span>
+                                                                <span class="c1"># the following is done in policy.update(batch_size, buffer)</span>
+        <span class="n">b_s</span><span class="p">,</span> <span class="n">b_a</span><span class="p">,</span> <span class="n">b_s_</span><span class="p">,</span> <span class="n">b_r</span><span class="p">,</span> <span class="n">b_d</span> <span class="o">=</span> <span class="n">buffer</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span>          <span class="c1"># batch, indices = buffer.sample(batch_size)</span>
+        <span class="c1"># compute 2-step returns. How?</span>
+        <span class="n">b_ret</span> <span class="o">=</span> <span class="n">compute_2_step_return</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">b_r</span><span class="p">,</span> <span class="n">b_d</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>    <span class="c1"># policy.process_fn(batch, buffer, indices)</span>
+        <span class="c1"># update DQN policy</span>
+        <span class="n">agent</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">b_s</span><span class="p">,</span> <span class="n">b_a</span><span class="p">,</span> <span class="n">b_s_</span><span class="p">,</span> <span class="n">b_r</span><span class="p">,</span> <span class="n">b_d</span><span class="p">,</span> <span class="n">b_ret</span><span class="p">)</span>           <span class="c1"># policy.learn(batch, ...)</span>
+</pre></div>
+</div>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading">¶</a></h2>
+<p>So far, we go through the overall framework of Tianshou. Really simple, isn’t it?</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dqn.html" class="btn btn-neutral float-left" title="Deep Q Network" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="batch.html" class="btn btn-neutral float-right" title="Understand Batch" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Tianshou contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

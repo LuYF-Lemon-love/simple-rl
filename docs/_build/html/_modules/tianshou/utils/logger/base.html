@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tianshou.utils.logger.base &mdash; Tianshou 0.5.1 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/style.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+        <script src="../../../../_static/js/copybutton.js?v=7db002fe"></script>
+        <script src="../../../../_static/js/benchmark.js?v=1091b9f3"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            Tianshou
+              <img src="../../../../_static/tianshou-logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.5.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/get_started.html">Get Started with Jupyter Notebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/dqn.html">Deep Q Network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/concepts.html">Basic concepts in Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/batch.html">Understand Batch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/tictactoe.html">Multi-Agent RL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/logger.html">Logging Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/benchmark.html">Benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/cheatsheet.html">Cheat Sheet</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.data.html">tianshou.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.env.html">tianshou.env</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.policy.html">tianshou.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.trainer.html">tianshou.trainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.exploration.html">tianshou.exploration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.utils.html">tianshou.utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing to Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributor.html">Contributor</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tianshou</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">tianshou.utils.logger.base</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tianshou.utils.logger.base</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Number</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">LOG_DATA_TYPE</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Number</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span>
+
+
+<div class="viewcode-block" id="BaseLogger">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.BaseLogger">[docs]</a>
+<span class="k">class</span> <span class="nc">BaseLogger</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The base class for any logger which is compatible with trainer.</span>
+
+<span class="sd">    Try to overwrite write() method to use your own writer.</span>
+
+<span class="sd">    :param int train_interval: the log interval in log_train_data(). Default to 1000.</span>
+<span class="sd">    :param int test_interval: the log interval in log_test_data(). Default to 1.</span>
+<span class="sd">    :param int update_interval: the log interval in log_update_data(). Default to 1000.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">train_interval</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="n">test_interval</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">update_interval</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_interval</span> <span class="o">=</span> <span class="n">train_interval</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_interval</span> <span class="o">=</span> <span class="n">test_interval</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_interval</span> <span class="o">=</span> <span class="n">update_interval</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_log_train_step</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_log_test_step</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_log_update_step</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+<div class="viewcode-block" id="BaseLogger.write">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.BaseLogger.write">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">step</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">LOG_DATA_TYPE</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Specify how the writer is used to log data.</span>
+
+<span class="sd">        :param str step_type: namespace which the data dict belongs to.</span>
+<span class="sd">        :param int step: stands for the ordinate of the data dict.</span>
+<span class="sd">        :param dict data: the data to write with format ``{key: value}``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="BaseLogger.log_train_data">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.BaseLogger.log_train_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">log_train_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collect_result</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">step</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Use writer to log statistics generated during training.</span>
+
+<span class="sd">        :param collect_result: a dict containing information of data collected in</span>
+<span class="sd">            training stage, i.e., returns of collector.collect().</span>
+<span class="sd">        :param int step: stands for the timestep the collect_result being logged.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">collect_result</span><span class="p">[</span><span class="s2">&quot;n/ep&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">step</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_log_train_step</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_interval</span><span class="p">:</span>
+                <span class="n">log_data</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;train/episode&quot;</span><span class="p">:</span> <span class="n">collect_result</span><span class="p">[</span><span class="s2">&quot;n/ep&quot;</span><span class="p">],</span>
+                    <span class="s2">&quot;train/reward&quot;</span><span class="p">:</span> <span class="n">collect_result</span><span class="p">[</span><span class="s2">&quot;rew&quot;</span><span class="p">],</span>
+                    <span class="s2">&quot;train/length&quot;</span><span class="p">:</span> <span class="n">collect_result</span><span class="p">[</span><span class="s2">&quot;len&quot;</span><span class="p">],</span>
+                <span class="p">}</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;train/env_step&quot;</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">log_data</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">last_log_train_step</span> <span class="o">=</span> <span class="n">step</span></div>
+
+
+<div class="viewcode-block" id="BaseLogger.log_test_data">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.BaseLogger.log_test_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">log_test_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collect_result</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">step</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Use writer to log statistics generated during evaluating.</span>
+
+<span class="sd">        :param collect_result: a dict containing information of data collected in</span>
+<span class="sd">            evaluating stage, i.e., returns of collector.collect().</span>
+<span class="sd">        :param int step: stands for the timestep the collect_result being logged.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">collect_result</span><span class="p">[</span><span class="s2">&quot;n/ep&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">step</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_log_test_step</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_interval</span><span class="p">:</span>
+            <span class="n">log_data</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;test/env_step&quot;</span><span class="p">:</span> <span class="n">step</span><span class="p">,</span>
+                <span class="s2">&quot;test/reward&quot;</span><span class="p">:</span> <span class="n">collect_result</span><span class="p">[</span><span class="s2">&quot;rew&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;test/length&quot;</span><span class="p">:</span> <span class="n">collect_result</span><span class="p">[</span><span class="s2">&quot;len&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;test/reward_std&quot;</span><span class="p">:</span> <span class="n">collect_result</span><span class="p">[</span><span class="s2">&quot;rew_std&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;test/length_std&quot;</span><span class="p">:</span> <span class="n">collect_result</span><span class="p">[</span><span class="s2">&quot;len_std&quot;</span><span class="p">],</span>
+            <span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;test/env_step&quot;</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">log_data</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_log_test_step</span> <span class="o">=</span> <span class="n">step</span></div>
+
+
+<div class="viewcode-block" id="BaseLogger.log_update_data">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.BaseLogger.log_update_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">log_update_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">update_result</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">step</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Use writer to log statistics generated during updating.</span>
+
+<span class="sd">        :param update_result: a dict containing information of data collected in</span>
+<span class="sd">            updating stage, i.e., returns of policy.update().</span>
+<span class="sd">        :param int step: stands for the timestep the collect_result being logged.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">step</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_log_update_step</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_interval</span><span class="p">:</span>
+            <span class="n">log_data</span> <span class="o">=</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;update/</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">update_result</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;update/gradient_step&quot;</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">log_data</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_log_update_step</span> <span class="o">=</span> <span class="n">step</span></div>
+
+
+<div class="viewcode-block" id="BaseLogger.save_data">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.BaseLogger.save_data">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">save_data</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">epoch</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">env_step</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">gradient_step</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">save_checkpoint_fn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Use writer to log metadata when calling ``save_checkpoint_fn`` in trainer.</span>
+
+<span class="sd">        :param int epoch: the epoch in trainer.</span>
+<span class="sd">        :param int env_step: the env_step in trainer.</span>
+<span class="sd">        :param int gradient_step: the gradient_step in trainer.</span>
+<span class="sd">        :param function save_checkpoint_fn: a hook defined by user, see trainer</span>
+<span class="sd">            documentation for detail.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="BaseLogger.restore_data">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.BaseLogger.restore_data">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">restore_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the metadata from existing log.</span>
+
+<span class="sd">        If it finds nothing or an error occurs during the recover process, it will</span>
+<span class="sd">        return the default parameters.</span>
+
+<span class="sd">        :return: epoch, env_step, gradient_step.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="LazyLogger">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.LazyLogger">[docs]</a>
+<span class="k">class</span> <span class="nc">LazyLogger</span><span class="p">(</span><span class="n">BaseLogger</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A logger that does nothing. Used as the placeholder in trainer.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+<div class="viewcode-block" id="LazyLogger.write">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.LazyLogger.write">[docs]</a>
+    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">step</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">LOG_DATA_TYPE</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The LazyLogger writes nothing.&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="LazyLogger.save_data">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.LazyLogger.save_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">save_data</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">epoch</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">env_step</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">gradient_step</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">save_checkpoint_fn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="LazyLogger.restore_data">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.LazyLogger.restore_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">restore_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Tianshou contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

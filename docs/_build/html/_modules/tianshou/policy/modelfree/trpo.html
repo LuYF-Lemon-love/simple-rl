@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tianshou.policy.modelfree.trpo &mdash; Tianshou 0.5.1 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/style.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+        <script src="../../../../_static/js/copybutton.js?v=7db002fe"></script>
+        <script src="../../../../_static/js/benchmark.js?v=1091b9f3"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            Tianshou
+              <img src="../../../../_static/tianshou-logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.5.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/get_started.html">Get Started with Jupyter Notebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/dqn.html">Deep Q Network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/concepts.html">Basic concepts in Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/batch.html">Understand Batch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/tictactoe.html">Multi-Agent RL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/logger.html">Logging Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/benchmark.html">Benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/cheatsheet.html">Cheat Sheet</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.data.html">tianshou.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.env.html">tianshou.env</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.policy.html">tianshou.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.trainer.html">tianshou.trainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.exploration.html">tianshou.exploration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.utils.html">tianshou.utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing to Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributor.html">Contributor</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tianshou</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">tianshou.policy.modelfree.trpo</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tianshou.policy.modelfree.trpo</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+<span class="kn">from</span> <span class="nn">torch.distributions</span> <span class="kn">import</span> <span class="n">kl_divergence</span>
+
+<span class="kn">from</span> <span class="nn">tianshou.data</span> <span class="kn">import</span> <span class="n">Batch</span>
+<span class="kn">from</span> <span class="nn">tianshou.policy</span> <span class="kn">import</span> <span class="n">NPGPolicy</span>
+<span class="kn">from</span> <span class="nn">tianshou.policy.modelfree.pg</span> <span class="kn">import</span> <span class="n">TDistParams</span>
+
+
+<div class="viewcode-block" id="TRPOPolicy">
+<a class="viewcode-back" href="../../../../api/tianshou.policy.html#tianshou.policy.TRPOPolicy">[docs]</a>
+<span class="k">class</span> <span class="nc">TRPOPolicy</span><span class="p">(</span><span class="n">NPGPolicy</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implementation of Trust Region Policy Optimization. arXiv:1502.05477.</span>
+
+<span class="sd">    :param torch.nn.Module actor: the actor network following the rules in</span>
+<span class="sd">        :class:`~tianshou.policy.BasePolicy`. (s -&gt; logits)</span>
+<span class="sd">    :param torch.nn.Module critic: the critic network. (s -&gt; V(s))</span>
+<span class="sd">    :param torch.optim.Optimizer optim: the optimizer for actor and critic network.</span>
+<span class="sd">    :param dist_fn: distribution class for computing the action.</span>
+<span class="sd">    :param bool advantage_normalization: whether to do per mini-batch advantage</span>
+<span class="sd">        normalization. Default to True.</span>
+<span class="sd">    :param int optim_critic_iters: Number of times to optimize critic network per</span>
+<span class="sd">        update. Default to 5.</span>
+<span class="sd">    :param int max_kl: max kl-divergence used to constrain each actor network update.</span>
+<span class="sd">        Default to 0.01.</span>
+<span class="sd">    :param float backtrack_coeff: Coefficient to be multiplied by step size when</span>
+<span class="sd">        constraints are not met. Default to 0.8.</span>
+<span class="sd">    :param int max_backtracks: Max number of backtracking times in linesearch. Default</span>
+<span class="sd">        to 10.</span>
+<span class="sd">    :param float gae_lambda: in [0, 1], param for Generalized Advantage Estimation.</span>
+<span class="sd">        Default to 0.95.</span>
+<span class="sd">    :param bool reward_normalization: normalize estimated values to have std close to</span>
+<span class="sd">        1. Default to False.</span>
+<span class="sd">    :param int max_batchsize: the maximum size of the batch when computing GAE,</span>
+<span class="sd">        depends on the size of available memory and the memory cost of the</span>
+<span class="sd">        model; should be as large as possible within the memory constraint.</span>
+<span class="sd">        Default to 256.</span>
+<span class="sd">    :param bool action_scaling: whether to map actions from range [-1, 1] to range</span>
+<span class="sd">        [action_spaces.low, action_spaces.high]. Default to True.</span>
+<span class="sd">    :param str action_bound_method: method to bound action to range [-1, 1], can be</span>
+<span class="sd">        either &quot;clip&quot; (for simply clipping the action), &quot;tanh&quot; (for applying tanh</span>
+<span class="sd">        squashing) for now, or empty string for no bounding. Default to &quot;clip&quot;.</span>
+<span class="sd">    :param Optional[gym.Space] action_space: env&#39;s action space, mandatory if you want</span>
+<span class="sd">        to use option &quot;action_scaling&quot; or &quot;action_bound_method&quot;. Default to None.</span>
+<span class="sd">    :param lr_scheduler: a learning rate scheduler that adjusts the learning rate in</span>
+<span class="sd">        optimizer in each policy.update(). Default to None (no lr_scheduler).</span>
+<span class="sd">    :param bool deterministic_eval: whether to use deterministic action instead of</span>
+<span class="sd">        stochastic action sampled by the policy. Default to False.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">actor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+        <span class="n">critic</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+        <span class="n">optim</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Optimizer</span><span class="p">,</span>
+        <span class="n">dist_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">TDistParams</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">Distribution</span><span class="p">],</span>
+        <span class="n">max_kl</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">,</span>
+        <span class="n">backtrack_coeff</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span>
+        <span class="n">max_backtracks</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">actor</span><span class="p">,</span> <span class="n">critic</span><span class="p">,</span> <span class="n">optim</span><span class="p">,</span> <span class="n">dist_fn</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_backtracks</span> <span class="o">=</span> <span class="n">max_backtracks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_delta</span> <span class="o">=</span> <span class="n">max_kl</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_backtrack_coeff</span> <span class="o">=</span> <span class="n">backtrack_coeff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_optim_critic_iters</span><span class="p">:</span> <span class="nb">int</span>
+
+<div class="viewcode-block" id="TRPOPolicy.learn">
+<a class="viewcode-back" href="../../../../api/tianshou.policy.html#tianshou.policy.TRPOPolicy.learn">[docs]</a>
+    <span class="k">def</span> <span class="nf">learn</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="n">Batch</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">repeat</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+        <span class="n">actor_losses</span><span class="p">,</span> <span class="n">vf_losses</span><span class="p">,</span> <span class="n">step_sizes</span><span class="p">,</span> <span class="n">kls</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repeat</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">minibatch</span> <span class="ow">in</span> <span class="n">batch</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">merge_last</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                <span class="c1"># optimize actor</span>
+                <span class="c1"># direction: calculate villia gradient</span>
+                <span class="n">dist</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">minibatch</span><span class="p">)</span><span class="o">.</span><span class="n">dist</span>  <span class="c1"># TODO could come from batch</span>
+                <span class="n">ratio</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">minibatch</span><span class="o">.</span><span class="n">act</span><span class="p">)</span> <span class="o">-</span> <span class="n">minibatch</span><span class="o">.</span><span class="n">logp_old</span><span class="p">)</span><span class="o">.</span><span class="n">exp</span><span class="p">()</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+                <span class="p">)</span>
+                <span class="n">ratio</span> <span class="o">=</span> <span class="n">ratio</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ratio</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">actor_loss</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">ratio</span> <span class="o">*</span> <span class="n">minibatch</span><span class="o">.</span><span class="n">adv</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+                <span class="n">flat_grads</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_flat_grad</span><span class="p">(</span>
+                    <span class="n">actor_loss</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="p">,</span> <span class="n">retain_graph</span><span class="o">=</span><span class="kc">True</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+
+                <span class="c1"># direction: calculate natural gradient</span>
+                <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+                    <span class="n">old_dist</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">minibatch</span><span class="p">)</span><span class="o">.</span><span class="n">dist</span>
+
+                <span class="n">kl</span> <span class="o">=</span> <span class="n">kl_divergence</span><span class="p">(</span><span class="n">old_dist</span><span class="p">,</span> <span class="n">dist</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+                <span class="c1"># calculate first order gradient of kl with respect to theta</span>
+                <span class="n">flat_kl_grad</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_flat_grad</span><span class="p">(</span><span class="n">kl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="p">,</span> <span class="n">create_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">search_direction</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">_conjugate_gradients</span><span class="p">(</span>
+                    <span class="n">flat_grads</span><span class="p">,</span> <span class="n">flat_kl_grad</span><span class="p">,</span> <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span>
+                <span class="p">)</span>
+
+                <span class="c1"># stepsize: calculate max stepsize constrained by kl bound</span>
+                <span class="n">step_size</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
+                    <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_delta</span> <span class="o">/</span>
+                    <span class="p">(</span><span class="n">search_direction</span> <span class="o">*</span>
+                     <span class="bp">self</span><span class="o">.</span><span class="n">_MVP</span><span class="p">(</span><span class="n">search_direction</span><span class="p">,</span> <span class="n">flat_kl_grad</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="p">)</span>
+
+                <span class="c1"># stepsize: linesearch stepsize</span>
+                <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+                    <span class="n">flat_params</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
+                        <span class="p">[</span><span class="n">param</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">parameters</span><span class="p">()]</span>
+                    <span class="p">)</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_backtracks</span><span class="p">):</span>
+                        <span class="n">new_flat_params</span> <span class="o">=</span> <span class="n">flat_params</span> <span class="o">+</span> <span class="n">step_size</span> <span class="o">*</span> <span class="n">search_direction</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_set_from_flat_params</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="p">,</span> <span class="n">new_flat_params</span><span class="p">)</span>
+                        <span class="c1"># calculate kl and if in bound, loss actually down</span>
+                        <span class="n">new_dist</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">minibatch</span><span class="p">)</span><span class="o">.</span><span class="n">dist</span>
+                        <span class="n">new_dratio</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="p">(</span><span class="n">new_dist</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">minibatch</span><span class="o">.</span><span class="n">act</span><span class="p">)</span> <span class="o">-</span>
+                             <span class="n">minibatch</span><span class="o">.</span><span class="n">logp_old</span><span class="p">)</span><span class="o">.</span><span class="n">exp</span><span class="p">()</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+                        <span class="p">)</span>
+                        <span class="n">new_dratio</span> <span class="o">=</span> <span class="n">new_dratio</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">new_dratio</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+                                                        <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                        <span class="n">new_actor_loss</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">new_dratio</span> <span class="o">*</span> <span class="n">minibatch</span><span class="o">.</span><span class="n">adv</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+                        <span class="n">kl</span> <span class="o">=</span> <span class="n">kl_divergence</span><span class="p">(</span><span class="n">old_dist</span><span class="p">,</span> <span class="n">new_dist</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+                        <span class="k">if</span> <span class="n">kl</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_delta</span> <span class="ow">and</span> <span class="n">new_actor_loss</span> <span class="o">&lt;</span> <span class="n">actor_loss</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Backtracking to step </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                            <span class="k">break</span>
+                        <span class="k">elif</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_backtracks</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="n">step_size</span> <span class="o">=</span> <span class="n">step_size</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backtrack_coeff</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_set_from_flat_params</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="p">,</span> <span class="n">new_flat_params</span><span class="p">)</span>
+                            <span class="n">step_size</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">0.0</span><span class="p">])</span>
+                            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                                <span class="s2">&quot;Line search failed! It seems hyperparamters&quot;</span>
+                                <span class="s2">&quot; are poor and need to be changed.&quot;</span>
+                            <span class="p">)</span>
+
+                <span class="c1"># optimize citirc</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_optim_critic_iters</span><span class="p">):</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">critic</span><span class="p">(</span><span class="n">minibatch</span><span class="o">.</span><span class="n">obs</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+                    <span class="n">vf_loss</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span><span class="n">minibatch</span><span class="o">.</span><span class="n">returns</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+                    <span class="n">vf_loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+                <span class="n">actor_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">actor_loss</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+                <span class="n">vf_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vf_loss</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+                <span class="n">step_sizes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">step_size</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+                <span class="n">kls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">kl</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;loss/actor&quot;</span><span class="p">:</span> <span class="n">actor_losses</span><span class="p">,</span>
+            <span class="s2">&quot;loss/vf&quot;</span><span class="p">:</span> <span class="n">vf_losses</span><span class="p">,</span>
+            <span class="s2">&quot;step_size&quot;</span><span class="p">:</span> <span class="n">step_sizes</span><span class="p">,</span>
+            <span class="s2">&quot;kl&quot;</span><span class="p">:</span> <span class="n">kls</span><span class="p">,</span>
+        <span class="p">}</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Tianshou contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

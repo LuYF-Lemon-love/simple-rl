@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tianshou.utils.logger.tensorboard &mdash; Tianshou 0.5.1 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/style.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+        <script src="../../../../_static/js/copybutton.js?v=7db002fe"></script>
+        <script src="../../../../_static/js/benchmark.js?v=1091b9f3"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            Tianshou
+              <img src="../../../../_static/tianshou-logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.5.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/get_started.html">Get Started with Jupyter Notebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/dqn.html">Deep Q Network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/concepts.html">Basic concepts in Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/batch.html">Understand Batch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/tictactoe.html">Multi-Agent RL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/logger.html">Logging Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/benchmark.html">Benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/cheatsheet.html">Cheat Sheet</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.data.html">tianshou.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.env.html">tianshou.env</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.policy.html">tianshou.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.trainer.html">tianshou.trainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.exploration.html">tianshou.exploration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.utils.html">tianshou.utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing to Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributor.html">Contributor</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tianshou</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">tianshou.utils.logger.tensorboard</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tianshou.utils.logger.tensorboard</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">from</span> <span class="nn">tensorboard.backend.event_processing</span> <span class="kn">import</span> <span class="n">event_accumulator</span>
+<span class="kn">from</span> <span class="nn">torch.utils.tensorboard</span> <span class="kn">import</span> <span class="n">SummaryWriter</span>
+
+<span class="kn">from</span> <span class="nn">tianshou.utils.logger.base</span> <span class="kn">import</span> <span class="n">LOG_DATA_TYPE</span><span class="p">,</span> <span class="n">BaseLogger</span>
+<span class="kn">from</span> <span class="nn">tianshou.utils.warning</span> <span class="kn">import</span> <span class="n">deprecation</span>
+
+
+<div class="viewcode-block" id="TensorboardLogger">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.TensorboardLogger">[docs]</a>
+<span class="k">class</span> <span class="nc">TensorboardLogger</span><span class="p">(</span><span class="n">BaseLogger</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A logger that relies on tensorboard SummaryWriter by default to visualize \</span>
+<span class="sd">    and log statistics.</span>
+
+<span class="sd">    :param SummaryWriter writer: the writer to log data.</span>
+<span class="sd">    :param int train_interval: the log interval in log_train_data(). Default to 1000.</span>
+<span class="sd">    :param int test_interval: the log interval in log_test_data(). Default to 1.</span>
+<span class="sd">    :param int update_interval: the log interval in log_update_data(). Default to 1000.</span>
+<span class="sd">    :param int save_interval: the save interval in save_data(). Default to 1 (save at</span>
+<span class="sd">        the end of each epoch).</span>
+<span class="sd">    :param bool write_flush: whether to flush tensorboard result after each</span>
+<span class="sd">        add_scalar operation. Default to True.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">writer</span><span class="p">:</span> <span class="n">SummaryWriter</span><span class="p">,</span>
+        <span class="n">train_interval</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="n">test_interval</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">update_interval</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="n">save_interval</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">write_flush</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">train_interval</span><span class="p">,</span> <span class="n">test_interval</span><span class="p">,</span> <span class="n">update_interval</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_interval</span> <span class="o">=</span> <span class="n">save_interval</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_flush</span> <span class="o">=</span> <span class="n">write_flush</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_save_step</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">writer</span> <span class="o">=</span> <span class="n">writer</span>
+
+<div class="viewcode-block" id="TensorboardLogger.write">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.TensorboardLogger.write">[docs]</a>
+    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">step</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">LOG_DATA_TYPE</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">global_step</span><span class="o">=</span><span class="n">step</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_flush</span><span class="p">:</span>  <span class="c1"># issue 580</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>  <span class="c1"># issue #482</span></div>
+
+
+<div class="viewcode-block" id="TensorboardLogger.save_data">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.TensorboardLogger.save_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">save_data</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">epoch</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">env_step</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">gradient_step</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">save_checkpoint_fn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">save_checkpoint_fn</span> <span class="ow">and</span> <span class="n">epoch</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_save_step</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_interval</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_save_step</span> <span class="o">=</span> <span class="n">epoch</span>
+            <span class="n">save_checkpoint_fn</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">env_step</span><span class="p">,</span> <span class="n">gradient_step</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;save/epoch&quot;</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;save/epoch&quot;</span><span class="p">:</span> <span class="n">epoch</span><span class="p">})</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;save/env_step&quot;</span><span class="p">,</span> <span class="n">env_step</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;save/env_step&quot;</span><span class="p">:</span> <span class="n">env_step</span><span class="p">})</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+                <span class="s2">&quot;save/gradient_step&quot;</span><span class="p">,</span> <span class="n">gradient_step</span><span class="p">,</span>
+                <span class="p">{</span><span class="s2">&quot;save/gradient_step&quot;</span><span class="p">:</span> <span class="n">gradient_step</span><span class="p">}</span>
+            <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TensorboardLogger.restore_data">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.TensorboardLogger.restore_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">restore_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="n">ea</span> <span class="o">=</span> <span class="n">event_accumulator</span><span class="o">.</span><span class="n">EventAccumulator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">log_dir</span><span class="p">)</span>
+        <span class="n">ea</span><span class="o">.</span><span class="n">Reload</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>  <span class="c1"># epoch / gradient_step</span>
+            <span class="n">epoch</span> <span class="o">=</span> <span class="n">ea</span><span class="o">.</span><span class="n">scalars</span><span class="o">.</span><span class="n">Items</span><span class="p">(</span><span class="s2">&quot;save/epoch&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">step</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_save_step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_log_test_step</span> <span class="o">=</span> <span class="n">epoch</span>
+            <span class="n">gradient_step</span> <span class="o">=</span> <span class="n">ea</span><span class="o">.</span><span class="n">scalars</span><span class="o">.</span><span class="n">Items</span><span class="p">(</span><span class="s2">&quot;save/gradient_step&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">step</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_log_update_step</span> <span class="o">=</span> <span class="n">gradient_step</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">epoch</span><span class="p">,</span> <span class="n">gradient_step</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="k">try</span><span class="p">:</span>  <span class="c1"># offline trainer doesn&#39;t have env_step</span>
+            <span class="n">env_step</span> <span class="o">=</span> <span class="n">ea</span><span class="o">.</span><span class="n">scalars</span><span class="o">.</span><span class="n">Items</span><span class="p">(</span><span class="s2">&quot;save/env_step&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">step</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_log_train_step</span> <span class="o">=</span> <span class="n">env_step</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">env_step</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">return</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">env_step</span><span class="p">,</span> <span class="n">gradient_step</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="BasicLogger">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.BasicLogger">[docs]</a>
+<span class="k">class</span> <span class="nc">BasicLogger</span><span class="p">(</span><span class="n">TensorboardLogger</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;BasicLogger has changed its name to TensorboardLogger in #427.</span>
+
+<span class="sd">    This class is for compatibility.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">deprecation</span><span class="p">(</span>
+            <span class="s2">&quot;Class BasicLogger is marked as deprecated and will be removed soon. &quot;</span>
+            <span class="s2">&quot;Please use TensorboardLogger instead.&quot;</span>
+        <span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Tianshou contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

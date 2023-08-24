@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to Tianshou! &mdash; Tianshou 0.5.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/style.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/documentation_options.js?v=b9afe91b"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+        <script src="_static/js/copybutton.js?v=7db002fe"></script>
+        <script src="_static/js/benchmark.js?v=1091b9f3"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Get Started with Jupyter Notebook" href="tutorials/get_started.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            Tianshou
+              <img src="_static/tianshou-logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.5.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/get_started.html">Get Started with Jupyter Notebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/dqn.html">Deep Q Network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/concepts.html">Basic concepts in Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/batch.html">Understand Batch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/tictactoe.html">Multi-Agent RL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/logger.html">Logging Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/benchmark.html">Benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/cheatsheet.html">Cheat Sheet</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/tianshou.data.html">tianshou.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/tianshou.env.html">tianshou.env</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/tianshou.policy.html">tianshou.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/tianshou.trainer.html">tianshou.trainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/tianshou.exploration.html">tianshou.exploration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/tianshou.utils.html">tianshou.utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributor.html">Contributor</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">Tianshou</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Welcome to Tianshou!</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="welcome-to-tianshou">
+<h1>Welcome to Tianshou!<a class="headerlink" href="#welcome-to-tianshou" title="Link to this heading">¶</a></h1>
+<p><strong>Tianshou</strong> (<a class="reference external" href="https://baike.baidu.com/item/%E5%A4%A9%E6%8E%88">天授</a>) is a reinforcement learning platform based on pure PyTorch. Unlike existing reinforcement learning libraries, which are mainly based on TensorFlow, have many nested classes, unfriendly API, or slow-speed, Tianshou provides a fast-speed framework and pythonic API for building the deep reinforcement learning agent. The supported interface algorithms include:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.DQNPolicy" title="tianshou.policy.DQNPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">DQNPolicy</span></code></a> <a class="reference external" href="https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf">Deep Q-Network</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.DQNPolicy" title="tianshou.policy.DQNPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">DQNPolicy</span></code></a> <a class="reference external" href="https://arxiv.org/pdf/1509.06461.pdf">Double DQN</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.DQNPolicy" title="tianshou.policy.DQNPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">DQNPolicy</span></code></a> <a class="reference external" href="https://arxiv.org/pdf/1511.06581.pdf">Dueling DQN</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.BranchingDQNPolicy" title="tianshou.policy.BranchingDQNPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">BranchingDQNPolicy</span></code></a> <a class="reference external" href="https://arxiv.org/pdf/1711.08946.pdf">Branching DQN</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.C51Policy" title="tianshou.policy.C51Policy"><code class="xref py py-class docutils literal notranslate"><span class="pre">C51Policy</span></code></a> <a class="reference external" href="https://arxiv.org/pdf/1707.06887.pdf">Categorical DQN</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.RainbowPolicy" title="tianshou.policy.RainbowPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">RainbowPolicy</span></code></a> <a class="reference external" href="https://arxiv.org/pdf/1710.02298.pdf">Rainbow DQN</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.QRDQNPolicy" title="tianshou.policy.QRDQNPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">QRDQNPolicy</span></code></a> <a class="reference external" href="https://arxiv.org/pdf/1710.10044.pdf">Quantile Regression DQN</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.IQNPolicy" title="tianshou.policy.IQNPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">IQNPolicy</span></code></a> <a class="reference external" href="https://arxiv.org/pdf/1806.06923.pdf">Implicit Quantile Network</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.FQFPolicy" title="tianshou.policy.FQFPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">FQFPolicy</span></code></a> <a class="reference external" href="https://arxiv.org/pdf/1911.02140.pdf">Fully-parameterized Quantile Function</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.PGPolicy" title="tianshou.policy.PGPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">PGPolicy</span></code></a> <a class="reference external" href="https://papers.nips.cc/paper/1713-policy-gradient-methods-for-reinforcement-learning-with-function-approximation.pdf">Policy Gradient</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.NPGPolicy" title="tianshou.policy.NPGPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">NPGPolicy</span></code></a> <a class="reference external" href="https://proceedings.neurips.cc/paper/2001/file/4b86abe48d358ecf194c56c69108433e-Paper.pdf">Natural Policy Gradient</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.A2CPolicy" title="tianshou.policy.A2CPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">A2CPolicy</span></code></a> <a class="reference external" href="https://openai.com/blog/baselines-acktr-a2c/">Advantage Actor-Critic</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.TRPOPolicy" title="tianshou.policy.TRPOPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">TRPOPolicy</span></code></a> <a class="reference external" href="https://arxiv.org/pdf/1502.05477.pdf">Trust Region Policy Optimization</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.PPOPolicy" title="tianshou.policy.PPOPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">PPOPolicy</span></code></a> <a class="reference external" href="https://arxiv.org/pdf/1707.06347.pdf">Proximal Policy Optimization</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.DDPGPolicy" title="tianshou.policy.DDPGPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">DDPGPolicy</span></code></a> <a class="reference external" href="https://arxiv.org/pdf/1509.02971.pdf">Deep Deterministic Policy Gradient</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.TD3Policy" title="tianshou.policy.TD3Policy"><code class="xref py py-class docutils literal notranslate"><span class="pre">TD3Policy</span></code></a> <a class="reference external" href="https://arxiv.org/pdf/1802.09477.pdf">Twin Delayed DDPG</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.SACPolicy" title="tianshou.policy.SACPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">SACPolicy</span></code></a> <a class="reference external" href="https://arxiv.org/pdf/1812.05905.pdf">Soft Actor-Critic</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.REDQPolicy" title="tianshou.policy.REDQPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">REDQPolicy</span></code></a> <a class="reference external" href="https://arxiv.org/pdf/2101.05982.pdf">Randomized Ensembled Double Q-Learning</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.DiscreteSACPolicy" title="tianshou.policy.DiscreteSACPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">DiscreteSACPolicy</span></code></a> <a class="reference external" href="https://arxiv.org/pdf/1910.07207.pdf">Discrete Soft Actor-Critic</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.ImitationPolicy" title="tianshou.policy.ImitationPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImitationPolicy</span></code></a> Imitation Learning</p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.BCQPolicy" title="tianshou.policy.BCQPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">BCQPolicy</span></code></a> <a class="reference external" href="https://arxiv.org/pdf/1812.02900.pdf">Batch-Constrained deep Q-Learning</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.CQLPolicy" title="tianshou.policy.CQLPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">CQLPolicy</span></code></a> <a class="reference external" href="https://arxiv.org/pdf/2006.04779.pdf">Conservative Q-Learning</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.TD3BCPolicy" title="tianshou.policy.TD3BCPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">TD3BCPolicy</span></code></a> <a class="reference external" href="https://arxiv.org/pdf/2106.06860.pdf">Twin Delayed DDPG with Behavior Cloning</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.DiscreteBCQPolicy" title="tianshou.policy.DiscreteBCQPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">DiscreteBCQPolicy</span></code></a> <a class="reference external" href="https://arxiv.org/pdf/1910.01708.pdf">Discrete Batch-Constrained deep Q-Learning</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.DiscreteCQLPolicy" title="tianshou.policy.DiscreteCQLPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">DiscreteCQLPolicy</span></code></a> <a class="reference external" href="https://arxiv.org/pdf/2006.04779.pdf">Discrete Conservative Q-Learning</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.DiscreteCRRPolicy" title="tianshou.policy.DiscreteCRRPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">DiscreteCRRPolicy</span></code></a> <a class="reference external" href="https://arxiv.org/pdf/2006.15134.pdf">Critic Regularized Regression</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.GAILPolicy" title="tianshou.policy.GAILPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">GAILPolicy</span></code></a> <a class="reference external" href="https://arxiv.org/pdf/1606.03476.pdf">Generative Adversarial Imitation Learning</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.PSRLPolicy" title="tianshou.policy.PSRLPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">PSRLPolicy</span></code></a> <a class="reference external" href="https://www.ece.uvic.ca/~bctill/papers/learning/Strens_2000.pdf">Posterior Sampling Reinforcement Learning</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.ICMPolicy" title="tianshou.policy.ICMPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">ICMPolicy</span></code></a> <a class="reference external" href="https://arxiv.org/pdf/1705.05363.pdf">Intrinsic Curiosity Module</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.data.html#tianshou.data.PrioritizedReplayBuffer" title="tianshou.data.PrioritizedReplayBuffer"><code class="xref py py-class docutils literal notranslate"><span class="pre">PrioritizedReplayBuffer</span></code></a> <a class="reference external" href="https://arxiv.org/pdf/1511.05952.pdf">Prioritized Experience Replay</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.BasePolicy.compute_episodic_return" title="tianshou.policy.BasePolicy.compute_episodic_return"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_episodic_return()</span></code></a> <a class="reference external" href="https://arxiv.org/pdf/1506.02438.pdf">Generalized Advantage Estimator</a></p></li>
+<li><p><a class="reference internal" href="api/tianshou.data.html#tianshou.data.HERReplayBuffer" title="tianshou.data.HERReplayBuffer"><code class="xref py py-class docutils literal notranslate"><span class="pre">HERReplayBuffer</span></code></a> <a class="reference external" href="https://arxiv.org/pdf/1707.01495.pdf">Hindsight Experience Replay</a></p></li>
+</ul>
+<p>Here is Tianshou’s other features:</p>
+<ul class="simple">
+<li><p>Elegant framework, using only ~3000 lines of code</p></li>
+<li><p>State-of-the-art <a class="reference external" href="https://github.com/thu-ml/tianshou/tree/master/examples/mujoco">MuJoCo benchmark</a></p></li>
+<li><p>Support vectorized environment (synchronous or asynchronous) for all algorithms: <a class="reference internal" href="tutorials/cheatsheet.html#parallel-sampling"><span class="std std-ref">Parallel Sampling</span></a></p></li>
+<li><p>Support super-fast vectorized environment <a class="reference external" href="https://github.com/sail-sg/envpool/">EnvPool</a> for all algorithms: <a class="reference internal" href="tutorials/cheatsheet.html#envpool-integration"><span class="std std-ref">EnvPool Integration</span></a></p></li>
+<li><p>Support recurrent state representation in actor network and critic network (RNN-style training for POMDP): <a class="reference internal" href="tutorials/cheatsheet.html#rnn-training"><span class="std std-ref">RNN-style Training</span></a></p></li>
+<li><p>Support any type of environment state/action (e.g. a dict, a self-defined class, …): <a class="reference internal" href="tutorials/cheatsheet.html#self-defined-env"><span class="std std-ref">User-defined Environment and Different State Representation</span></a></p></li>
+<li><p>Support <a class="reference internal" href="tutorials/cheatsheet.html#customize-training"><span class="std std-ref">Customize Training Process</span></a></p></li>
+<li><p>Support n-step returns estimation <a class="reference internal" href="api/tianshou.policy.html#tianshou.policy.BasePolicy.compute_nstep_return" title="tianshou.policy.BasePolicy.compute_nstep_return"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_nstep_return()</span></code></a> and prioritized experience replay <a class="reference internal" href="api/tianshou.data.html#tianshou.data.PrioritizedReplayBuffer" title="tianshou.data.PrioritizedReplayBuffer"><code class="xref py py-class docutils literal notranslate"><span class="pre">PrioritizedReplayBuffer</span></code></a> for all Q-learning based algorithms; GAE, nstep and PER are very fast thanks to numba jit function and vectorized numpy operation</p></li>
+<li><p>Support <a class="reference internal" href="tutorials/tictactoe.html"><span class="doc">Multi-Agent RL</span></a></p></li>
+<li><p>Support both <a class="reference external" href="https://www.tensorflow.org/tensorboard">TensorBoard</a> and <a class="reference external" href="https://wandb.ai/">W&amp;B</a> log tools</p></li>
+<li><p>Support multi-GPU training <a class="reference internal" href="tutorials/cheatsheet.html#multi-gpu"><span class="std std-ref">Multi-GPU Training</span></a></p></li>
+<li><p>Comprehensive <a class="reference external" href="https://github.com/thu-ml/tianshou/actions">unit tests</a>, including functional checking, RL pipeline checking, documentation checking, PEP8 code-style checking, and type checking</p></li>
+</ul>
+<p>中文文档位于 <a class="reference external" href="https://tianshou.readthedocs.io/zh/master/">https://tianshou.readthedocs.io/zh/master/</a></p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
+<p>Tianshou is currently hosted on <a class="reference external" href="https://pypi.org/project/tianshou/">PyPI</a> and <a class="reference external" href="https://github.com/conda-forge/tianshou-feedstock">conda-forge</a>. It requires Python &gt;= 3.8.</p>
+<p>You can simply install Tianshou from PyPI with the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>tianshou
+</pre></div>
+</div>
+<p>If you use Anaconda or Miniconda, you can install Tianshou from conda-forge through the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>conda<span class="w"> </span>install<span class="w"> </span>tianshou<span class="w"> </span>-c<span class="w"> </span>conda-forge
+</pre></div>
+</div>
+<p>You can also install with the newest version through GitHub:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/thu-ml/tianshou.git@master<span class="w"> </span>--upgrade
+</pre></div>
+</div>
+<p>After installation, open your python console and type</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tianshou</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tianshou</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If no error occurs, you have successfully installed Tianshou.</p>
+<p>Tianshou is still under development, you can also check out the documents in stable version through <a class="reference external" href="https://tianshou.readthedocs.io/en/stable/">tianshou.readthedocs.io/en/stable/</a>.</p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/get_started.html">Get Started with Jupyter Notebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/dqn.html">Deep Q Network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/concepts.html">Basic concepts in Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/batch.html">Understand Batch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/tictactoe.html">Multi-Agent RL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/logger.html">Logging Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/benchmark.html">Benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/cheatsheet.html">Cheat Sheet</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/tianshou.data.html">tianshou.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/tianshou.env.html">tianshou.env</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/tianshou.policy.html">tianshou.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/tianshou.trainer.html">tianshou.trainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/tianshou.exploration.html">tianshou.exploration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/tianshou.utils.html">tianshou.utils</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributor.html">Contributor</a></li>
+</ul>
+</div>
+</section>
+<section id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tutorials/get_started.html" class="btn btn-neutral float-right" title="Get Started with Jupyter Notebook" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Tianshou contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

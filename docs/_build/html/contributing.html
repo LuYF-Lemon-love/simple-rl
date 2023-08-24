@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contributing to Tianshou &mdash; Tianshou 0.5.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/style.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/documentation_options.js?v=b9afe91b"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+        <script src="_static/js/copybutton.js?v=7db002fe"></script>
+        <script src="_static/js/benchmark.js?v=1091b9f3"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributor" href="contributor.html" />
+    <link rel="prev" title="tianshou.utils" href="api/tianshou.utils.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Tianshou
+              <img src="_static/tianshou-logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.5.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/get_started.html">Get Started with Jupyter Notebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/dqn.html">Deep Q Network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/concepts.html">Basic concepts in Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/batch.html">Understand Batch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/tictactoe.html">Multi-Agent RL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/logger.html">Logging Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/benchmark.html">Benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/cheatsheet.html">Cheat Sheet</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/tianshou.data.html">tianshou.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/tianshou.env.html">tianshou.env</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/tianshou.policy.html">tianshou.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/tianshou.trainer.html">tianshou.trainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/tianshou.exploration.html">tianshou.exploration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/tianshou.utils.html">tianshou.utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contributing to Tianshou</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#install-develop-version">Install Develop Version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pep8-code-style-check-and-code-formatter">PEP8 Code Style Check and Code Formatter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#type-check">Type Check</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#test-locally">Test Locally</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#test-by-github-actions">Test by GitHub Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#documentation-generation-test">Documentation Generation Test</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributor.html">Contributor</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Tianshou</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Contributing to Tianshou</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/contributing.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="contributing-to-tianshou">
+<h1>Contributing to Tianshou<a class="headerlink" href="#contributing-to-tianshou" title="Link to this heading">¶</a></h1>
+<section id="install-develop-version">
+<h2>Install Develop Version<a class="headerlink" href="#install-develop-version" title="Link to this heading">¶</a></h2>
+<p>To install Tianshou in an “editable” mode, run</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[dev]&quot;</span>
+</pre></div>
+</div>
+<p>in the main directory. This installation is removable by</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python<span class="w"> </span>setup.py<span class="w"> </span>develop<span class="w"> </span>--uninstall
+</pre></div>
+</div>
+</section>
+<section id="pep8-code-style-check-and-code-formatter">
+<h2>PEP8 Code Style Check and Code Formatter<a class="headerlink" href="#pep8-code-style-check-and-code-formatter" title="Link to this heading">¶</a></h2>
+<p>Please set up pre-commit by running</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pre-commit<span class="w"> </span>install
+</pre></div>
+</div>
+<p>in the main directory. This should make sure that your contribution is properly
+formatted before every commit.</p>
+<p>We follow PEP8 python code style with flake8. To check, in the main directory, run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>make<span class="w"> </span>lint
+</pre></div>
+</div>
+<p>We use isort and yapf to format all codes. To format, in the main directory, run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>make<span class="w"> </span>format
+</pre></div>
+</div>
+<p>To check if formatted correctly, in the main directory, run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>make<span class="w"> </span>check-codestyle
+</pre></div>
+</div>
+</section>
+<section id="type-check">
+<h2>Type Check<a class="headerlink" href="#type-check" title="Link to this heading">¶</a></h2>
+<p>We use <a class="reference external" href="https://github.com/python/mypy/">mypy</a> to check the type annotations. To check, in the main directory, run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>make<span class="w"> </span>mypy
+</pre></div>
+</div>
+</section>
+<section id="test-locally">
+<h2>Test Locally<a class="headerlink" href="#test-locally" title="Link to this heading">¶</a></h2>
+<p>This command will run automatic tests in the main directory</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>make<span class="w"> </span>pytest
+</pre></div>
+</div>
+</section>
+<section id="test-by-github-actions">
+<h2>Test by GitHub Actions<a class="headerlink" href="#test-by-github-actions" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Click the <code class="docutils literal notranslate"><span class="pre">Actions</span></code> button in your own repo:</p></li>
+</ol>
+<img alt="_images/action1.jpg" class="align-center" src="_images/action1.jpg" />
+<ol class="arabic simple" start="2">
+<li><p>Click the green button:</p></li>
+</ol>
+<img alt="_images/action2.jpg" class="align-center" src="_images/action2.jpg" />
+<ol class="arabic simple" start="3">
+<li><p>You will see <code class="docutils literal notranslate"><span class="pre">Actions</span> <span class="pre">Enabled.</span></code> on the top of html page.</p></li>
+<li><p>When you push a new commit to your own repo (e.g. <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span></code>), it will automatically run the test in this page:</p></li>
+</ol>
+<img alt="_images/action3.png" class="align-center" src="_images/action3.png" />
+</section>
+<section id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">¶</a></h2>
+<p>Documentations are written under the <code class="docutils literal notranslate"><span class="pre">docs/</span></code> directory as ReStructuredText (<code class="docutils literal notranslate"><span class="pre">.rst</span></code>) files. <code class="docutils literal notranslate"><span class="pre">index.rst</span></code> is the main page. A Tutorial on ReStructuredText can be found <a class="reference external" href="https://pythonhosted.org/an_example_pypi_project/sphinx.html">here</a>.</p>
+<p>API References are automatically generated by <a class="reference external" href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> according to the outlines under <code class="docutils literal notranslate"><span class="pre">docs/api/</span></code> and should be modified when any code changes.</p>
+<p>To compile documentation into webpage, run</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>make<span class="w"> </span>doc
+</pre></div>
+</div>
+<p>The generated webpage is in <code class="docutils literal notranslate"><span class="pre">docs/_build</span></code> and can be viewed with browser (<a class="reference external" href="http://0.0.0.0:8000/">http://0.0.0.0:8000/</a>).</p>
+<p>Chinese documentation is in <a class="reference external" href="https://tianshou.readthedocs.io/zh/latest/">https://tianshou.readthedocs.io/zh/latest/</a>.</p>
+</section>
+<section id="documentation-generation-test">
+<h2>Documentation Generation Test<a class="headerlink" href="#documentation-generation-test" title="Link to this heading">¶</a></h2>
+<p>We have the following three documentation tests:</p>
+<ol class="arabic simple">
+<li><p>pydocstyle: test all docstring under <code class="docutils literal notranslate"><span class="pre">tianshou/</span></code>;</p></li>
+<li><p>doc8: test ReStructuredText format;</p></li>
+<li><p>sphinx test: test if there is any error/warning when generating front-end html documentation.</p></li>
+</ol>
+<p>To check, in the main directory, run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>make<span class="w"> </span>check-docstyle
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="api/tianshou.utils.html" class="btn btn-neutral float-left" title="tianshou.utils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="contributor.html" class="btn btn-neutral float-right" title="Contributor" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Tianshou contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

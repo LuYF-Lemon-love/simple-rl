@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tianshou.data.buffer.prio &mdash; Tianshou 0.5.1 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/style.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+        <script src="../../../../_static/js/copybutton.js?v=7db002fe"></script>
+        <script src="../../../../_static/js/benchmark.js?v=1091b9f3"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            Tianshou
+              <img src="../../../../_static/tianshou-logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.5.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/get_started.html">Get Started with Jupyter Notebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/dqn.html">Deep Q Network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/concepts.html">Basic concepts in Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/batch.html">Understand Batch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/tictactoe.html">Multi-Agent RL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/logger.html">Logging Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/benchmark.html">Benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/cheatsheet.html">Cheat Sheet</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.data.html">tianshou.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.env.html">tianshou.env</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.policy.html">tianshou.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.trainer.html">tianshou.trainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.exploration.html">tianshou.exploration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.utils.html">tianshou.utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing to Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributor.html">Contributor</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tianshou</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">tianshou.data.buffer.prio</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tianshou.data.buffer.prio</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">cast</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="kn">from</span> <span class="nn">tianshou.data</span> <span class="kn">import</span> <span class="n">ReplayBuffer</span><span class="p">,</span> <span class="n">SegmentTree</span><span class="p">,</span> <span class="n">to_numpy</span>
+<span class="kn">from</span> <span class="nn">tianshou.data.types</span> <span class="kn">import</span> <span class="n">PrioBatchProtocol</span><span class="p">,</span> <span class="n">RolloutBatchProtocol</span>
+
+
+<div class="viewcode-block" id="PrioritizedReplayBuffer">
+<a class="viewcode-back" href="../../../../api/tianshou.data.html#tianshou.data.PrioritizedReplayBuffer">[docs]</a>
+<span class="k">class</span> <span class="nc">PrioritizedReplayBuffer</span><span class="p">(</span><span class="n">ReplayBuffer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implementation of Prioritized Experience Replay. arXiv:1511.05952.</span>
+
+<span class="sd">    :param float alpha: the prioritization exponent.</span>
+<span class="sd">    :param float beta: the importance sample soft coefficient.</span>
+<span class="sd">    :param bool weight_norm: whether to normalize returned weights with the maximum</span>
+<span class="sd">        weight value within the batch. Default to True.</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        Please refer to :class:`~tianshou.data.ReplayBuffer` for other APIs&#39; usage.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">beta</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">weight_norm</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># will raise KeyError in PrioritizedVectorReplayBuffer</span>
+        <span class="c1"># super().__init__(size, **kwargs)</span>
+        <span class="n">ReplayBuffer</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">alpha</span> <span class="o">&gt;</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">beta</span> <span class="o">&gt;=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_alpha</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_beta</span> <span class="o">=</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_prio</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_prio</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="c1"># save weight directly in this class instead of self._meta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">SegmentTree</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_weight_norm</span> <span class="o">=</span> <span class="n">weight_norm</span>
+
+<div class="viewcode-block" id="PrioritizedReplayBuffer.init_weight">
+<a class="viewcode-back" href="../../../../api/tianshou.data.html#tianshou.data.PrioritizedReplayBuffer.init_weight">[docs]</a>
+    <span class="k">def</span> <span class="nf">init_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_prio</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_alpha</span></div>
+
+
+<div class="viewcode-block" id="PrioritizedReplayBuffer.update">
+<a class="viewcode-back" href="../../../../api/tianshou.data.html#tianshou.data.PrioritizedReplayBuffer.update">[docs]</a>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="n">ReplayBuffer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_weight</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">indices</span></div>
+
+
+<div class="viewcode-block" id="PrioritizedReplayBuffer.add">
+<a class="viewcode-back" href="../../../../api/tianshou.data.html#tianshou.data.PrioritizedReplayBuffer.add">[docs]</a>
+    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">batch</span><span class="p">:</span> <span class="n">RolloutBatchProtocol</span><span class="p">,</span>
+        <span class="n">buffer_ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="n">ptr</span><span class="p">,</span> <span class="n">ep_rew</span><span class="p">,</span> <span class="n">ep_len</span><span class="p">,</span> <span class="n">ep_idx</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">buffer_ids</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_weight</span><span class="p">(</span><span class="n">ptr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ptr</span><span class="p">,</span> <span class="n">ep_rew</span><span class="p">,</span> <span class="n">ep_len</span><span class="p">,</span> <span class="n">ep_idx</span></div>
+
+
+<div class="viewcode-block" id="PrioritizedReplayBuffer.sample_indices">
+<a class="viewcode-back" href="../../../../api/tianshou.data.html#tianshou.data.PrioritizedReplayBuffer.sample_indices">[docs]</a>
+    <span class="k">def</span> <span class="nf">sample_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">batch_size</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">scalar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">reduce</span><span class="p">()</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">get_prefix_sum_idx</span><span class="p">(</span><span class="n">scalar</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">sample_indices</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PrioritizedReplayBuffer.get_weight">
+<a class="viewcode-back" href="../../../../api/tianshou.data.html#tianshou.data.PrioritizedReplayBuffer.get_weight">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the importance sampling weight.</span>
+
+<span class="sd">        The &quot;weight&quot; in the returned Batch is the weight on loss function to debias</span>
+<span class="sd">        the sampling process (some transition tuples are sampled more often so their</span>
+<span class="sd">        losses are weighted less).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># important sampling weight calculation</span>
+        <span class="c1"># original formula: ((p_j/p_sum*N)**(-beta))/((p_min/p_sum*N)**(-beta))</span>
+        <span class="c1"># simplified formula: (p_j/p_min)**(-beta)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_prio</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">_beta</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PrioritizedReplayBuffer.update_weight">
+<a class="viewcode-back" href="../../../../api/tianshou.data.html#tianshou.data.PrioritizedReplayBuffer.update_weight">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_weight</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">new_weight</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update priority weight by index in this buffer.</span>
+
+<span class="sd">        :param np.ndarray index: index you want to update weight.</span>
+<span class="sd">        :param np.ndarray new_weight: new priority weight you want to update.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">weight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">new_weight</span><span class="p">))</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__eps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">weight</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_alpha</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_prio</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_prio</span><span class="p">,</span> <span class="n">weight</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_min_prio</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_min_prio</span><span class="p">,</span> <span class="n">weight</span><span class="o">.</span><span class="n">min</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="PrioritizedReplayBuffer.__getitem__">
+<a class="viewcode-back" href="../../../../api/tianshou.data.html#tianshou.data.PrioritizedReplayBuffer.__getitem__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">slice</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PrioBatchProtocol</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>  <span class="c1"># change slice to np array</span>
+            <span class="c1"># buffer[:] will get all available data</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_indices</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span> \
+                <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_indices</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)][</span><span class="n">index</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="n">index</span>  <span class="c1"># type: ignore</span>
+        <span class="n">batch</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+        <span class="n">weight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_weight</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+        <span class="c1"># ref: https://github.com/Kaixhin/Rainbow/blob/master/memory.py L154</span>
+        <span class="n">batch</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">weight</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">weight</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weight_norm</span> <span class="k">else</span> <span class="n">weight</span>
+        <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">PrioBatchProtocol</span><span class="p">,</span> <span class="n">batch</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PrioritizedReplayBuffer.set_beta">
+<a class="viewcode-back" href="../../../../api/tianshou.data.html#tianshou.data.PrioritizedReplayBuffer.set_beta">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_beta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">beta</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_beta</span> <span class="o">=</span> <span class="n">beta</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Tianshou contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

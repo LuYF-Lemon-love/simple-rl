@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tianshou.policy.base &mdash; Tianshou 0.5.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/style.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/documentation_options.js?v=b9afe91b"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+        <script src="../../../_static/js/copybutton.js?v=7db002fe"></script>
+        <script src="../../../_static/js/benchmark.js?v=1091b9f3"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Tianshou
+              <img src="../../../_static/tianshou-logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.5.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/get_started.html">Get Started with Jupyter Notebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/dqn.html">Deep Q Network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/concepts.html">Basic concepts in Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/batch.html">Understand Batch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/tictactoe.html">Multi-Agent RL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/logger.html">Logging Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/benchmark.html">Benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/cheatsheet.html">Cheat Sheet</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/tianshou.data.html">tianshou.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/tianshou.env.html">tianshou.env</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/tianshou.policy.html">tianshou.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/tianshou.trainer.html">tianshou.trainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/tianshou.exploration.html">tianshou.exploration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/tianshou.utils.html">tianshou.utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing to Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributor.html">Contributor</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Tianshou</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">tianshou.policy.base</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tianshou.policy.base</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">Dict</span><span class="p">,</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Literal</span><span class="p">,</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">Tuple</span><span class="p">,</span>
+    <span class="n">Union</span><span class="p">,</span>
+    <span class="n">cast</span><span class="p">,</span>
+    <span class="n">overload</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">gymnasium</span> <span class="k">as</span> <span class="nn">gym</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">gymnasium.spaces</span> <span class="kn">import</span> <span class="n">Box</span><span class="p">,</span> <span class="n">Discrete</span><span class="p">,</span> <span class="n">MultiBinary</span><span class="p">,</span> <span class="n">MultiDiscrete</span>
+<span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">njit</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+
+<span class="kn">from</span> <span class="nn">tianshou.data</span> <span class="kn">import</span> <span class="n">ReplayBuffer</span><span class="p">,</span> <span class="n">to_numpy</span><span class="p">,</span> <span class="n">to_torch_as</span>
+<span class="kn">from</span> <span class="nn">tianshou.data.batch</span> <span class="kn">import</span> <span class="n">BatchProtocol</span><span class="p">,</span> <span class="n">TBatch</span>
+<span class="kn">from</span> <span class="nn">tianshou.data.types</span> <span class="kn">import</span> <span class="n">BatchWithReturnsProtocol</span><span class="p">,</span> <span class="n">RolloutBatchProtocol</span>
+<span class="kn">from</span> <span class="nn">tianshou.utils</span> <span class="kn">import</span> <span class="n">MultipleLRSchedulers</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="BasePolicy">
+<a class="viewcode-back" href="../../../api/tianshou.policy.html#tianshou.policy.BasePolicy">[docs]</a>
+<span class="k">class</span> <span class="nc">BasePolicy</span><span class="p">(</span><span class="n">ABC</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The base class for any RL policy.</span>
+
+<span class="sd">    Tianshou aims to modularize RL algorithms. It comes into several classes of</span>
+<span class="sd">    policies in Tianshou. All of the policy classes must inherit</span>
+<span class="sd">    :class:`~tianshou.policy.BasePolicy`.</span>
+
+<span class="sd">    A policy class typically has the following parts:</span>
+
+<span class="sd">    * :meth:`~tianshou.policy.BasePolicy.__init__`: initialize the policy, including \</span>
+<span class="sd">        coping the target network and so on;</span>
+<span class="sd">    * :meth:`~tianshou.policy.BasePolicy.forward`: compute action with given \</span>
+<span class="sd">        observation;</span>
+<span class="sd">    * :meth:`~tianshou.policy.BasePolicy.process_fn`: pre-process data from the \</span>
+<span class="sd">        replay buffer (this function can interact with replay buffer);</span>
+<span class="sd">    * :meth:`~tianshou.policy.BasePolicy.learn`: update policy with a given batch of \</span>
+<span class="sd">        data.</span>
+<span class="sd">    * :meth:`~tianshou.policy.BasePolicy.post_process_fn`: update the replay buffer \</span>
+<span class="sd">        from the learning process (e.g., prioritized replay buffer needs to update \</span>
+<span class="sd">        the weight);</span>
+<span class="sd">    * :meth:`~tianshou.policy.BasePolicy.update`: the main interface for training, \</span>
+<span class="sd">        i.e., `process_fn -&gt; learn -&gt; post_process_fn`.</span>
+
+<span class="sd">    Most of the policy needs a neural network to predict the action and an</span>
+<span class="sd">    optimizer to optimize the policy. The rules of self-defined networks are:</span>
+
+<span class="sd">    1. Input: observation &quot;obs&quot; (may be a ``numpy.ndarray``, a ``torch.Tensor``, a \</span>
+<span class="sd">    dict or any others), hidden state &quot;state&quot; (for RNN usage), and other information \</span>
+<span class="sd">    &quot;info&quot; provided by the environment.</span>
+<span class="sd">    2. Output: some &quot;logits&quot;, the next hidden state &quot;state&quot;, and the intermediate \</span>
+<span class="sd">    result during policy forwarding procedure &quot;policy&quot;. The &quot;logits&quot; could be a tuple \</span>
+<span class="sd">    instead of a ``torch.Tensor``. It depends on how the policy process the network \</span>
+<span class="sd">    output. For example, in PPO, the return of the network might be \</span>
+<span class="sd">    ``(mu, sigma), state`` for Gaussian policy. The &quot;policy&quot; can be a Batch of \</span>
+<span class="sd">    torch.Tensor or other things, which will be stored in the replay buffer, and can \</span>
+<span class="sd">    be accessed in the policy update process (e.g. in &quot;policy.learn()&quot;, the \</span>
+<span class="sd">    &quot;batch.policy&quot; is what you need).</span>
+
+<span class="sd">    Since :class:`~tianshou.policy.BasePolicy` inherits ``torch.nn.Module``, you can</span>
+<span class="sd">    use :class:`~tianshou.policy.BasePolicy` almost the same as ``torch.nn.Module``,</span>
+<span class="sd">    for instance, loading and saving the model:</span>
+<span class="sd">    ::</span>
+
+<span class="sd">        torch.save(policy.state_dict(), &quot;policy.pth&quot;)</span>
+<span class="sd">        policy.load_state_dict(torch.load(&quot;policy.pth&quot;))</span>
+
+<span class="sd">    :param observation_space: appears unused.</span>
+<span class="sd">    :param action_space: required for action_scaling.</span>
+<span class="sd">    :param action_scaling: if True, scale the action from [-1, 1] to the range</span>
+<span class="sd">        of action_space. Note that in this case, the action_space must be provided!</span>
+<span class="sd">    :param action_bound_method:</span>
+<span class="sd">    :param lr_scheduler:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="c1"># TODO: does the policy actually need the observation space?</span>
+        <span class="n">observation_space</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">gym</span><span class="o">.</span><span class="n">Space</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">action_space</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">gym</span><span class="o">.</span><span class="n">Space</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">action_scaling</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">action_bound_method</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;clip&quot;</span><span class="p">,</span> <span class="s2">&quot;tanh&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">lr_scheduler</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">lr_scheduler</span><span class="o">.</span><span class="n">LambdaLR</span><span class="p">,</span>
+                                     <span class="n">MultipleLRSchedulers</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">allowed_action_bound_methods</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;clip&quot;</span><span class="p">,</span> <span class="s2">&quot;tanh&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">action_bound_method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">action_bound_method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed_action_bound_methods</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Got invalid </span><span class="si">{</span><span class="n">action_bound_method</span><span class="si">=}</span><span class="s2">. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Valid values are: </span><span class="si">{</span><span class="n">allowed_action_bound_methods</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="p">)</span>
+        <span class="k">if</span> <span class="n">action_scaling</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action_space</span><span class="p">,</span> <span class="n">Box</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;action_scaling can only be True when action_space is Box but &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;got: </span><span class="si">{</span><span class="n">action_space</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observation_space</span> <span class="o">=</span> <span class="n">observation_space</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">action_space</span> <span class="o">=</span> <span class="n">action_space</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action_space</span><span class="p">,</span> <span class="p">(</span><span class="n">Discrete</span><span class="p">,</span> <span class="n">MultiDiscrete</span><span class="p">,</span> <span class="n">MultiBinary</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">action_type</span> <span class="o">=</span> <span class="s2">&quot;discrete&quot;</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action_space</span><span class="p">,</span> <span class="n">Box</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">action_type</span> <span class="o">=</span> <span class="s2">&quot;continuous&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported action space: </span><span class="si">{</span><span class="n">action_space</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agent_id</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">updating</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">action_scaling</span> <span class="o">=</span> <span class="n">action_scaling</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">action_bound_method</span> <span class="o">=</span> <span class="n">action_bound_method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lr_scheduler</span> <span class="o">=</span> <span class="n">lr_scheduler</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_compile</span><span class="p">()</span>
+
+<div class="viewcode-block" id="BasePolicy.set_agent_id">
+<a class="viewcode-back" href="../../../api/tianshou.policy.html#tianshou.policy.BasePolicy.set_agent_id">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_agent_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set self.agent_id = agent_id, for MARL.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agent_id</span> <span class="o">=</span> <span class="n">agent_id</span></div>
+
+
+    <span class="c1"># TODO: needed since for most of offline algorithm, the algorithm itself doesn&#39;t</span>
+    <span class="c1">#  have a method to add noise to action.</span>
+    <span class="c1">#  So we add the default behavior here. It&#39;s a little messy, maybe one can</span>
+    <span class="c1">#  find a better way to do this.</span>
+<div class="viewcode-block" id="BasePolicy.exploration_noise">
+<a class="viewcode-back" href="../../../api/tianshou.policy.html#tianshou.policy.BasePolicy.exploration_noise">[docs]</a>
+    <span class="k">def</span> <span class="nf">exploration_noise</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">act</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">BatchProtocol</span><span class="p">],</span> <span class="n">batch</span><span class="p">:</span> <span class="n">RolloutBatchProtocol</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">BatchProtocol</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Modify the action from policy.forward with exploration noise.</span>
+
+<span class="sd">        NOTE: currently does not add any noise! Needs to be overridden by subclasses</span>
+<span class="sd">        to actually do something.</span>
+
+<span class="sd">        :param act: a data batch or numpy.ndarray which is the action taken by</span>
+<span class="sd">            policy.forward.</span>
+<span class="sd">        :param batch: the input batch for policy.forward, kept for advanced usage.</span>
+<span class="sd">        :return: action in the same form of input &quot;act&quot; but with added exploration</span>
+<span class="sd">            noise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">act</span></div>
+
+
+<div class="viewcode-block" id="BasePolicy.soft_update">
+<a class="viewcode-back" href="../../../api/tianshou.policy.html#tianshou.policy.BasePolicy.soft_update">[docs]</a>
+    <span class="k">def</span> <span class="nf">soft_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tgt</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">tau</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Softly update the parameters of target module towards the parameters \</span>
+<span class="sd">        of source module.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">tgt_param</span><span class="p">,</span> <span class="n">src_param</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">tgt</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">src</span><span class="o">.</span><span class="n">parameters</span><span class="p">()):</span>
+            <span class="n">tgt_param</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy_</span><span class="p">(</span><span class="n">tau</span> <span class="o">*</span> <span class="n">src_param</span><span class="o">.</span><span class="n">data</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">tau</span><span class="p">)</span> <span class="o">*</span> <span class="n">tgt_param</span><span class="o">.</span><span class="n">data</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BasePolicy.forward">
+<a class="viewcode-back" href="../../../api/tianshou.policy.html#tianshou.policy.BasePolicy.forward">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">batch</span><span class="p">:</span> <span class="n">RolloutBatchProtocol</span><span class="p">,</span>
+        <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">BatchProtocol</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BatchProtocol</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute action over the given batch data.</span>
+
+<span class="sd">        :return: A :class:`~tianshou.data.Batch` which MUST have the following keys:</span>
+
+<span class="sd">            * ``act`` an numpy.ndarray or a torch.Tensor, the action over \</span>
+<span class="sd">                given batch data.</span>
+<span class="sd">            * ``state`` a dict, an numpy.ndarray or a torch.Tensor, the \</span>
+<span class="sd">                internal state of the policy, ``None`` as default.</span>
+
+<span class="sd">        Other keys are user-defined. It depends on the algorithm. For example,</span>
+<span class="sd">        ::</span>
+
+<span class="sd">            # some code</span>
+<span class="sd">            return Batch(logits=..., act=..., state=None, dist=...)</span>
+
+<span class="sd">        The keyword ``policy`` is reserved and the corresponding data will be</span>
+<span class="sd">        stored into the replay buffer. For instance,</span>
+<span class="sd">        ::</span>
+
+<span class="sd">            # some code</span>
+<span class="sd">            return Batch(..., policy=Batch(log_prob=dist.log_prob(act)))</span>
+<span class="sd">            # and in the sampled data batch, you can directly use</span>
+<span class="sd">            # batch.policy.log_prob to get your data.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            In continuous action space, you should do another step &quot;map_action&quot; to get</span>
+<span class="sd">            the real action:</span>
+<span class="sd">            ::</span>
+
+<span class="sd">                act = policy(batch).act  # doesn&#39;t map to the target action range</span>
+<span class="sd">                act = policy.map_action(act, batch)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="nf">map_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">act</span><span class="p">:</span> <span class="n">TBatch</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TBatch</span><span class="p">:</span>
+        <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="nf">map_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">act</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="nf">map_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">act</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+        <span class="o">...</span>
+
+<div class="viewcode-block" id="BasePolicy.map_action">
+<a class="viewcode-back" href="../../../api/tianshou.policy.html#tianshou.policy.BasePolicy.map_action">[docs]</a>
+    <span class="k">def</span> <span class="nf">map_action</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">act</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">BatchProtocol</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">BatchProtocol</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Map raw network output to action range in gym&#39;s env.action_space.</span>
+
+<span class="sd">        This function is called in :meth:`~tianshou.data.Collector.collect` and only</span>
+<span class="sd">        affects action sending to env. Remapped action will not be stored in buffer</span>
+<span class="sd">        and thus can be viewed as a part of env (a black box action transformation).</span>
+
+<span class="sd">        Action mapping includes 2 standard procedures: bounding and scaling. Bounding</span>
+<span class="sd">        procedure expects original action range is (-inf, inf) and maps it to [-1, 1],</span>
+<span class="sd">        while scaling procedure expects original action range is (-1, 1) and maps it</span>
+<span class="sd">        to [action_space.low, action_space.high]. Bounding procedure is applied first.</span>
+
+<span class="sd">        :param act: a data batch or numpy.ndarray which is the action taken by</span>
+<span class="sd">            policy.forward.</span>
+
+<span class="sd">        :return: action in the same form of input &quot;act&quot; but remap to the target action</span>
+<span class="sd">            space.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">action_space</span><span class="p">,</span>
+                      <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Box</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">act</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="c1"># currently this action mapping only supports np.ndarray action</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_bound_method</span> <span class="o">==</span> <span class="s2">&quot;clip&quot;</span><span class="p">:</span>
+                <span class="n">act</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">act</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_bound_method</span> <span class="o">==</span> <span class="s2">&quot;tanh&quot;</span><span class="p">:</span>
+                <span class="n">act</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">act</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_scaling</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">act</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mf">1.0</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">act</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">1.0</span>  <span class="c1"># type: ignore</span>
+                <span class="p">),</span> <span class="s2">&quot;action scaling only accepts raw action range = [-1, 1]&quot;</span>
+                <span class="n">low</span><span class="p">,</span> <span class="n">high</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">low</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">high</span>
+                <span class="n">act</span> <span class="o">=</span> <span class="n">low</span> <span class="o">+</span> <span class="p">(</span><span class="n">high</span> <span class="o">-</span> <span class="n">low</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">act</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>  <span class="c1"># type: ignore</span>
+        <span class="k">return</span> <span class="n">act</span></div>
+
+
+<div class="viewcode-block" id="BasePolicy.map_action_inverse">
+<a class="viewcode-back" href="../../../api/tianshou.policy.html#tianshou.policy.BasePolicy.map_action_inverse">[docs]</a>
+    <span class="k">def</span> <span class="nf">map_action_inverse</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">act</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">BatchProtocol</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">BatchProtocol</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Inverse operation to :meth:`~tianshou.policy.BasePolicy.map_action`.</span>
+
+<span class="sd">        This function is called in :meth:`~tianshou.data.Collector.collect` for</span>
+<span class="sd">        random initial steps. It scales [action_space.low, action_space.high] to</span>
+<span class="sd">        the value ranges of policy.forward.</span>
+
+<span class="sd">        :param act: a data batch, list or numpy.ndarray which is the action taken</span>
+<span class="sd">            by gym.spaces.Box.sample().</span>
+
+<span class="sd">        :return: action remapped.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">action_space</span><span class="p">,</span> <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Box</span><span class="p">):</span>
+            <span class="n">act</span> <span class="o">=</span> <span class="n">to_numpy</span><span class="p">(</span><span class="n">act</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">act</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_scaling</span><span class="p">:</span>
+                    <span class="n">low</span><span class="p">,</span> <span class="n">high</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">low</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">high</span>
+                    <span class="n">scale</span> <span class="o">=</span> <span class="n">high</span> <span class="o">-</span> <span class="n">low</span>
+                    <span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+                    <span class="n">scale</span><span class="p">[</span><span class="n">scale</span> <span class="o">&lt;</span> <span class="n">eps</span><span class="p">]</span> <span class="o">+=</span> <span class="n">eps</span>
+                    <span class="n">act</span> <span class="o">=</span> <span class="p">(</span><span class="n">act</span> <span class="o">-</span> <span class="n">low</span><span class="p">)</span> <span class="o">*</span> <span class="mf">2.0</span> <span class="o">/</span> <span class="n">scale</span> <span class="o">-</span> <span class="mf">1.0</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_bound_method</span> <span class="o">==</span> <span class="s2">&quot;tanh&quot;</span><span class="p">:</span>
+                    <span class="n">act</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">act</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">act</span><span class="p">))</span> <span class="o">/</span> <span class="mf">2.0</span>  <span class="c1"># type: ignore</span>
+        <span class="k">return</span> <span class="n">act</span></div>
+
+
+<div class="viewcode-block" id="BasePolicy.process_fn">
+<a class="viewcode-back" href="../../../api/tianshou.policy.html#tianshou.policy.BasePolicy.process_fn">[docs]</a>
+    <span class="k">def</span> <span class="nf">process_fn</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="n">RolloutBatchProtocol</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="n">ReplayBuffer</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RolloutBatchProtocol</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Pre-process the data from the provided replay buffer.</span>
+
+<span class="sd">        Used in :meth:`update`. Check out :ref:`process_fn` for more information.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">batch</span></div>
+
+
+<div class="viewcode-block" id="BasePolicy.learn">
+<a class="viewcode-back" href="../../../api/tianshou.policy.html#tianshou.policy.BasePolicy.learn">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">learn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="n">RolloutBatchProtocol</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+              <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update policy with a given batch of data.</span>
+
+<span class="sd">        :return: A dict, including the data needed to be logged (e.g., loss).</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            In order to distinguish the collecting state, updating state and</span>
+<span class="sd">            testing state, you can check the policy state by ``self.training``</span>
+<span class="sd">            and ``self.updating``. Please refer to :ref:`policy_state` for more</span>
+<span class="sd">            detailed explanation.</span>
+
+<span class="sd">        .. warning::</span>
+
+<span class="sd">            If you use ``torch.distributions.Normal`` and</span>
+<span class="sd">            ``torch.distributions.Categorical`` to calculate the log_prob,</span>
+<span class="sd">            please be careful about the shape: Categorical distribution gives</span>
+<span class="sd">            &quot;[batch_size]&quot; shape while Normal distribution gives &quot;[batch_size,</span>
+<span class="sd">            1]&quot; shape. The auto-broadcasting of numerical operation with torch</span>
+<span class="sd">            tensors will amplify this error.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="BasePolicy.post_process_fn">
+<a class="viewcode-back" href="../../../api/tianshou.policy.html#tianshou.policy.BasePolicy.post_process_fn">[docs]</a>
+    <span class="k">def</span> <span class="nf">post_process_fn</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="n">BatchProtocol</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="n">ReplayBuffer</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Post-process the data from the provided replay buffer.</span>
+
+<span class="sd">        This will only have an effect if the buffer has the</span>
+<span class="sd">        method `update_weight` and the batch has the attribute `weight`.</span>
+
+<span class="sd">        Typical usage is to update the sampling weight in prioritized</span>
+<span class="sd">        experience replay. Used in :meth:`update`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="s2">&quot;update_weight&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">):</span>
+                <span class="n">buffer</span><span class="o">.</span><span class="n">update_weight</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">batch</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="s2">&quot;batch has no attribute &#39;weight&#39;, but buffer has an &quot;</span>
+                    <span class="s2">&quot;update_weight method. This is probably a mistake.&quot;</span>
+                    <span class="s2">&quot;Prioritized replay is disabled for this batch.&quot;</span>
+                <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BasePolicy.update">
+<a class="viewcode-back" href="../../../api/tianshou.policy.html#tianshou.policy.BasePolicy.update">[docs]</a>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ReplayBuffer</span><span class="p">],</span>
+               <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the policy network and replay buffer.</span>
+
+<span class="sd">        It includes 3 function steps: process_fn, learn, and post_process_fn. In</span>
+<span class="sd">        addition, this function will change the value of ``self.updating``: it will be</span>
+<span class="sd">        False before this function and will be True when executing :meth:`update`.</span>
+<span class="sd">        Please refer to :ref:`policy_state` for more detailed explanation.</span>
+
+<span class="sd">        :param int sample_size: 0 means it will extract all the data from the buffer,</span>
+<span class="sd">            otherwise it will sample a batch with given sample_size.</span>
+<span class="sd">        :param ReplayBuffer buffer: the corresponding replay buffer.</span>
+
+<span class="sd">        :return: A dict, including the data needed to be logged (e.g., loss) from</span>
+<span class="sd">            ``policy.learn()``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">buffer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{}</span>
+        <span class="n">batch</span><span class="p">,</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">buffer</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">sample_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">updating</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">batch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_fn</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">post_process_fn</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lr_scheduler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lr_scheduler</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">updating</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="BasePolicy.value_mask">
+<a class="viewcode-back" href="../../../api/tianshou.policy.html#tianshou.policy.BasePolicy.value_mask">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">value_mask</span><span class="p">(</span><span class="n">buffer</span><span class="p">:</span> <span class="n">ReplayBuffer</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Value mask determines whether the obs_next of buffer[indices] is valid.</span>
+
+<span class="sd">        For instance, usually &quot;obs_next&quot; after &quot;done&quot; flag is considered to be invalid,</span>
+<span class="sd">        and its q/advantage value can provide meaningless (even misleading)</span>
+<span class="sd">        information, and should be set to 0 by hand. But if &quot;done&quot; flag is generated</span>
+<span class="sd">        because timelimit of game length (info[&quot;TimeLimit.truncated&quot;] is set to True in</span>
+<span class="sd">        gym&#39;s settings), &quot;obs_next&quot; will instead be valid. Value mask is typically used</span>
+<span class="sd">        for assisting in calculating the correct q/advantage value.</span>
+
+<span class="sd">        :param ReplayBuffer buffer: the corresponding replay buffer.</span>
+<span class="sd">        :param numpy.ndarray indices: indices of replay buffer whose &quot;obs_next&quot; will be</span>
+<span class="sd">            judged.</span>
+
+<span class="sd">        :return: A bool type numpy.ndarray in the same shape with indices. &quot;True&quot; means</span>
+<span class="sd">            &quot;obs_next&quot; of that buffer[indices] is valid.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="o">~</span><span class="n">buffer</span><span class="o">.</span><span class="n">terminated</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="BasePolicy.compute_episodic_return">
+<a class="viewcode-back" href="../../../api/tianshou.policy.html#tianshou.policy.BasePolicy.compute_episodic_return">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">compute_episodic_return</span><span class="p">(</span>
+        <span class="n">batch</span><span class="p">:</span> <span class="n">RolloutBatchProtocol</span><span class="p">,</span>
+        <span class="n">buffer</span><span class="p">:</span> <span class="n">ReplayBuffer</span><span class="p">,</span>
+        <span class="n">indices</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">v_s_</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">v_s</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">gamma</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.99</span><span class="p">,</span>
+        <span class="n">gae_lambda</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.95</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Compute returns over given batch.</span>
+
+<span class="sd">        Use Implementation of Generalized Advantage Estimator (arXiv:1506.02438)</span>
+<span class="sd">        to calculate q/advantage value of given batch. Returns are calculated as</span>
+<span class="sd">        advantage + value, which is exactly equivalent to using :math:`TD(\lambda)`</span>
+<span class="sd">        for estimating returns.</span>
+
+<span class="sd">        :param batch: a data batch which contains several episodes of data in</span>
+<span class="sd">            sequential order. Mind that the end of each finished episode of batch</span>
+<span class="sd">            should be marked by done flag, unfinished (or collecting) episodes will be</span>
+<span class="sd">            recognized by buffer.unfinished_index().</span>
+<span class="sd">        :param buffer: the corresponding replay buffer.</span>
+<span class="sd">        :param numpy.ndarray indices: tell batch&#39;s location in buffer, batch is equal</span>
+<span class="sd">            to buffer[indices].</span>
+<span class="sd">        :param np.ndarray v_s_: the value function of all next states :math:`V(s&#39;)`.</span>
+<span class="sd">            If None, it will be set to an array of 0.</span>
+<span class="sd">        :param v_s: the value function of all current states :math:`V(s)`.</span>
+<span class="sd">        :param float gamma: the discount factor, should be in [0, 1]. Default to 0.99.</span>
+<span class="sd">        :param float gae_lambda: the parameter for Generalized Advantage Estimation,</span>
+<span class="sd">            should be in [0, 1]. Default to 0.95.</span>
+
+<span class="sd">        :return: two numpy arrays (returns, advantage) with each shape (bsz, ).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rew</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">rew</span>
+        <span class="k">if</span> <span class="n">v_s_</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">gae_lambda</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+            <span class="n">v_s_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">rew</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">v_s_</span> <span class="o">=</span> <span class="n">to_numpy</span><span class="p">(</span><span class="n">v_s_</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+            <span class="n">v_s_</span> <span class="o">=</span> <span class="n">v_s_</span> <span class="o">*</span> <span class="n">BasePolicy</span><span class="o">.</span><span class="n">value_mask</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>
+        <span class="n">v_s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">v_s_</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">v_s</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">to_numpy</span><span class="p">(</span><span class="n">v_s</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+
+        <span class="n">end_flag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">terminated</span><span class="p">,</span> <span class="n">batch</span><span class="o">.</span><span class="n">truncated</span><span class="p">)</span>
+        <span class="n">end_flag</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">buffer</span><span class="o">.</span><span class="n">unfinished_index</span><span class="p">())]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">advantage</span> <span class="o">=</span> <span class="n">_gae_return</span><span class="p">(</span><span class="n">v_s</span><span class="p">,</span> <span class="n">v_s_</span><span class="p">,</span> <span class="n">rew</span><span class="p">,</span> <span class="n">end_flag</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">gae_lambda</span><span class="p">)</span>
+        <span class="n">returns</span> <span class="o">=</span> <span class="n">advantage</span> <span class="o">+</span> <span class="n">v_s</span>
+        <span class="c1"># normalization varies from each policy, so we don&#39;t do it here</span>
+        <span class="k">return</span> <span class="n">returns</span><span class="p">,</span> <span class="n">advantage</span></div>
+
+
+<div class="viewcode-block" id="BasePolicy.compute_nstep_return">
+<a class="viewcode-back" href="../../../api/tianshou.policy.html#tianshou.policy.BasePolicy.compute_nstep_return">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">compute_nstep_return</span><span class="p">(</span>
+        <span class="n">batch</span><span class="p">:</span> <span class="n">RolloutBatchProtocol</span><span class="p">,</span>
+        <span class="n">buffer</span><span class="p">:</span> <span class="n">ReplayBuffer</span><span class="p">,</span>
+        <span class="n">indices</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">target_q_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">ReplayBuffer</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>
+        <span class="n">gamma</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.99</span><span class="p">,</span>
+        <span class="n">n_step</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">rew_norm</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BatchWithReturnsProtocol</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Compute n-step return for Q-learning targets.</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            G_t = \sum_{i = t}^{t + n - 1} \gamma^{i - t}(1 - d_i)r_i +</span>
+<span class="sd">            \gamma^n (1 - d_{t + n}) Q_{\mathrm{target}}(s_{t + n})</span>
+
+<span class="sd">        where :math:`\gamma` is the discount factor, :math:`\gamma \in [0, 1]`,</span>
+<span class="sd">        :math:`d_t` is the done flag of step :math:`t`.</span>
+
+<span class="sd">        :param Batch batch: a data batch, which is equal to buffer[indices].</span>
+<span class="sd">        :param ReplayBuffer buffer: the data buffer.</span>
+<span class="sd">        :param indices: tell batch&#39;s location in buffer</span>
+<span class="sd">        :param function target_q_fn: a function which compute target Q value</span>
+<span class="sd">            of &quot;obs_next&quot; given data buffer and wanted indices.</span>
+<span class="sd">        :param float gamma: the discount factor, should be in [0, 1]. Default to 0.99.</span>
+<span class="sd">        :param int n_step: the number of estimation step, should be an int greater</span>
+<span class="sd">            than 0. Default to 1.</span>
+<span class="sd">        :param bool rew_norm: normalize the reward to Normal(0, 1), Default to False.</span>
+
+<span class="sd">        :return: a Batch. The result will be stored in batch.returns as a</span>
+<span class="sd">            torch.Tensor with the same shape as target_q_fn&#39;s return tensor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="ow">not</span> <span class="n">rew_norm</span>
+        <span class="p">),</span> <span class="s2">&quot;Reward normalization in computing n-step returns is unsupported now.&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">batch</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Batch size </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span><span class="si">}</span><span class="s2"> and indices size </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span><span class="si">}</span><span class="s2"> mismatch.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">rew</span> <span class="o">=</span> <span class="n">buffer</span><span class="o">.</span><span class="n">rew</span>
+        <span class="n">bsz</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">buffer</span><span class="o">.</span><span class="n">next</span><span class="p">(</span><span class="n">indices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+        <span class="c1"># terminal indicates buffer indexes nstep after &#39;indices&#39;,</span>
+        <span class="c1"># and are truncated at the end of each episode</span>
+        <span class="n">terminal</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">target_q_torch</span> <span class="o">=</span> <span class="n">target_q_fn</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">terminal</span><span class="p">)</span>  <span class="c1"># (bsz, ?)</span>
+        <span class="n">target_q</span> <span class="o">=</span> <span class="n">to_numpy</span><span class="p">(</span><span class="n">target_q_torch</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">bsz</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">target_q</span> <span class="o">=</span> <span class="n">target_q</span> <span class="o">*</span> <span class="n">BasePolicy</span><span class="o">.</span><span class="n">value_mask</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">terminal</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">end_flag</span> <span class="o">=</span> <span class="n">buffer</span><span class="o">.</span><span class="n">done</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">end_flag</span><span class="p">[</span><span class="n">buffer</span><span class="o">.</span><span class="n">unfinished_index</span><span class="p">()]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">target_q</span> <span class="o">=</span> <span class="n">_nstep_return</span><span class="p">(</span><span class="n">rew</span><span class="p">,</span> <span class="n">end_flag</span><span class="p">,</span> <span class="n">target_q</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">n_step</span><span class="p">)</span>
+
+        <span class="n">batch</span><span class="o">.</span><span class="n">returns</span> <span class="o">=</span> <span class="n">to_torch_as</span><span class="p">(</span><span class="n">target_q</span><span class="p">,</span> <span class="n">target_q_torch</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">):</span>  <span class="c1"># prio buffer update</span>
+            <span class="n">batch</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">to_torch_as</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">target_q_torch</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">BatchWithReturnsProtocol</span><span class="p">,</span> <span class="n">batch</span><span class="p">)</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_compile</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">f64</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="n">f32</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">)</span>
+        <span class="n">i64</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+        <span class="n">_gae_return</span><span class="p">(</span><span class="n">f64</span><span class="p">,</span> <span class="n">f64</span><span class="p">,</span> <span class="n">f64</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+        <span class="n">_gae_return</span><span class="p">(</span><span class="n">f32</span><span class="p">,</span> <span class="n">f32</span><span class="p">,</span> <span class="n">f64</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+        <span class="n">_nstep_return</span><span class="p">(</span><span class="n">f64</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">f32</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">i64</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># TODO: rename? See docstring</span>
+<span class="nd">@njit</span>
+<span class="k">def</span> <span class="nf">_gae_return</span><span class="p">(</span>
+    <span class="n">v_s</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">v_s_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">rew</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">end_flag</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">gamma</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">gae_lambda</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Computes advantages with GAE.</span>
+
+<span class="sd">    Note: doesn&#39;t compute returns but rather advantages. The return</span>
+<span class="sd">    is given by the output of this + v_s. Note that the advantages plus v_s</span>
+<span class="sd">    is exactly the same as the TD-lambda target, which is computed by the recursive</span>
+<span class="sd">    formula:</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        G_t^\lambda = r_t + \gamma ( \lambda G_{t+1}^\lambda + (1 - \lambda) V_{t+1} )</span>
+
+<span class="sd">    The GAE is computed recursively as:</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \delta_t = r_t + \gamma V_{t+1} - V_t \n</span>
+<span class="sd">        A_t^\lambda= \delta_t + \gamma \lambda A_{t+1}^\lambda</span>
+
+<span class="sd">    And the following equality holds:</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        G_t^\lambda = A_t^\lambda+ V_t</span>
+
+<span class="sd">    :param v_s: values in an episode, i.e. $V_t$</span>
+<span class="sd">    :param v_s_: next values in an episode, i.e. v_s shifted by 1, equivalent to</span>
+<span class="sd">        $V_{t+1}$</span>
+<span class="sd">    :param rew: rewards in an episode, i.e. $r_t$</span>
+<span class="sd">    :param end_flag: boolean array indicating whether the episode is done</span>
+<span class="sd">    :param gamma: discount factor</span>
+<span class="sd">    :param gae_lambda: lambda parameter for GAE, controlling the bias-variance tradeoff</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">returns</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">rew</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="n">rew</span> <span class="o">+</span> <span class="n">v_s_</span> <span class="o">*</span> <span class="n">gamma</span> <span class="o">-</span> <span class="n">v_s</span>
+    <span class="n">discount</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">end_flag</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">gae_lambda</span><span class="p">)</span>
+    <span class="n">gae</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rew</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">gae</span> <span class="o">=</span> <span class="n">delta</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">discount</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">gae</span>
+        <span class="n">returns</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">gae</span>
+    <span class="k">return</span> <span class="n">returns</span>
+
+
+<span class="nd">@njit</span>
+<span class="k">def</span> <span class="nf">_nstep_return</span><span class="p">(</span>
+    <span class="n">rew</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">end_flag</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">target_q</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">indices</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">gamma</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">n_step</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="n">gamma_buffer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_step</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_step</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">gamma_buffer</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">gamma_buffer</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">gamma</span>
+    <span class="n">target_shape</span> <span class="o">=</span> <span class="n">target_q</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">bsz</span> <span class="o">=</span> <span class="n">target_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># change target_q to 2d array</span>
+    <span class="n">target_q</span> <span class="o">=</span> <span class="n">target_q</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">bsz</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">returns</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">target_q</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">gammas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">n_step</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+        <span class="n">gammas</span><span class="p">[</span><span class="n">end_flag</span><span class="p">[</span><span class="n">now</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">returns</span><span class="p">[</span><span class="n">end_flag</span><span class="p">[</span><span class="n">now</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">returns</span> <span class="o">=</span> <span class="n">rew</span><span class="p">[</span><span class="n">now</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">bsz</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">gamma</span> <span class="o">*</span> <span class="n">returns</span>
+    <span class="n">target_q</span> <span class="o">=</span> <span class="n">target_q</span> <span class="o">*</span> <span class="n">gamma_buffer</span><span class="p">[</span><span class="n">gammas</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">bsz</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">returns</span>
+    <span class="k">return</span> <span class="n">target_q</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">target_shape</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Tianshou contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

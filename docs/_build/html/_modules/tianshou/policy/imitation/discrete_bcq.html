@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tianshou.policy.imitation.discrete_bcq &mdash; Tianshou 0.5.1 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/style.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+        <script src="../../../../_static/js/copybutton.js?v=7db002fe"></script>
+        <script src="../../../../_static/js/benchmark.js?v=1091b9f3"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            Tianshou
+              <img src="../../../../_static/tianshou-logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.5.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/get_started.html">Get Started with Jupyter Notebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/dqn.html">Deep Q Network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/concepts.html">Basic concepts in Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/batch.html">Understand Batch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/tictactoe.html">Multi-Agent RL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/logger.html">Logging Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/benchmark.html">Benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/cheatsheet.html">Cheat Sheet</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.data.html">tianshou.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.env.html">tianshou.env</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.policy.html">tianshou.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.trainer.html">tianshou.trainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.exploration.html">tianshou.exploration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.utils.html">tianshou.utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing to Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributor.html">Contributor</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tianshou</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">tianshou.policy.imitation.discrete_bcq</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tianshou.policy.imitation.discrete_bcq</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">cast</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+
+<span class="kn">from</span> <span class="nn">tianshou.data</span> <span class="kn">import</span> <span class="n">Batch</span><span class="p">,</span> <span class="n">ReplayBuffer</span><span class="p">,</span> <span class="n">to_torch</span>
+<span class="kn">from</span> <span class="nn">tianshou.data.types</span> <span class="kn">import</span> <span class="n">ImitationBatchProtocol</span><span class="p">,</span> <span class="n">RolloutBatchProtocol</span>
+<span class="kn">from</span> <span class="nn">tianshou.policy</span> <span class="kn">import</span> <span class="n">DQNPolicy</span>
+
+
+<div class="viewcode-block" id="DiscreteBCQPolicy">
+<a class="viewcode-back" href="../../../../api/tianshou.policy.html#tianshou.policy.DiscreteBCQPolicy">[docs]</a>
+<span class="k">class</span> <span class="nc">DiscreteBCQPolicy</span><span class="p">(</span><span class="n">DQNPolicy</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implementation of discrete BCQ algorithm. arXiv:1910.01708.</span>
+
+<span class="sd">    :param torch.nn.Module model: a model following the rules in</span>
+<span class="sd">        :class:`~tianshou.policy.BasePolicy`. (s -&gt; q_value)</span>
+<span class="sd">    :param torch.nn.Module imitator: a model following the rules in</span>
+<span class="sd">        :class:`~tianshou.policy.BasePolicy`. (s -&gt; imitation_logits)</span>
+<span class="sd">    :param torch.optim.Optimizer optim: a torch.optim for optimizing the model.</span>
+<span class="sd">    :param float discount_factor: in [0, 1].</span>
+<span class="sd">    :param int estimation_step: the number of steps to look ahead. Default to 1.</span>
+<span class="sd">    :param int target_update_freq: the target network update frequency.</span>
+<span class="sd">    :param float eval_eps: the epsilon-greedy noise added in evaluation.</span>
+<span class="sd">    :param float unlikely_action_threshold: the threshold (tau) for unlikely</span>
+<span class="sd">        actions, as shown in Equ. (17) in the paper. Default to 0.3.</span>
+<span class="sd">    :param float imitation_logits_penalty: regularization weight for imitation</span>
+<span class="sd">        logits. Default to 1e-2.</span>
+<span class="sd">    :param bool reward_normalization: normalize the reward to Normal(0, 1).</span>
+<span class="sd">        Default to False.</span>
+<span class="sd">    :param lr_scheduler: a learning rate scheduler that adjusts the learning rate in</span>
+<span class="sd">        optimizer in each policy.update(). Default to None (no lr_scheduler).</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        Please refer to :class:`~tianshou.policy.BasePolicy` for more detailed</span>
+<span class="sd">        explanation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">model</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+        <span class="n">imitator</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+        <span class="n">optim</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Optimizer</span><span class="p">,</span>
+        <span class="n">discount_factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.99</span><span class="p">,</span>
+        <span class="n">estimation_step</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">target_update_freq</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8000</span><span class="p">,</span>
+        <span class="n">eval_eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-3</span><span class="p">,</span>
+        <span class="n">unlikely_action_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.3</span><span class="p">,</span>
+        <span class="n">imitation_logits_penalty</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-2</span><span class="p">,</span>
+        <span class="n">reward_normalization</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">model</span><span class="p">,</span> <span class="n">optim</span><span class="p">,</span> <span class="n">discount_factor</span><span class="p">,</span> <span class="n">estimation_step</span><span class="p">,</span> <span class="n">target_update_freq</span><span class="p">,</span>
+            <span class="n">reward_normalization</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+        <span class="k">assert</span> <span class="n">target_update_freq</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;BCQ needs target network setting.&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">imitator</span> <span class="o">=</span> <span class="n">imitator</span>
+        <span class="k">assert</span> <span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">unlikely_action_threshold</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">,</span> \
+            <span class="s2">&quot;unlikely_action_threshold should be in [0, 1)&quot;</span>
+        <span class="k">if</span> <span class="n">unlikely_action_threshold</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log_tau</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">unlikely_action_threshold</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log_tau</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+        <span class="k">assert</span> <span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">eval_eps</span> <span class="o">&lt;</span> <span class="mf">1.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eps</span> <span class="o">=</span> <span class="n">eval_eps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_weight_reg</span> <span class="o">=</span> <span class="n">imitation_logits_penalty</span>
+
+<div class="viewcode-block" id="DiscreteBCQPolicy.train">
+<a class="viewcode-back" href="../../../../api/tianshou.policy.html#tianshou.policy.DiscreteBCQPolicy.train">[docs]</a>
+    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DiscreteBCQPolicy&quot;</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">training</span> <span class="o">=</span> <span class="n">mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">imitator</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_target_q</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="n">ReplayBuffer</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+        <span class="n">batch</span> <span class="o">=</span> <span class="n">buffer</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>  <span class="c1"># batch.obs_next: s_{t+n}</span>
+        <span class="c1"># target_Q = Q_old(s_, argmax(Q_new(s_, *)))</span>
+        <span class="n">act</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="s2">&quot;obs_next&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">act</span>
+        <span class="n">target_q</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_old</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">obs_next</span><span class="p">)</span>
+        <span class="n">target_q</span> <span class="o">=</span> <span class="n">target_q</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">act</span><span class="p">)),</span> <span class="n">act</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">target_q</span>
+
+<div class="viewcode-block" id="DiscreteBCQPolicy.forward">
+<a class="viewcode-back" href="../../../../api/tianshou.policy.html#tianshou.policy.DiscreteBCQPolicy.forward">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">batch</span><span class="p">:</span> <span class="n">RolloutBatchProtocol</span><span class="p">,</span>
+        <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">Batch</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="nb">input</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;obs&quot;</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ImitationBatchProtocol</span><span class="p">:</span>
+        <span class="c1"># TODO: Liskov substitution principle is violated here, the superclass</span>
+        <span class="c1">#  produces a batch with the field logits, but this one doesn&#39;t.</span>
+        <span class="c1">#  Should be fixed in the future!</span>
+        <span class="n">obs</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="nb">input</span><span class="p">]</span>
+        <span class="n">q_value</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="n">state</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="n">batch</span><span class="o">.</span><span class="n">info</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;max_action_num&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">max_action_num</span> <span class="o">=</span> <span class="n">q_value</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">imitation_logits</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">imitator</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="n">state</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="n">batch</span><span class="o">.</span><span class="n">info</span><span class="p">)</span>
+
+        <span class="c1"># mask actions for argmax</span>
+        <span class="n">ratio</span> <span class="o">=</span> <span class="n">imitation_logits</span> <span class="o">-</span> <span class="n">imitation_logits</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">ratio</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_log_tau</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+        <span class="n">act</span> <span class="o">=</span> <span class="p">(</span><span class="n">q_value</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span> <span class="o">*</span> <span class="n">mask</span><span class="p">)</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">Batch</span><span class="p">(</span>
+            <span class="n">act</span><span class="o">=</span><span class="n">act</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="n">state</span><span class="p">,</span> <span class="n">q_value</span><span class="o">=</span><span class="n">q_value</span><span class="p">,</span> <span class="n">imitation_logits</span><span class="o">=</span><span class="n">imitation_logits</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">ImitationBatchProtocol</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DiscreteBCQPolicy.learn">
+<a class="viewcode-back" href="../../../../api/tianshou.policy.html#tianshou.policy.DiscreteBCQPolicy.learn">[docs]</a>
+    <span class="k">def</span> <span class="nf">learn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="n">RolloutBatchProtocol</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+              <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iter</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_freq</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sync_weight</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_iter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">target_q</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">returns</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+        <span class="n">imitation_logits</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">imitation_logits</span>
+        <span class="n">current_q</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">q_value</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">target_q</span><span class="p">)),</span> <span class="n">batch</span><span class="o">.</span><span class="n">act</span><span class="p">]</span>
+        <span class="n">act</span> <span class="o">=</span> <span class="n">to_torch</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">act</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">target_q</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">q_loss</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">smooth_l1_loss</span><span class="p">(</span><span class="n">current_q</span><span class="p">,</span> <span class="n">target_q</span><span class="p">)</span>
+        <span class="n">i_loss</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">nll_loss</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">log_softmax</span><span class="p">(</span><span class="n">imitation_logits</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">),</span> <span class="n">act</span><span class="p">)</span>
+        <span class="n">reg_loss</span> <span class="o">=</span> <span class="n">imitation_logits</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">q_loss</span> <span class="o">+</span> <span class="n">i_loss</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weight_reg</span> <span class="o">*</span> <span class="n">reg_loss</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;loss&quot;</span><span class="p">:</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span>
+            <span class="s2">&quot;loss/q&quot;</span><span class="p">:</span> <span class="n">q_loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span>
+            <span class="s2">&quot;loss/i&quot;</span><span class="p">:</span> <span class="n">i_loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span>
+            <span class="s2">&quot;loss/reg&quot;</span><span class="p">:</span> <span class="n">reg_loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span>
+        <span class="p">}</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Tianshou contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

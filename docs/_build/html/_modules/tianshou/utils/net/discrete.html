@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tianshou.utils.net.discrete &mdash; Tianshou 0.5.1 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/style.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+        <script src="../../../../_static/js/copybutton.js?v=7db002fe"></script>
+        <script src="../../../../_static/js/benchmark.js?v=1091b9f3"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            Tianshou
+              <img src="../../../../_static/tianshou-logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.5.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/get_started.html">Get Started with Jupyter Notebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/dqn.html">Deep Q Network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/concepts.html">Basic concepts in Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/batch.html">Understand Batch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/tictactoe.html">Multi-Agent RL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/logger.html">Logging Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/benchmark.html">Benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/cheatsheet.html">Cheat Sheet</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.data.html">tianshou.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.env.html">tianshou.env</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.policy.html">tianshou.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.trainer.html">tianshou.trainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.exploration.html">tianshou.exploration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tianshou.utils.html">tianshou.utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing to Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributor.html">Contributor</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Tianshou</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">tianshou.utils.net.discrete</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tianshou.utils.net.discrete</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+
+<span class="kn">from</span> <span class="nn">tianshou.data</span> <span class="kn">import</span> <span class="n">Batch</span><span class="p">,</span> <span class="n">to_torch</span>
+<span class="kn">from</span> <span class="nn">tianshou.utils.net.common</span> <span class="kn">import</span> <span class="n">MLP</span>
+
+
+<div class="viewcode-block" id="Actor">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.net.discrete.Actor">[docs]</a>
+<span class="k">class</span> <span class="nc">Actor</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Simple actor network.</span>
+
+<span class="sd">    Will create an actor operated in discrete action space with structure of</span>
+<span class="sd">    preprocess_net ---&gt; action_shape.</span>
+
+<span class="sd">    :param preprocess_net: a self-defined preprocess_net which output a</span>
+<span class="sd">        flattened hidden state.</span>
+<span class="sd">    :param action_shape: a sequence of int for the shape of action.</span>
+<span class="sd">    :param hidden_sizes: a sequence of int for constructing the MLP after</span>
+<span class="sd">        preprocess_net. Default to empty sequence (where the MLP now contains</span>
+<span class="sd">        only a single linear layer).</span>
+<span class="sd">    :param bool softmax_output: whether to apply a softmax layer over the last</span>
+<span class="sd">        layer&#39;s output.</span>
+<span class="sd">    :param int preprocess_net_output_dim: the output dimension of</span>
+<span class="sd">        preprocess_net.</span>
+
+<span class="sd">    For advanced usage (how to customize the network), please refer to</span>
+<span class="sd">    :ref:`build_the_network`.</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        Please refer to :class:`~tianshou.utils.net.common.Net` as an instance</span>
+<span class="sd">        of how preprocess_net is suggested to be defined.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">preprocess_net</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+        <span class="n">action_shape</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+        <span class="n">hidden_sizes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+        <span class="n">softmax_output</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">preprocess_net_output_dim</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">device</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preprocess</span> <span class="o">=</span> <span class="n">preprocess_net</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_dim</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">action_shape</span><span class="p">))</span>
+        <span class="n">input_dim</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">preprocess_net</span><span class="p">,</span> <span class="s2">&quot;output_dim&quot;</span><span class="p">,</span> <span class="n">preprocess_net_output_dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last</span> <span class="o">=</span> <span class="n">MLP</span><span class="p">(</span>
+            <span class="n">input_dim</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">output_dim</span><span class="p">,</span>
+            <span class="n">hidden_sizes</span><span class="p">,</span>
+            <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">softmax_output</span> <span class="o">=</span> <span class="n">softmax_output</span>
+
+<div class="viewcode-block" id="Actor.forward">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.net.discrete.Actor.forward">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">obs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>
+        <span class="n">state</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">info</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Mapping: s -&gt; Q(s, \*).&quot;&quot;&quot;</span>
+        <span class="n">logits</span><span class="p">,</span> <span class="n">hidden</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+        <span class="n">logits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last</span><span class="p">(</span><span class="n">logits</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">softmax_output</span><span class="p">:</span>
+            <span class="n">logits</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">logits</span><span class="p">,</span> <span class="n">hidden</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Critic">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.net.discrete.Critic">[docs]</a>
+<span class="k">class</span> <span class="nc">Critic</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Simple critic network. Will create an actor operated in discrete \</span>
+<span class="sd">    action space with structure of preprocess_net ---&gt; 1(q value).</span>
+
+<span class="sd">    :param preprocess_net: a self-defined preprocess_net which output a</span>
+<span class="sd">        flattened hidden state.</span>
+<span class="sd">    :param hidden_sizes: a sequence of int for constructing the MLP after</span>
+<span class="sd">        preprocess_net. Default to empty sequence (where the MLP now contains</span>
+<span class="sd">        only a single linear layer).</span>
+<span class="sd">    :param int last_size: the output dimension of Critic network. Default to 1.</span>
+<span class="sd">    :param int preprocess_net_output_dim: the output dimension of</span>
+<span class="sd">        preprocess_net.</span>
+
+<span class="sd">    For advanced usage (how to customize the network), please refer to</span>
+<span class="sd">    :ref:`build_the_network`.</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        Please refer to :class:`~tianshou.utils.net.common.Net` as an instance</span>
+<span class="sd">        of how preprocess_net is suggested to be defined.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">preprocess_net</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+        <span class="n">hidden_sizes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+        <span class="n">last_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">preprocess_net_output_dim</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">device</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preprocess</span> <span class="o">=</span> <span class="n">preprocess_net</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_dim</span> <span class="o">=</span> <span class="n">last_size</span>
+        <span class="n">input_dim</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">preprocess_net</span><span class="p">,</span> <span class="s2">&quot;output_dim&quot;</span><span class="p">,</span> <span class="n">preprocess_net_output_dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last</span> <span class="o">=</span> <span class="n">MLP</span><span class="p">(</span>
+            <span class="n">input_dim</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
+            <span class="n">last_size</span><span class="p">,</span>
+            <span class="n">hidden_sizes</span><span class="p">,</span>
+            <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="Critic.forward">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.net.discrete.Critic.forward">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Mapping: s -&gt; V(s).&quot;&quot;&quot;</span>
+        <span class="n">logits</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;state&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">last</span><span class="p">(</span><span class="n">logits</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CosineEmbeddingNetwork">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.net.discrete.CosineEmbeddingNetwork">[docs]</a>
+<span class="k">class</span> <span class="nc">CosineEmbeddingNetwork</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cosine embedding network for IQN. Convert a scalar in [0, 1] to a list \</span>
+<span class="sd">    of n-dim vectors.</span>
+
+<span class="sd">    :param num_cosines: the number of cosines used for the embedding.</span>
+<span class="sd">    :param embedding_dim: the dimension of the embedding/output.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        From https://github.com/ku2482/fqf-iqn-qrdqn.pytorch/blob/master</span>
+<span class="sd">        /fqf_iqn_qrdqn/network.py .</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_cosines</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">net</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">num_cosines</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">),</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_cosines</span> <span class="o">=</span> <span class="n">num_cosines</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embedding_dim</span> <span class="o">=</span> <span class="n">embedding_dim</span>
+
+<div class="viewcode-block" id="CosineEmbeddingNetwork.forward">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.net.discrete.CosineEmbeddingNetwork.forward">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">taus</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="n">taus</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">taus</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c1"># Calculate i * \pi (i=1,...,N).</span>
+        <span class="n">i_pi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
+            <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_cosines</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">taus</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">taus</span><span class="o">.</span><span class="n">device</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_cosines</span><span class="p">)</span>
+        <span class="c1"># Calculate cos(i * \pi * \tau).</span>
+        <span class="n">cosines</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">taus</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">i_pi</span>
+                            <span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span> <span class="o">*</span> <span class="n">N</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_cosines</span><span class="p">)</span>
+        <span class="c1"># Calculate embeddings of taus.</span>
+        <span class="n">tau_embeddings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">(</span><span class="n">cosines</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">embedding_dim</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tau_embeddings</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ImplicitQuantileNetwork">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.net.discrete.ImplicitQuantileNetwork">[docs]</a>
+<span class="k">class</span> <span class="nc">ImplicitQuantileNetwork</span><span class="p">(</span><span class="n">Critic</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implicit Quantile Network.</span>
+
+<span class="sd">    :param preprocess_net: a self-defined preprocess_net which output a</span>
+<span class="sd">        flattened hidden state.</span>
+<span class="sd">    :param int action_shape: a sequence of int for the shape of action.</span>
+<span class="sd">    :param hidden_sizes: a sequence of int for constructing the MLP after</span>
+<span class="sd">        preprocess_net. Default to empty sequence (where the MLP now contains</span>
+<span class="sd">        only a single linear layer).</span>
+<span class="sd">    :param int num_cosines: the number of cosines to use for cosine embedding.</span>
+<span class="sd">        Default to 64.</span>
+<span class="sd">    :param int preprocess_net_output_dim: the output dimension of</span>
+<span class="sd">        preprocess_net.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        Although this class inherits Critic, it is actually a quantile Q-Network</span>
+<span class="sd">        with output shape (batch_size, action_dim, sample_size).</span>
+
+<span class="sd">        The second item of the first return value is tau vector.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">preprocess_net</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+        <span class="n">action_shape</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+        <span class="n">hidden_sizes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+        <span class="n">num_cosines</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">64</span><span class="p">,</span>
+        <span class="n">preprocess_net_output_dim</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">device</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;cpu&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">last_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">action_shape</span><span class="p">))</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">preprocess_net</span><span class="p">,</span> <span class="n">hidden_sizes</span><span class="p">,</span> <span class="n">last_size</span><span class="p">,</span> <span class="n">preprocess_net_output_dim</span><span class="p">,</span> <span class="n">device</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_dim</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span>
+            <span class="n">preprocess_net</span><span class="p">,</span> <span class="s2">&quot;output_dim&quot;</span><span class="p">,</span> <span class="n">preprocess_net_output_dim</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embed_model</span> <span class="o">=</span> <span class="n">CosineEmbeddingNetwork</span><span class="p">(</span>
+            <span class="n">num_cosines</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_dim</span>  <span class="c1"># type: ignore</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ImplicitQuantileNetwork.forward">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.net.discrete.ImplicitQuantileNetwork.forward">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">sample_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Mapping: s -&gt; Q(s, \*).&quot;&quot;&quot;</span>
+        <span class="n">logits</span><span class="p">,</span> <span class="n">hidden</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;state&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+        <span class="c1"># Sample fractions.</span>
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="n">logits</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">taus</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span>
+            <span class="n">batch_size</span><span class="p">,</span> <span class="n">sample_size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">logits</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">logits</span><span class="o">.</span><span class="n">device</span>
+        <span class="p">)</span>
+        <span class="n">embedding</span> <span class="o">=</span> <span class="p">(</span><span class="n">logits</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span>
+                     <span class="bp">self</span><span class="o">.</span><span class="n">embed_model</span><span class="p">(</span><span class="n">taus</span><span class="p">))</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span> <span class="o">*</span> <span class="n">sample_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last</span><span class="p">(</span><span class="n">embedding</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">sample_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">taus</span><span class="p">),</span> <span class="n">hidden</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="FractionProposalNetwork">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.net.discrete.FractionProposalNetwork">[docs]</a>
+<span class="k">class</span> <span class="nc">FractionProposalNetwork</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fraction proposal network for FQF.</span>
+
+<span class="sd">    :param num_fractions: the number of factions to propose.</span>
+<span class="sd">    :param embedding_dim: the dimension of the embedding/input.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        Adapted from https://github.com/ku2482/fqf-iqn-qrdqn.pytorch/blob/master</span>
+<span class="sd">        /fqf_iqn_qrdqn/network.py .</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_fractions</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">net</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">embedding_dim</span><span class="p">,</span> <span class="n">num_fractions</span><span class="p">)</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">xavier_uniform_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">constant_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">bias</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_fractions</span> <span class="o">=</span> <span class="n">num_fractions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embedding_dim</span> <span class="o">=</span> <span class="n">embedding_dim</span>
+
+<div class="viewcode-block" id="FractionProposalNetwork.forward">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.net.discrete.FractionProposalNetwork.forward">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">obs_embeddings</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
+        <span class="c1"># Calculate (log of) probabilities q_i in the paper.</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">Categorical</span><span class="p">(</span><span class="n">logits</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">(</span><span class="n">obs_embeddings</span><span class="p">))</span>
+        <span class="n">taus_1_N</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">probs</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># Calculate \tau_i (i=0,...,N).</span>
+        <span class="n">taus</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">taus_1_N</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="c1"># Calculate \hat \tau_i (i=0,...,N-1).</span>
+        <span class="n">tau_hats</span> <span class="o">=</span> <span class="p">(</span><span class="n">taus</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">taus</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:])</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span> <span class="o">/</span> <span class="mf">2.0</span>
+        <span class="c1"># Calculate entropies of value distributions.</span>
+        <span class="n">entropies</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">entropy</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">taus</span><span class="p">,</span> <span class="n">tau_hats</span><span class="p">,</span> <span class="n">entropies</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="FullQuantileFunction">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.net.discrete.FullQuantileFunction">[docs]</a>
+<span class="k">class</span> <span class="nc">FullQuantileFunction</span><span class="p">(</span><span class="n">ImplicitQuantileNetwork</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Full(y parameterized) Quantile Function.</span>
+
+<span class="sd">    :param preprocess_net: a self-defined preprocess_net which output a</span>
+<span class="sd">        flattened hidden state.</span>
+<span class="sd">    :param int action_shape: a sequence of int for the shape of action.</span>
+<span class="sd">    :param hidden_sizes: a sequence of int for constructing the MLP after</span>
+<span class="sd">        preprocess_net. Default to empty sequence (where the MLP now contains</span>
+<span class="sd">        only a single linear layer).</span>
+<span class="sd">    :param int num_cosines: the number of cosines to use for cosine embedding.</span>
+<span class="sd">        Default to 64.</span>
+<span class="sd">    :param int preprocess_net_output_dim: the output dimension of</span>
+<span class="sd">        preprocess_net.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The first return value is a tuple of (quantiles, fractions, quantiles_tau),</span>
+<span class="sd">        where fractions is a Batch(taus, tau_hats, entropies).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">preprocess_net</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+        <span class="n">action_shape</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+        <span class="n">hidden_sizes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+        <span class="n">num_cosines</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">64</span><span class="p">,</span>
+        <span class="n">preprocess_net_output_dim</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">device</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">preprocess_net</span><span class="p">,</span> <span class="n">action_shape</span><span class="p">,</span> <span class="n">hidden_sizes</span><span class="p">,</span> <span class="n">num_cosines</span><span class="p">,</span>
+            <span class="n">preprocess_net_output_dim</span><span class="p">,</span> <span class="n">device</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_compute_quantiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">taus</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+        <span class="n">batch_size</span><span class="p">,</span> <span class="n">sample_size</span> <span class="o">=</span> <span class="n">taus</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">embedding</span> <span class="o">=</span> <span class="p">(</span><span class="n">obs</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span>
+                     <span class="bp">self</span><span class="o">.</span><span class="n">embed_model</span><span class="p">(</span><span class="n">taus</span><span class="p">))</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span> <span class="o">*</span> <span class="n">sample_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">quantiles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last</span><span class="p">(</span><span class="n">embedding</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">sample_size</span><span class="p">,</span>
+                                              <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">quantiles</span>
+
+<div class="viewcode-block" id="FullQuantileFunction.forward">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.net.discrete.FullQuantileFunction.forward">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>
+        <span class="n">propose_model</span><span class="p">:</span> <span class="n">FractionProposalNetwork</span><span class="p">,</span>
+        <span class="n">fractions</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Batch</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Mapping: s -&gt; Q(s, \*).&quot;&quot;&quot;</span>
+        <span class="n">logits</span><span class="p">,</span> <span class="n">hidden</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;state&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+        <span class="c1"># Propose fractions</span>
+        <span class="k">if</span> <span class="n">fractions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">taus</span><span class="p">,</span> <span class="n">tau_hats</span><span class="p">,</span> <span class="n">entropies</span> <span class="o">=</span> <span class="n">propose_model</span><span class="p">(</span><span class="n">logits</span><span class="o">.</span><span class="n">detach</span><span class="p">())</span>
+            <span class="n">fractions</span> <span class="o">=</span> <span class="n">Batch</span><span class="p">(</span><span class="n">taus</span><span class="o">=</span><span class="n">taus</span><span class="p">,</span> <span class="n">tau_hats</span><span class="o">=</span><span class="n">tau_hats</span><span class="p">,</span> <span class="n">entropies</span><span class="o">=</span><span class="n">entropies</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">taus</span><span class="p">,</span> <span class="n">tau_hats</span> <span class="o">=</span> <span class="n">fractions</span><span class="o">.</span><span class="n">taus</span><span class="p">,</span> <span class="n">fractions</span><span class="o">.</span><span class="n">tau_hats</span>
+        <span class="n">quantiles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_quantiles</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">tau_hats</span><span class="p">)</span>
+        <span class="c1"># Calculate quantiles_tau for computing fraction grad</span>
+        <span class="n">quantiles_tau</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">training</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+                <span class="n">quantiles_tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_quantiles</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">taus</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">quantiles</span><span class="p">,</span> <span class="n">fractions</span><span class="p">,</span> <span class="n">quantiles_tau</span><span class="p">),</span> <span class="n">hidden</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="NoisyLinear">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.net.discrete.NoisyLinear">[docs]</a>
+<span class="k">class</span> <span class="nc">NoisyLinear</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implementation of Noisy Networks. arXiv:1706.10295.</span>
+
+<span class="sd">    :param int in_features: the number of input features.</span>
+<span class="sd">    :param int out_features: the number of output features.</span>
+<span class="sd">    :param float noisy_std: initial standard deviation of noisy linear layers.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        Adapted from https://github.com/ku2482/fqf-iqn-qrdqn.pytorch/blob/master</span>
+<span class="sd">        /fqf_iqn_qrdqn/network.py .</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">in_features</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">out_features</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">noisy_std</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Learnable parameters.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mu_W</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">(</span><span class="n">out_features</span><span class="p">,</span> <span class="n">in_features</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigma_W</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">(</span><span class="n">out_features</span><span class="p">,</span> <span class="n">in_features</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mu_bias</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">(</span><span class="n">out_features</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigma_bias</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">(</span><span class="n">out_features</span><span class="p">))</span>
+
+        <span class="c1"># Factorized noise parameters.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s1">&#39;eps_p&#39;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">(</span><span class="n">in_features</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s1">&#39;eps_q&#39;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">(</span><span class="n">out_features</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_features</span> <span class="o">=</span> <span class="n">in_features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out_features</span> <span class="o">=</span> <span class="n">out_features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span> <span class="o">=</span> <span class="n">noisy_std</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+
+<div class="viewcode-block" id="NoisyLinear.reset">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.net.discrete.NoisyLinear.reset">[docs]</a>
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">bound</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_features</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mu_W</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">uniform_</span><span class="p">(</span><span class="o">-</span><span class="n">bound</span><span class="p">,</span> <span class="n">bound</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mu_bias</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">uniform_</span><span class="p">(</span><span class="o">-</span><span class="n">bound</span><span class="p">,</span> <span class="n">bound</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigma_W</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">fill_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sigma</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_features</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigma_bias</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">fill_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sigma</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_features</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="NoisyLinear.f">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.net.discrete.NoisyLinear.f">[docs]</a>
+    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">device</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">sign</span><span class="p">()</span><span class="o">.</span><span class="n">mul_</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">sqrt_</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="NoisyLinear.sample">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.net.discrete.NoisyLinear.sample">[docs]</a>
+    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eps_p</span><span class="o">.</span><span class="n">copy_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eps_p</span><span class="p">))</span>  <span class="c1"># type: ignore</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eps_q</span><span class="o">.</span><span class="n">copy_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eps_q</span><span class="p">))</span>  <span class="c1"># type: ignore</span></div>
+
+
+<div class="viewcode-block" id="NoisyLinear.forward">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.net.discrete.NoisyLinear.forward">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">training</span><span class="p">:</span>
+            <span class="n">weight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu_W</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma_W</span> <span class="o">*</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">eps_q</span><span class="o">.</span><span class="n">ger</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eps_p</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+            <span class="p">)</span>
+            <span class="n">bias</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu_bias</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma_bias</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps_q</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>  <span class="c1"># type: ignore</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">weight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu_W</span>
+            <span class="n">bias</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu_bias</span>
+
+        <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">bias</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="sample_noise">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.net.discrete.sample_noise">[docs]</a>
+<span class="k">def</span> <span class="nf">sample_noise</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sample the random noises of NoisyLinear modules in the model.</span>
+
+<span class="sd">    :param model: a PyTorch module which may have NoisyLinear submodules.</span>
+<span class="sd">    :returns: True if model has at least one NoisyLinear submodule;</span>
+<span class="sd">        otherwise, False.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">modules</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">NoisyLinear</span><span class="p">):</span>
+            <span class="n">m</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+            <span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="n">done</span></div>
+
+
+
+<div class="viewcode-block" id="IntrinsicCuriosityModule">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.net.discrete.IntrinsicCuriosityModule">[docs]</a>
+<span class="k">class</span> <span class="nc">IntrinsicCuriosityModule</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implementation of Intrinsic Curiosity Module. arXiv:1705.05363.</span>
+
+<span class="sd">    :param torch.nn.Module feature_net: a self-defined feature_net which output a</span>
+<span class="sd">        flattened hidden state.</span>
+<span class="sd">    :param int feature_dim: input dimension of the feature net.</span>
+<span class="sd">    :param int action_dim: dimension of the action space.</span>
+<span class="sd">    :param hidden_sizes: hidden layer sizes for forward and inverse models.</span>
+<span class="sd">    :param device: device for the module.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">feature_net</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+        <span class="n">feature_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">action_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">hidden_sizes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+        <span class="n">device</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;cpu&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feature_net</span> <span class="o">=</span> <span class="n">feature_net</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">forward_model</span> <span class="o">=</span> <span class="n">MLP</span><span class="p">(</span>
+            <span class="n">feature_dim</span> <span class="o">+</span> <span class="n">action_dim</span><span class="p">,</span>
+            <span class="n">output_dim</span><span class="o">=</span><span class="n">feature_dim</span><span class="p">,</span>
+            <span class="n">hidden_sizes</span><span class="o">=</span><span class="n">hidden_sizes</span><span class="p">,</span>
+            <span class="n">device</span><span class="o">=</span><span class="n">device</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inverse_model</span> <span class="o">=</span> <span class="n">MLP</span><span class="p">(</span>
+            <span class="n">feature_dim</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="n">output_dim</span><span class="o">=</span><span class="n">action_dim</span><span class="p">,</span>
+            <span class="n">hidden_sizes</span><span class="o">=</span><span class="n">hidden_sizes</span><span class="p">,</span>
+            <span class="n">device</span><span class="o">=</span><span class="n">device</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feature_dim</span> <span class="o">=</span> <span class="n">feature_dim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">action_dim</span> <span class="o">=</span> <span class="n">action_dim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+
+<div class="viewcode-block" id="IntrinsicCuriosityModule.forward">
+<a class="viewcode-back" href="../../../../api/tianshou.utils.html#tianshou.utils.net.discrete.IntrinsicCuriosityModule.forward">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">s1</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">act</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>
+        <span class="n">s2</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Mapping: s1, act, s2 -&gt; mse_loss, act_hat.&quot;&quot;&quot;</span>
+        <span class="n">s1</span> <span class="o">=</span> <span class="n">to_torch</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">s2</span> <span class="o">=</span> <span class="n">to_torch</span><span class="p">(</span><span class="n">s2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">phi1</span><span class="p">,</span> <span class="n">phi2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature_net</span><span class="p">(</span><span class="n">s1</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature_net</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span>
+        <span class="n">act</span> <span class="o">=</span> <span class="n">to_torch</span><span class="p">(</span><span class="n">act</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">phi2_hat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward_model</span><span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">phi1</span><span class="p">,</span> <span class="n">F</span><span class="o">.</span><span class="n">one_hot</span><span class="p">(</span><span class="n">act</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">action_dim</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">mse_loss</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span><span class="n">phi2_hat</span><span class="p">,</span> <span class="n">phi2</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">act_hat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inverse_model</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">phi1</span><span class="p">,</span> <span class="n">phi2</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">mse_loss</span><span class="p">,</span> <span class="n">act_hat</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Tianshou contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

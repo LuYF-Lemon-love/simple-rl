@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deep Q Network &mdash; Tianshou 0.5.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/style.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/documentation_options.js?v=b9afe91b"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+        <script src="../_static/js/copybutton.js?v=7db002fe"></script>
+        <script src="../_static/js/benchmark.js?v=1091b9f3"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Basic concepts in Tianshou" href="concepts.html" />
+    <link rel="prev" title="Get Started with Jupyter Notebook" href="get_started.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Tianshou
+              <img src="../_static/tianshou-logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.5.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="get_started.html">Get Started with Jupyter Notebook</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Deep Q Network</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#make-an-environment">Make an Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setup-vectorized-environment">Setup Vectorized Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build-the-network">Build the Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setup-policy">Setup Policy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setup-collector">Setup Collector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#train-policy-with-a-trainer">Train Policy with a Trainer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#save-load-policy">Save/Load Policy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#watch-the-agent-s-performance">Watch the Agent’s Performance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#train-a-policy-with-customized-codes">Train a Policy with Customized Codes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">Basic concepts in Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="batch.html">Understand Batch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tictactoe.html">Multi-Agent RL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logger.html">Logging Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="benchmark.html">Benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheat Sheet</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/tianshou.data.html">tianshou.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/tianshou.env.html">tianshou.env</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/tianshou.policy.html">tianshou.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/tianshou.trainer.html">tianshou.trainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/tianshou.exploration.html">tianshou.exploration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/tianshou.utils.html">tianshou.utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to Tianshou</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributor.html">Contributor</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Tianshou</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Deep Q Network</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tutorials/dqn.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="deep-q-network">
+<h1>Deep Q Network<a class="headerlink" href="#deep-q-network" title="Link to this heading">¶</a></h1>
+<p>Deep reinforcement learning has achieved significant successes in various applications.
+<strong>Deep Q Network</strong> (DQN) <span id="id1">[<a class="reference internal" href="#id6" title="Volodymyr Mnih, Koray Kavukcuoglu, David Silver, Andrei A. Rusu, Joel Veness, Marc G. Bellemare, Alex Graves, Martin A. Riedmiller, Andreas Fidjeland, Georg Ostrovski, Stig Petersen, Charles Beattie, Amir Sadik, Ioannis Antonoglou, Helen King, Dharshan Kumaran, Daan Wierstra, Shane Legg, and Demis Hassabis. Human-level control through deep reinforcement learning. Nature, 518(7540):529–533, 2015. URL: https://doi.org/10.1038/nature14236, doi:10.1038/nature14236.">MKS+15</a>]</span> is the pioneer one.
+In this tutorial, we will show how to train a DQN agent on CartPole with Tianshou step by step.
+The full script is at <a class="reference external" href="https://github.com/thu-ml/tianshou/blob/master/test/discrete/test_dqn.py">test/discrete/test_dqn.py</a>.</p>
+<p>Contrary to existing Deep RL libraries such as <a class="reference external" href="https://github.com/ray-project/ray/tree/master/rllib/">RLlib</a>, which could only accept a config specification of hyperparameters, network, and others, Tianshou provides an easy way of construction through the code-level.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>In reinforcement learning, the agent interacts with environments to improve itself.</p>
+<a class="reference internal image-reference" href="../_images/rl-loop.jpg"><img alt="../_images/rl-loop.jpg" class="align-center" src="../_images/rl-loop.jpg" style="height: 200px;" /></a>
+<p>There are three types of data flow in RL training pipeline:</p>
+<ol class="arabic simple">
+<li><p>Agent to environment: <code class="docutils literal notranslate"><span class="pre">action</span></code> will be generated by agent and sent to environment;</p></li>
+<li><p>Environment to agent: <code class="docutils literal notranslate"><span class="pre">env.step</span></code> takes action, and returns a tuple of <code class="docutils literal notranslate"><span class="pre">(observation,</span> <span class="pre">reward,</span> <span class="pre">done,</span> <span class="pre">info)</span></code>;</p></li>
+<li><p>Agent-environment interaction to agent training: the data generated by interaction will be stored and sent to the learner of agent.</p></li>
+</ol>
+<p>In the following sections, we will set up (vectorized) environments, policy (with neural network), collector (with buffer), and trainer to successfully run the RL training and evaluation pipeline.
+Here is the overall system:</p>
+<a class="reference internal image-reference" href="../_images/pipeline.png"><img alt="../_images/pipeline.png" class="align-center" src="../_images/pipeline.png" style="height: 300px;" /></a>
+</section>
+<section id="make-an-environment">
+<h2>Make an Environment<a class="headerlink" href="#make-an-environment" title="Link to this heading">¶</a></h2>
+<p>First of all, you have to make an environment for your agent to interact with. You can use <code class="docutils literal notranslate"><span class="pre">gym.make(environment_name)</span></code> to make an environment for your agent. For environment interfaces, we follow the convention of <a class="reference external" href="https://github.com/Farama-Foundation/Gymnasium">Gymnasium</a>. In your Python code, simply import Tianshou and make the environment:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gymnasium</span> <span class="k">as</span> <span class="nn">gym</span>
+<span class="kn">import</span> <span class="nn">tianshou</span> <span class="k">as</span> <span class="nn">ts</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s1">&#39;CartPole-v0&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>CartPole-v0 includes a cart carrying a pole moving on a track. This is a simple environment with a discrete action space, for which DQN applies. You have to identify whether the action space is continuous or discrete and apply eligible algorithms. DDPG <span id="id2">[<a class="reference internal" href="#id7" title="Timothy P. Lillicrap, Jonathan J. Hunt, Alexander Pritzel, Nicolas Heess, Tom Erez, Yuval Tassa, David Silver, and Daan Wierstra. Continuous control with deep reinforcement learning. In 4th International Conference on Learning Representations, ICLR 2016, San Juan, Puerto Rico, May 2-4, 2016, Conference Track Proceedings. 2016. URL: http://arxiv.org/abs/1509.02971.">LHP+16</a>]</span>, for example, could only be applied to continuous action spaces, while almost all other policy gradient methods could be applied to both.</p>
+<p>Here is the detail of useful fields of CartPole-v0:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">state</span></code>: the position of the cart, the velocity of the cart, the angle of the pole and the velocity of the tip of the pole;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">action</span></code>: can only be one of <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1,</span> <span class="pre">2]</span></code>, for moving the cart left, no move, and right;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reward</span></code>: each timestep you last, you will receive a +1 <code class="docutils literal notranslate"><span class="pre">reward</span></code>;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">done</span></code>: if CartPole is out-of-range or timeout (the pole is more than 15 degrees from vertical, or the cart moves more than 2.4 units from the center, or you last over 200 timesteps);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">info</span></code>: extra info from environment simulation.</p></li>
+</ul>
+<p>The goal is to train a good policy that can get the highest reward in this environment.</p>
+</section>
+<section id="setup-vectorized-environment">
+<h2>Setup Vectorized Environment<a class="headerlink" href="#setup-vectorized-environment" title="Link to this heading">¶</a></h2>
+<p>If you want to use the original <code class="docutils literal notranslate"><span class="pre">gym.Env</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">train_envs</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s1">&#39;CartPole-v0&#39;</span><span class="p">)</span>
+<span class="n">test_envs</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s1">&#39;CartPole-v0&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Tianshou supports vectorized environment for all algorithms. It provides four types of vectorized environment wrapper:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../api/tianshou.env.html#tianshou.env.DummyVectorEnv" title="tianshou.env.DummyVectorEnv"><code class="xref py py-class docutils literal notranslate"><span class="pre">DummyVectorEnv</span></code></a>: the sequential version, using a single-thread for-loop;</p></li>
+<li><p><a class="reference internal" href="../api/tianshou.env.html#tianshou.env.SubprocVectorEnv" title="tianshou.env.SubprocVectorEnv"><code class="xref py py-class docutils literal notranslate"><span class="pre">SubprocVectorEnv</span></code></a>: use python multiprocessing and pipe for concurrent execution;</p></li>
+<li><p><a class="reference internal" href="../api/tianshou.env.html#tianshou.env.ShmemVectorEnv" title="tianshou.env.ShmemVectorEnv"><code class="xref py py-class docutils literal notranslate"><span class="pre">ShmemVectorEnv</span></code></a>: use share memory instead of pipe based on SubprocVectorEnv;</p></li>
+<li><p><a class="reference internal" href="../api/tianshou.env.html#tianshou.env.RayVectorEnv" title="tianshou.env.RayVectorEnv"><code class="xref py py-class docutils literal notranslate"><span class="pre">RayVectorEnv</span></code></a>: use Ray for concurrent activities and is currently the only choice for parallel simulation in a cluster with multiple machines. It can be used as follows: (more explanation can be found at <a class="reference internal" href="cheatsheet.html#parallel-sampling"><span class="std std-ref">Parallel Sampling</span></a>)</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">train_envs</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">DummyVectorEnv</span><span class="p">([</span><span class="k">lambda</span><span class="p">:</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s1">&#39;CartPole-v0&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)])</span>
+<span class="n">test_envs</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">DummyVectorEnv</span><span class="p">([</span><span class="k">lambda</span><span class="p">:</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s1">&#39;CartPole-v0&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)])</span>
+</pre></div>
+</div>
+<p>Here, we set up 10 environments in <code class="docutils literal notranslate"><span class="pre">train_envs</span></code> and 100 environments in <code class="docutils literal notranslate"><span class="pre">test_envs</span></code>.</p>
+<p>You can also try the super-fast vectorized environment <a class="reference external" href="https://github.com/sail-sg/envpool/">EnvPool</a> by</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">envpool</span>
+<span class="n">train_envs</span> <span class="o">=</span> <span class="n">envpool</span><span class="o">.</span><span class="n">make_gymnasium</span><span class="p">(</span><span class="s2">&quot;CartPole-v0&quot;</span><span class="p">,</span> <span class="n">num_envs</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">test_envs</span> <span class="o">=</span> <span class="n">envpool</span><span class="o">.</span><span class="n">make_gymnasium</span><span class="p">(</span><span class="s2">&quot;CartPole-v0&quot;</span><span class="p">,</span> <span class="n">num_envs</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For the demonstration, here we use the second code-block.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If you use your own environment, please make sure the <code class="docutils literal notranslate"><span class="pre">seed</span></code> method is set up properly, e.g.,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="p">):</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Otherwise, the outputs of these envs may be the same with each other.</p>
+</div>
+</section>
+<section id="build-the-network">
+<span id="id3"></span><h2>Build the Network<a class="headerlink" href="#build-the-network" title="Link to this heading">¶</a></h2>
+<p>Tianshou supports any user-defined PyTorch networks and optimizers. Yet, of course, the inputs and outputs must comply with Tianshou’s API. Here is an example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span><span class="o">,</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+
+<span class="k">class</span> <span class="nc">Net</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state_shape</span><span class="p">,</span> <span class="n">action_shape</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">state_shape</span><span class="p">),</span> <span class="mi">128</span><span class="p">),</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">),</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">),</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">action_shape</span><span class="p">)),</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+            <span class="n">obs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+        <span class="n">batch</span> <span class="o">=</span> <span class="n">obs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">logits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">obs</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">logits</span><span class="p">,</span> <span class="n">state</span>
+
+<span class="n">state_shape</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">observation_space</span><span class="o">.</span><span class="n">shape</span> <span class="ow">or</span> <span class="n">env</span><span class="o">.</span><span class="n">observation_space</span><span class="o">.</span><span class="n">n</span>
+<span class="n">action_shape</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">shape</span> <span class="ow">or</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">n</span>
+<span class="n">net</span> <span class="o">=</span> <span class="n">Net</span><span class="p">(</span><span class="n">state_shape</span><span class="p">,</span> <span class="n">action_shape</span><span class="p">)</span>
+<span class="n">optim</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can also use pre-defined MLP networks in <a class="reference internal" href="../api/tianshou.utils.html#module-tianshou.utils.net.common" title="tianshou.utils.net.common"><code class="xref py py-mod docutils literal notranslate"><span class="pre">common</span></code></a>, <a class="reference internal" href="../api/tianshou.utils.html#module-tianshou.utils.net.discrete" title="tianshou.utils.net.discrete"><code class="xref py py-mod docutils literal notranslate"><span class="pre">discrete</span></code></a>, and <a class="reference internal" href="../api/tianshou.utils.html#module-tianshou.utils.net.continuous" title="tianshou.utils.net.continuous"><code class="xref py py-mod docutils literal notranslate"><span class="pre">continuous</span></code></a>. The rules of self-defined networks are:</p>
+<ol class="arabic simple">
+<li><p>Input: observation <code class="docutils literal notranslate"><span class="pre">obs</span></code> (may be a <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>, <code class="docutils literal notranslate"><span class="pre">torch.Tensor</span></code>, dict, or self-defined class), hidden state <code class="docutils literal notranslate"><span class="pre">state</span></code> (for RNN usage), and other information <code class="docutils literal notranslate"><span class="pre">info</span></code> provided by the environment.</p></li>
+<li><p>Output: some <code class="docutils literal notranslate"><span class="pre">logits</span></code>, the next hidden state <code class="docutils literal notranslate"><span class="pre">state</span></code>. The logits could be a tuple instead of a <code class="docutils literal notranslate"><span class="pre">torch.Tensor</span></code>, or some other useful variables or results during the policy forwarding procedure. It depends on how the policy class process the network output. For example, in PPO <span id="id4">[<a class="reference internal" href="#id8" title="John Schulman, Filip Wolski, Prafulla Dhariwal, Alec Radford, and Oleg Klimov. Proximal policy optimization algorithms. CoRR, 2017. URL: http://arxiv.org/abs/1707.06347, arXiv:1707.06347.">SWD+17</a>]</span>, the return of the network might be <code class="docutils literal notranslate"><span class="pre">(mu,</span> <span class="pre">sigma),</span> <span class="pre">state</span></code> for Gaussian policy.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The logits here indicates the raw output of the network. In supervised learning, the raw output of prediction/classification model is called logits, and here we extend this definition to any raw output of the neural network.</p>
+</div>
+</section>
+<section id="setup-policy">
+<h2>Setup Policy<a class="headerlink" href="#setup-policy" title="Link to this heading">¶</a></h2>
+<p>We use the defined <code class="docutils literal notranslate"><span class="pre">net</span></code> and <code class="docutils literal notranslate"><span class="pre">optim</span></code> above, with extra policy hyper-parameters, to define a policy. Here we define a DQN policy with a target network:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">policy</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">DQNPolicy</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">optim</span><span class="p">,</span> <span class="n">discount_factor</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">estimation_step</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">target_update_freq</span><span class="o">=</span><span class="mi">320</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="setup-collector">
+<h2>Setup Collector<a class="headerlink" href="#setup-collector" title="Link to this heading">¶</a></h2>
+<p>The collector is a key concept in Tianshou. It allows the policy to interact with different types of environments conveniently.
+In each step, the collector will let the policy perform (at least) a specified number of steps or episodes and store the data in a replay buffer.</p>
+<p>The following code shows how to set up a collector in practice. It is worth noticing that VectorReplayBuffer is to be used in vectorized environment scenarios, and the number of buffers, in the following case 10, is preferred to be set as the number of environments.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">train_collector</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Collector</span><span class="p">(</span><span class="n">policy</span><span class="p">,</span> <span class="n">train_envs</span><span class="p">,</span> <span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">VectorReplayBuffer</span><span class="p">(</span><span class="mi">20000</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">exploration_noise</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">test_collector</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Collector</span><span class="p">(</span><span class="n">policy</span><span class="p">,</span> <span class="n">test_envs</span><span class="p">,</span> <span class="n">exploration_noise</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The main function of collector is the collect function, which can be summarized in the following lines:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">last_state</span><span class="p">)</span>                         <span class="c1"># the agent predicts the batch action from batch observation</span>
+<span class="n">act</span> <span class="o">=</span> <span class="n">to_numpy</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">act</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">act</span><span class="o">=</span><span class="n">act</span><span class="p">)</span>                                           <span class="c1"># update the data with new action/policy</span>
+<span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">act</span><span class="p">,</span> <span class="n">ready_env_ids</span><span class="p">)</span>                          <span class="c1"># apply action to environment</span>
+<span class="n">obs_next</span><span class="p">,</span> <span class="n">rew</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">result</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">obs_next</span><span class="o">=</span><span class="n">obs_next</span><span class="p">,</span> <span class="n">rew</span><span class="o">=</span><span class="n">rew</span><span class="p">,</span> <span class="n">done</span><span class="o">=</span><span class="n">done</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="n">info</span><span class="p">)</span>  <span class="c1"># update the data with new state/reward/done/info</span>
+</pre></div>
+</div>
+</section>
+<section id="train-policy-with-a-trainer">
+<h2>Train Policy with a Trainer<a class="headerlink" href="#train-policy-with-a-trainer" title="Link to this heading">¶</a></h2>
+<p>Tianshou provides <code class="xref py py-func docutils literal notranslate"><span class="pre">onpolicy_trainer()</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">offpolicy_trainer()</span></code>, and <code class="xref py py-func docutils literal notranslate"><span class="pre">offline_trainer()</span></code>. The trainer will automatically stop training when the policy reach the stop condition <code class="docutils literal notranslate"><span class="pre">stop_fn</span></code> on test collector. Since DQN is an off-policy algorithm, we use the <code class="xref py py-func docutils literal notranslate"><span class="pre">offpolicy_trainer()</span></code> as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">trainer</span><span class="o">.</span><span class="n">offpolicy_trainer</span><span class="p">(</span>
+    <span class="n">policy</span><span class="p">,</span> <span class="n">train_collector</span><span class="p">,</span> <span class="n">test_collector</span><span class="p">,</span>
+    <span class="n">max_epoch</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">step_per_epoch</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">step_per_collect</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">update_per_step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">episode_per_test</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+    <span class="n">train_fn</span><span class="o">=</span><span class="k">lambda</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">env_step</span><span class="p">:</span> <span class="n">policy</span><span class="o">.</span><span class="n">set_eps</span><span class="p">(</span><span class="mf">0.1</span><span class="p">),</span>
+    <span class="n">test_fn</span><span class="o">=</span><span class="k">lambda</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">env_step</span><span class="p">:</span> <span class="n">policy</span><span class="o">.</span><span class="n">set_eps</span><span class="p">(</span><span class="mf">0.05</span><span class="p">),</span>
+    <span class="n">stop_fn</span><span class="o">=</span><span class="k">lambda</span> <span class="n">mean_rewards</span><span class="p">:</span> <span class="n">mean_rewards</span> <span class="o">&gt;=</span> <span class="n">env</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">reward_threshold</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Finished training! Use </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;duration&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The meaning of each parameter is as follows (full description can be found at <code class="xref py py-func docutils literal notranslate"><span class="pre">offpolicy_trainer()</span></code>):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">max_epoch</span></code>: The maximum of epochs for training. The training process might be finished before reaching the <code class="docutils literal notranslate"><span class="pre">max_epoch</span></code>;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">step_per_epoch</span></code>: The number of environment step (a.k.a. transition) collected per epoch;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">step_per_collect</span></code>: The number of transition the collector would collect before the network update. For example, the code above means “collect 10 transitions and do one policy network update”;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">episode_per_test</span></code>: The number of episodes for one policy evaluation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">batch_size</span></code>: The batch size of sample data, which is going to feed in the policy network.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">train_fn</span></code>: A function receives the current number of epoch and step index, and performs some operations at the beginning of training in this epoch. For example, the code above means “reset the epsilon to 0.1 in DQN before training”.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_fn</span></code>: A function receives the current number of epoch and step index, and performs some operations at the beginning of testing in this epoch. For example, the code above means “reset the epsilon to 0.05 in DQN before testing”.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stop_fn</span></code>: A function receives the average undiscounted returns of the testing result, return a boolean which indicates whether reaching the goal.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">logger</span></code>: See below.</p></li>
+</ul>
+<p>The trainer supports <a class="reference external" href="https://www.tensorflow.org/tensorboard">TensorBoard</a> for logging. It can be used as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch.utils.tensorboard</span> <span class="kn">import</span> <span class="n">SummaryWriter</span>
+<span class="kn">from</span> <span class="nn">tianshou.utils</span> <span class="kn">import</span> <span class="n">TensorboardLogger</span>
+<span class="n">writer</span> <span class="o">=</span> <span class="n">SummaryWriter</span><span class="p">(</span><span class="s1">&#39;log/dqn&#39;</span><span class="p">)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">TensorboardLogger</span><span class="p">(</span><span class="n">writer</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Pass the logger into the trainer, and the training result will be recorded into the TensorBoard.</p>
+<p>The returned result is a dictionary as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s1">&#39;train_step&#39;</span><span class="p">:</span> <span class="mi">9246</span><span class="p">,</span>
+    <span class="s1">&#39;train_episode&#39;</span><span class="p">:</span> <span class="mf">504.0</span><span class="p">,</span>
+    <span class="s1">&#39;train_time/collector&#39;</span><span class="p">:</span> <span class="s1">&#39;0.65s&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;train_time/model&#39;</span><span class="p">:</span> <span class="s1">&#39;1.97s&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;train_speed&#39;</span><span class="p">:</span> <span class="s1">&#39;3518.79 step/s&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;test_step&#39;</span><span class="p">:</span> <span class="mi">49112</span><span class="p">,</span>
+    <span class="s1">&#39;test_episode&#39;</span><span class="p">:</span> <span class="mf">400.0</span><span class="p">,</span>
+    <span class="s1">&#39;test_time&#39;</span><span class="p">:</span> <span class="s1">&#39;1.38s&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;test_speed&#39;</span><span class="p">:</span> <span class="s1">&#39;35600.52 step/s&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;best_reward&#39;</span><span class="p">:</span> <span class="mf">199.03</span><span class="p">,</span>
+    <span class="s1">&#39;duration&#39;</span><span class="p">:</span> <span class="s1">&#39;4.01s&#39;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>It shows that within approximately 4 seconds, we finished training a DQN agent on CartPole. The mean returns over 100 consecutive episodes is 199.03.</p>
+</section>
+<section id="save-load-policy">
+<h2>Save/Load Policy<a class="headerlink" href="#save-load-policy" title="Link to this heading">¶</a></h2>
+<p>Since the policy inherits the class <code class="docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>, saving and loading the policy are exactly the same as a torch module:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">policy</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span> <span class="s1">&#39;dqn.pth&#39;</span><span class="p">)</span>
+<span class="n">policy</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;dqn.pth&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="watch-the-agent-s-performance">
+<h2>Watch the Agent’s Performance<a class="headerlink" href="#watch-the-agent-s-performance" title="Link to this heading">¶</a></h2>
+<p><a class="reference internal" href="../api/tianshou.data.html#tianshou.data.Collector" title="tianshou.data.Collector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Collector</span></code></a> supports rendering. Here is the example of watching the agent’s performance in 35 FPS:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">policy</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+<span class="n">policy</span><span class="o">.</span><span class="n">set_eps</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="n">collector</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Collector</span><span class="p">(</span><span class="n">policy</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">exploration_noise</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">collector</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="n">n_episode</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">render</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">35</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If you’d like to manually see the action generated by a well-trained agent:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># assume obs is a single environment observation</span>
+<span class="n">action</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">Batch</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">obs</span><span class="p">])))</span><span class="o">.</span><span class="n">act</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="train-a-policy-with-customized-codes">
+<span id="customized-trainer"></span><h2>Train a Policy with Customized Codes<a class="headerlink" href="#train-a-policy-with-customized-codes" title="Link to this heading">¶</a></h2>
+<p>“I don’t want to use your provided trainer. I want to customize it!”</p>
+<p>Tianshou supports user-defined training code. Here is the code snippet:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># pre-collect at least 5000 transitions with random action before training</span>
+<span class="n">train_collector</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="n">n_step</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">random</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">policy</span><span class="o">.</span><span class="n">set_eps</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="mf">1e6</span><span class="p">)):</span>  <span class="c1"># total step</span>
+    <span class="n">collect_result</span> <span class="o">=</span> <span class="n">train_collector</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="n">n_step</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+    <span class="c1"># once if the collected episodes&#39; mean returns reach the threshold,</span>
+    <span class="c1"># or every 1000 steps, we test it on test_collector</span>
+    <span class="k">if</span> <span class="n">collect_result</span><span class="p">[</span><span class="s1">&#39;rews&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">env</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">reward_threshold</span> <span class="ow">or</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">1000</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">policy</span><span class="o">.</span><span class="n">set_eps</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">test_collector</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="n">n_episode</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;rews&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">env</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">reward_threshold</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Finished training! Test mean returns: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;rews&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># back to training eps</span>
+            <span class="n">policy</span><span class="o">.</span><span class="n">set_eps</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+
+    <span class="c1"># train policy with a sampled batch data from buffer</span>
+    <span class="n">losses</span> <span class="o">=</span> <span class="n">policy</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">train_collector</span><span class="o">.</span><span class="n">buffer</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For further usage, you can refer to the <a class="reference internal" href="cheatsheet.html"><span class="doc">Cheat Sheet</span></a>.</p>
+<p class="rubric">References</p>
+<div class="docutils container" id="id5">
+<div class="citation" id="id6" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">MKS+15</a><span class="fn-bracket">]</span></span>
+<p>Volodymyr Mnih, Koray Kavukcuoglu, David Silver, Andrei A. Rusu, Joel Veness, Marc G. Bellemare, Alex Graves, Martin A. Riedmiller, Andreas Fidjeland, Georg Ostrovski, Stig Petersen, Charles Beattie, Amir Sadik, Ioannis Antonoglou, Helen King, Dharshan Kumaran, Daan Wierstra, Shane Legg, and Demis Hassabis. Human-level control through deep reinforcement learning. <em>Nature</em>, 518(7540):529–533, 2015. URL: <a class="reference external" href="https://doi.org/10.1038/nature14236">https://doi.org/10.1038/nature14236</a>, <a class="reference external" href="https://doi.org/10.1038/nature14236">doi:10.1038/nature14236</a>.</p>
+</div>
+<div class="citation" id="id7" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">LHP+16</a><span class="fn-bracket">]</span></span>
+<p>Timothy P. Lillicrap, Jonathan J. Hunt, Alexander Pritzel, Nicolas Heess, Tom Erez, Yuval Tassa, David Silver, and Daan Wierstra. Continuous control with deep reinforcement learning. In <em>4th International Conference on Learning Representations, ICLR 2016, San Juan, Puerto Rico, May 2-4, 2016, Conference Track Proceedings</em>. 2016. URL: <a class="reference external" href="http://arxiv.org/abs/1509.02971">http://arxiv.org/abs/1509.02971</a>.</p>
+</div>
+<div class="citation" id="id8" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">SWD+17</a><span class="fn-bracket">]</span></span>
+<p>John Schulman, Filip Wolski, Prafulla Dhariwal, Alec Radford, and Oleg Klimov. Proximal policy optimization algorithms. <em>CoRR</em>, 2017. URL: <a class="reference external" href="http://arxiv.org/abs/1707.06347">http://arxiv.org/abs/1707.06347</a>, <a class="reference external" href="https://arxiv.org/abs/1707.06347">arXiv:1707.06347</a>.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="get_started.html" class="btn btn-neutral float-left" title="Get Started with Jupyter Notebook" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="concepts.html" class="btn btn-neutral float-right" title="Basic concepts in Tianshou" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Tianshou contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
