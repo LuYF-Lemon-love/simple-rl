@@ -266,4 +266,6 @@ $ python3 test/discrete/test_pg.py --seed 0 --render 0.03
 
 [12] [Nginx快速入门](https://www.kuangstudy.com/bbs/1353634800149213186)
 
+[13] [使用Sphinx搭建本地(window)文档并把它部署到网上(github)-布置主题并发布(2)](https://blog.csdn.net/u013716535/article/details/104907240)
+
 </p></details>
