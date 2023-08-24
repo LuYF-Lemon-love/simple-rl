@@ -1,5 +1,7 @@
 ## Simple-RL
 
+>在开头，我想先表达一下对原作者的致敬：[我与清华学生的差距](https://www.zhihu.com/question/377263715)
+
 >**Tianshou** is a reinforcement learning platform based on pure PyTorch. The supported interface algorithms currently include:
 
 - [Deep Q-Network (DQN)](https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf)
@@ -79,15 +81,9 @@ print(tianshou.__version__)
 
 如果没有错误发生，你已经安装成功了。
 
-## Documentation
+## 例子
 
-The tutorials and API documentation are hosted on [tianshou.readthedocs.io](https://tianshou.readthedocs.io/).
-
-The example scripts are under [test/](https://github.com/thu-ml/tianshou/blob/master/test) folder and [examples/](https://github.com/thu-ml/tianshou/blob/master/examples) folder.
-
-中文文档位于 [https://tianshou.readthedocs.io/zh/master/](https://tianshou.readthedocs.io/zh/master/)。
-
-<!-- 这里有一份天授平台简短的中文简介：https://www.zhihu.com/question/377263715 -->
+保存在 [test/](./test/) 文件夹和 [examples/](./examples/) 文件夹。
 
 ## Why Tianshou?
 
