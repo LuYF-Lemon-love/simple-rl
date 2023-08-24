@@ -28,10 +28,11 @@ RL 训练管道中有三种类型的数据流：
     :height: 300
 
 
-Make an Environment
+创建环境
 -------------------
 
-First of all, you have to make an environment for your agent to interact with. You can use ``gym.make(environment_name)`` to make an environment for your agent. For environment interfaces, we follow the convention of `Gymnasium <https://github.com/Farama-Foundation/Gymnasium>`_. In your Python code, simply import Tianshou and make the environment:
+首先，您必须为智能体创建一个与之交互的环境。您可以使用 ``gym.make(environment_name)`` 为您的智能体创建环境。
+对于环境接口，我们遵循 `Gymnasium <https://github.com/Farama-Foundation/Gymnasium>`_ 的惯例。在你的 Python 代码中，只需导入天授并创建环境：
 ::
 
     import gymnasium as gym
@@ -39,43 +40,42 @@ First of all, you have to make an environment for your agent to interact with. Y
 
     env = gym.make('CartPole-v0')
 
-CartPole-v0 includes a cart carrying a pole moving on a track. This is a simple environment with a discrete action space, for which DQN applies. You have to identify whether the action space is continuous or discrete and apply eligible algorithms. DDPG :cite:`DDPG`, for example, could only be applied to continuous action spaces, while almost all other policy gradient methods could be applied to both.
+CartPole-v0 是一辆携带杆子在轨道上移动的推车。这是一个具有离散动作空间（discrete action space）的简单环境，DQN 适用于该环境。在使用不同种类的强化学习算法前，您需要了解每个算法是否能够应用在离散动作空间场景 / 连续动作空间场景中，比如像 DDPG :cite:`DDPG` 就只能用在连续动作空间任务中，其他基于策略梯度的算法可以用在任意这两个场景中。
 
-Here is the detail of useful fields of CartPole-v0:
+以下是 CartPole-v0 有用字段的详细信息：
 
-- ``state``: the position of the cart, the velocity of the cart, the angle of the pole and the velocity of the tip of the pole;
-- ``action``: can only be one of ``[0, 1, 2]``, for moving the cart left, no move, and right;
-- ``reward``: each timestep you last, you will receive a +1 ``reward``;
-- ``done``: if CartPole is out-of-range or timeout (the pole is more than 15 degrees from vertical, or the cart moves more than 2.4 units from the center, or you last over 200 timesteps);
-- ``info``: extra info from environment simulation.
+- ``state``: 推车的位置、推车的速度、杆子的角度和杆尖的速度；
+- ``action``: 只能是 ``[0, 1, 2]`` 其中之一，用于将推车向左移动、不移动和向右移动；
+- ``reward``: 你每坚持一步，就会获得 +1 ``reward``；
+- ``done``: 如果 CartPole 超出范围或超时（杆与垂直方向的夹角超过 15 度，或者推车与中心的距离超过 2.4 个单位，或者你持续了 200 多个时间步）；
+- ``info``: 来自环境模拟的额外信息。
 
-The goal is to train a good policy that can get the highest reward in this environment.
+我们的目标是制定一个好的策略，在这种环境下可以获得最高的回报。
 
-
-Setup Vectorized Environment
+设置矢量化环境
 ----------------------------
 
-If you want to use the original ``gym.Env``:
+此处定义训练环境和测试环境。使用原来的 ``gym.Env`` 当然是可以的：
 ::
 
     train_envs = gym.make('CartPole-v0')
     test_envs = gym.make('CartPole-v0')
 
-Tianshou supports vectorized environment for all algorithms. It provides four types of vectorized environment wrapper:
+天授支持所有算法的矢量化环境。它提供了四种类型的矢量化环境包装器：
 
-- :class:`~tianshou.env.DummyVectorEnv`: the sequential version, using a single-thread for-loop;
-- :class:`~tianshou.env.SubprocVectorEnv`: use python multiprocessing and pipe for concurrent execution;
-- :class:`~tianshou.env.ShmemVectorEnv`: use share memory instead of pipe based on SubprocVectorEnv;
-- :class:`~tianshou.env.RayVectorEnv`: use Ray for concurrent activities and is currently the only choice for parallel simulation in a cluster with multiple machines. It can be used as follows: (more explanation can be found at :ref:`parallel_sampling`)
+- :class:`~tianshou.env.DummyVectorEnv`: 顺序版本，使用单线程 for 循环;
+- :class:`~tianshou.env.SubprocVectorEnv`: 使用 Python 多进程进行并发执行;
+- :class:`~tianshou.env.ShmemVectorEnv`: 使用共享内存而不是基于 SubprocVectorEnv 的管道;
+- :class:`~tianshou.env.RayVectorEnv`: 将 Ray 用于并发活动，是目前在具有多台机器的集群中进行并行模拟的唯一选择。它可以按如下方式使用：（更多解释可以在 :ref:`parallel_sampling` 中找到）
 
 ::
 
     train_envs = ts.env.DummyVectorEnv([lambda: gym.make('CartPole-v0') for _ in range(10)])
     test_envs = ts.env.DummyVectorEnv([lambda: gym.make('CartPole-v0') for _ in range(100)])
 
-Here, we set up 10 environments in ``train_envs`` and 100 environments in ``test_envs``.
+在这里，我们在 ``train_envs`` 中设置了 10 个环境，在 ``test_envs`` 中设置了 100 个环境。
 
-You can also try the super-fast vectorized environment `EnvPool <https://github.com/sail-sg/envpool/>`_ by
+您也可以通过以下方式尝试超快速矢量化环境 `EnvPool <https://github.com/sail-sg/envpool/>`_ 。
 
 ::
 
@@ -83,23 +83,23 @@ You can also try the super-fast vectorized environment `EnvPool <https://github.
     train_envs = envpool.make_gymnasium("CartPole-v0", num_envs=10)
     test_envs = envpool.make_gymnasium("CartPole-v0", num_envs=100)
 
-For the demonstration, here we use the second code-block.
+为了演示，这里我们使用第二个代码块。
 
 .. warning::
 
-    If you use your own environment, please make sure the ``seed`` method is set up properly, e.g.,
+    如果您使用自己的环境，请确保正确设置 ``seed`` 方法，例如：
 
     ::
 
         def seed(self, seed):
             np.random.seed(seed)
 
-    Otherwise, the outputs of these envs may be the same with each other.
+    否则，这些 env 的输出可能彼此相同。
 
 
 .. _build_the_network:
 
-Build the Network
+构建神经网络
 -----------------
 
 Tianshou supports any user-defined PyTorch networks and optimizers. Yet, of course, the inputs and outputs must comply with Tianshou's API. Here is an example:
