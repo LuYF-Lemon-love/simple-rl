@@ -213,4 +213,8 @@ $ python3 test/discrete/test_pg.py --seed 0 --render 0.03
 
 [4] [Tianshou: A Highly Modularized Deep Reinforcement Learning Library](https://jmlr.org/papers/v23/21-1127.html)
 
+[5] [MANIFEST.in](https://packaging.python.org/en/latest/guides/using-manifest-in/)
+
+[6] [Including Data Files](https://setuptools.pypa.io/en/latest/userguide/quickstart.html#including-data-files)
+
 </p></details>
