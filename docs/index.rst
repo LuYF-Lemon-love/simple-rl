@@ -4,10 +4,10 @@
    contain the root `toctree` directive.
 
 
-Welcome to Tianshou!
+欢迎你的访问
 ====================
 
-**Tianshou** (`天授 <https://baike.baidu.com/item/%E5%A4%A9%E6%8E%88>`_) is a reinforcement learning platform based on pure PyTorch. Unlike existing reinforcement learning libraries, which are mainly based on TensorFlow, have many nested classes, unfriendly API, or slow-speed, Tianshou provides a fast-speed framework and pythonic API for building the deep reinforcement learning agent. The supported interface algorithms include:
+**Tianshou** is a reinforcement learning platform based on pure PyTorch. The supported interface algorithms include:
 
 * :class:`~tianshou.policy.DQNPolicy` `Deep Q-Network <https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf>`_
 * :class:`~tianshou.policy.DQNPolicy` `Double DQN <https://arxiv.org/pdf/1509.06461.pdf>`_
@@ -57,42 +57,34 @@ Here is Tianshou's other features:
 * Support multi-GPU training :ref:`multi_gpu`
 * Comprehensive `unit tests <https://github.com/thu-ml/tianshou/actions>`_, including functional checking, RL pipeline checking, documentation checking, PEP8 code-style checking, and type checking
 
-中文文档位于 `https://tianshou.readthedocs.io/zh/master/ <https://tianshou.readthedocs.io/zh/master/>`_
-
-
-Installation
+安装
 ------------
 
-Tianshou is currently hosted on `PyPI <https://pypi.org/project/tianshou/>`_ and `conda-forge <https://github.com/conda-forge/tianshou-feedstock>`_. It requires Python >= 3.8.
-
-You can simply install Tianshou from PyPI with the following command:
+你能使用下面命令来安装：
 
 .. code-block:: bash
 
-    $ pip install tianshou
+    $ git clone git@github.com:LuYF-Lemon-love/simple-rl.git
+    $ cd simple-rl
+    $ python -m venv env
+    $ source env/bin/activate
+    $ which python
+    $ pip install --upgrade pip
+    $ pip install .
 
-If you use Anaconda or Miniconda, you can install Tianshou from conda-forge through the following command:
+你也能直接从 GitHub 安装最新的版本：
 
 .. code-block:: bash
 
-    $ conda install tianshou -c conda-forge
+    $ pip install git+https://github.com/LuYF-Lemon-love/simple-rl.git@main --upgrade
 
-You can also install with the newest version through GitHub:
-
-.. code-block:: bash
-
-    $ pip install git+https://github.com/thu-ml/tianshou.git@master --upgrade
-
-After installation, open your python console and type
+安装完成后，打开 Python 运行下面的代码：
 ::
 
     import tianshou
     print(tianshou.__version__)
 
-If no error occurs, you have successfully installed Tianshou.
-
-Tianshou is still under development, you can also check out the documents in stable version through `tianshou.readthedocs.io/en/stable/ <https://tianshou.readthedocs.io/en/stable/>`_.
-
+如果没有错误发生，你已经安装成功了。
 
 .. toctree::
    :maxdepth: 1
