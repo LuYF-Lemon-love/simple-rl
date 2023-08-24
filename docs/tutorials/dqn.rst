@@ -1,10 +1,10 @@
 Deep Q Network
 ==============
 
-Deep reinforcement learning has achieved significant successes in various applications.
-**Deep Q Network** (DQN) :cite:`DQN` is the pioneer one.
-In this tutorial, we will show how to train a DQN agent on CartPole with Tianshou step by step.
-The full script is at `test/discrete/test_dqn.py <https://github.com/thu-ml/tianshou/blob/master/test/discrete/test_dqn.py>`_.
+深度强化学习在各种应用中取得了重大成功。
+**Deep Q Network** (DQN) :cite:`DQN` 是其中的先驱。
+在本教程中，我们会逐步展示如何在 Cartpole 任务上使用天授训练一个 DQN 智能体。 
+完整的代码位于 `test/discrete/test_dqn.py <https://github.com/LuYF-Lemon-love/simple-rl/blob/main/test/discrete/test_dqn.py>`_.
 
 Contrary to existing Deep RL libraries such as `RLlib <https://github.com/ray-project/ray/tree/master/rllib/>`_, which could only accept a config specification of hyperparameters, network, and others, Tianshou provides an easy way of construction through the code-level.
 
