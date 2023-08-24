@@ -100,7 +100,7 @@ Within this API, we can interact with different policies conveniently.
 
 ## Quick Start
 
-This is an example of Deep Q Network. You can also run the full script at [test/discrete/test_dqn.py](https://github.com/thu-ml/tianshou/blob/master/test/discrete/test_dqn.py).
+This is an example of Deep Q Network. You can also run the full script at [test/discrete/test_dqn.py](./test/discrete/test_dqn.py).
 
 First, import some relevant packages:
 
