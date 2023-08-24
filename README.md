@@ -81,6 +81,43 @@ print(tianshou.__version__)
 
 如果没有错误发生，你已经安装成功了。
 
+### 安装文档（可选）
+
+1. 安装 nginx：
+
+```shell
+$ sudo apt-get install nginx
+```
+
+2. 创建存放网站的文件夹：
+
+```shell
+$ sudo mkdir -p /var/www/simple_rl
+```
+
+3. 修改配置文件，修改 `root` 后面的内容，使其指向存放网页文件的文件夹（`root /var/www/simple_rl;`）：
+
+```shell
+$ sudo vim /etc/nginx/sites-enabled/default
+```
+
+4. 构建文档并复制到上面创建的文件中：
+
+```shell
+$ pip install -r docs/requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+$ cd docs/
+$ make html
+$ sudo cp -r _build/html/* /var/www/simple_rl/
+```
+
+5. 重启服务：
+
+```shell
+$ sudo systemctl restart nginx
+```
+
+6. 在浏览器中输入服务器 IP 地址即可访问文档了。
+
 ## 例子
 
 保存在 [test/](./test/) 文件夹和 [examples/](./examples/) 文件夹。
@@ -218,5 +255,15 @@ $ python3 test/discrete/test_pg.py --seed 0 --render 0.03
 [6] [Including Data Files](https://setuptools.pypa.io/en/latest/userguide/quickstart.html#including-data-files)
 
 [7] [thu-ml/tianshou](https://github.com/thu-ml/tianshou)
+
+[8] [Getting started with Sphinx](https://docs.readthedocs.io/en/stable/intro/getting-started-with-sphinx.html)
+
+[9] [Getting started](https://www.sphinx-doc.org/en/master/tutorial/getting-started.html)
+
+[10] [使用Sphinx搭建本地(window)文档并把它部署到网上(github)-本地搭建(1)](https://blog.csdn.net/u013716535/article/details/104902308/)
+
+[11] [Nginx+Ubuntu实现静态网页Web服务器](https://zhuanlan.zhihu.com/p/400447282)
+
+[12] [Nginx快速入门](https://www.kuangstudy.com/bbs/1353634800149213186)
 
 </p></details>
