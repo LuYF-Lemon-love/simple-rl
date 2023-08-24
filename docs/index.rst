@@ -90,7 +90,6 @@ Here is Tianshou's other features:
    :maxdepth: 1
    :caption: Tutorials
 
-   tutorials/get_started
    tutorials/dqn
    tutorials/concepts
    tutorials/batch
