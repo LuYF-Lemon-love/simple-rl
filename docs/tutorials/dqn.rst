@@ -172,10 +172,10 @@ CartPole-v0 是一辆携带杆子在轨道上移动的推车。这是一个具�
     self.data.update(obs_next=obs_next, rew=rew, done=done, info=info)  # update the data with new state/reward/done/info
 
 
-Train Policy with a Trainer
+使用训练器训练策略
 ---------------------------
 
-Tianshou provides :func:`~tianshou.trainer.onpolicy_trainer`, :func:`~tianshou.trainer.offpolicy_trainer`, and :func:`~tianshou.trainer.offline_trainer`. The trainer will automatically stop training when the policy reach the stop condition ``stop_fn`` on test collector. Since DQN is an off-policy algorithm, we use the :func:`~tianshou.trainer.offpolicy_trainer` as follows:
+天授提供了 :func:`~tianshou.trainer.onpolicy_trainer`, :func:`~tianshou.trainer.offpolicy_trainer`, 和 :func:`~tianshou.trainer.offline_trainer`. 训练器会在 test collector 的 ``stop_fn`` 达到条件的时候停止训练。由于 DQN 是一种异策略算法 (off-policy algorithm) , 因此使用 :func:`~tianshou.trainer.offpolicy_trainer` 进行训练：
 ::
 
     result = ts.trainer.offpolicy_trainer(
@@ -187,19 +187,18 @@ Tianshou provides :func:`~tianshou.trainer.onpolicy_trainer`, :func:`~tianshou.t
         stop_fn=lambda mean_rewards: mean_rewards >= env.spec.reward_threshold)
     print(f'Finished training! Use {result["duration"]}')
 
-The meaning of each parameter is as follows (full description can be found at :func:`~tianshou.trainer.offpolicy_trainer`):
+每个参数的具体含义如下：(完整的描述可以在 :func:`~tianshou.trainer.offpolicy_trainer` 中找到):
 
-* ``max_epoch``: The maximum of epochs for training. The training process might be finished before reaching the ``max_epoch``;
-* ``step_per_epoch``: The number of environment step (a.k.a. transition) collected per epoch;
-* ``step_per_collect``: The number of transition the collector would collect before the network update. For example, the code above means "collect 10 transitions and do one policy network update";
-* ``episode_per_test``: The number of episodes for one policy evaluation.
-* ``batch_size``: The batch size of sample data, which is going to feed in the policy network.
-* ``train_fn``: A function receives the current number of epoch and step index, and performs some operations at the beginning of training in this epoch. For example, the code above means "reset the epsilon to 0.1 in DQN before training".
-* ``test_fn``: A function receives the current number of epoch and step index, and performs some operations at the beginning of testing in this epoch. For example, the code above means "reset the epsilon to 0.05 in DQN before testing".
-* ``stop_fn``: A function receives the average undiscounted returns of the testing result, return a boolean which indicates whether reaching the goal.
-* ``logger``: See below.
+* ``max_epoch``: 最大允许的训练轮数，有可能没训练完这么多轮就会停止（因为满足了 ``stop_fn`` 的条件）；
+* ``step_per_epoch``: 每个 epoch 要更新多少次策略网络；
+* ``step_per_collect``: 每次更新前要收集多少帧与环境的交互数据。上面的代码参数意思是，每收集 10 帧进行一次网络更新；
+* ``episode_per_test``: 一次策略评估的回合数；
+* ``batch_size``: 每次策略计算的时候批量处理多少数据；
+* ``train_fn``: 在每个 epoch 训练之前被调用的函数，输入的是当前第几轮 epoch 和当前用于训练的 env 一共 step 了多少次。上面的代码意味着，在每次训练前将 epsilon 设置成 0.1；
+* ``test_fn``: 在每个 epoch 测试之前被调用的函数，输入的是当前第几轮 epoch 和当前用于训练的 env 一共 step 了多少次。上面的代码意味着，在每次测试前将 epsilon 设置成 0.05；
+* ``stop_fn``: 停止条件，输入是当前平均总奖励回报（the average undiscounted returns），返回是否要停止训练；
+* ``logger``: 天授支持 `TensorBoard <https://www.tensorflow.org/tensorboard>`_，可以像下面这样初始化：
 
-The trainer supports `TensorBoard <https://www.tensorflow.org/tensorboard>`_ for logging. It can be used as:
 ::
 
     from torch.utils.tensorboard import SummaryWriter
@@ -207,9 +206,9 @@ The trainer supports `TensorBoard <https://www.tensorflow.org/tensorboard>`_ for
     writer = SummaryWriter('log/dqn')
     logger = TensorboardLogger(writer)
 
-Pass the logger into the trainer, and the training result will be recorded into the TensorBoard.
+把 logger 送进去，训练器会自动把训练日志记录在里面。
 
-The returned result is a dictionary as follows:
+训练器返回的结果是个字典，如下所示：
 ::
 
     {
@@ -226,23 +225,22 @@ The returned result is a dictionary as follows:
         'duration': '4.01s'
     }
 
-It shows that within approximately 4 seconds, we finished training a DQN agent on CartPole. The mean returns over 100 consecutive episodes is 199.03.
+可以看出大概 4 秒就在 CartPole 任务上训练出来一个 DQN 智能体，在 100 轮测试中平均总奖励回报为 199.03。
 
-
-Save/Load Policy
+存储、导入策略
 ----------------
 
-Since the policy inherits the class ``torch.nn.Module``, saving and loading the policy are exactly the same as a torch module:
+因为策略继承了 ``torch.nn.Module``，所以存储和导入策略和 PyTorch 中的网络并无差别，如下所示：
 ::
 
     torch.save(policy.state_dict(), 'dqn.pth')
     policy.load_state_dict(torch.load('dqn.pth'))
 
 
-Watch the Agent's Performance
+可视化智能体的表现
 -----------------------------
 
-:class:`~tianshou.data.Collector` supports rendering. Here is the example of watching the agent's performance in 35 FPS:
+采集器 :class:`~tianshou.data.Collector` 支持渲染智能体的表现。下面的代码展示了以 35 FPS 的帧率查看智能体表现：
 ::
 
     policy.eval()
@@ -250,7 +248,7 @@ Watch the Agent's Performance
     collector = ts.data.Collector(policy, env, exploration_noise=True)
     collector.collect(n_episode=1, render=1 / 35)
 
-If you'd like to manually see the action generated by a well-trained agent:
+如果您想手动查看由训练有素的智能体生成的 ``action``：
 ::
 
     # assume obs is a single environment observation
@@ -259,12 +257,12 @@ If you'd like to manually see the action generated by a well-trained agent:
 
 .. _customized_trainer:
 
-Train a Policy with Customized Codes
+定制化训练器
 ------------------------------------
 
 "I don't want to use your provided trainer. I want to customize it!"
 
-Tianshou supports user-defined training code. Here is the code snippet:
+天授为了能够支持用户的定制化训练器，在 Trainer 做了尽可能少的封装。使用者可以自由地编写自己所需要的训练策略，比如：
 ::
 
     # pre-collect at least 5000 transitions with random action before training
@@ -289,7 +287,7 @@ Tianshou supports user-defined training code. Here is the code snippet:
         # train policy with a sampled batch data from buffer
         losses = policy.update(64, train_collector.buffer)
 
-For further usage, you can refer to the :doc:`/tutorials/cheatsheet`.
+如需进一步使用，您可以参考 :doc:`/tutorials/cheatsheet`。
 
 .. rubric:: References
 
