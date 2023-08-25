@@ -1,14 +1,13 @@
-Basic concepts in Tianshou
+基本概念
 ==========================
 
-Tianshou splits a Reinforcement Learning agent training procedure into these parts: trainer, collector, policy, and data buffer. The general control flow can be described as:
+天授把一个 RL 训练流程划分成了几个子模块：trainer（负责训练逻辑）、collector（负责数据采集）、policy（负责训练策略）和 buffer（负责数据存储），一般控制流程可以描述为：
 
 .. image:: /_static/images/concepts_arch.png
     :align: center
     :height: 300
 
-
-Here is a more detailed description, where ``Env`` is the environment and ``Model`` is the neural network:
+以下是更详细的描述，其中 ``Env`` 是环境， ``Model`` 是神经网络：
 
 .. image:: /_static/images/concepts_arch2.png
     :align: center
@@ -18,7 +17,7 @@ Here is a more detailed description, where ``Env`` is the environment and ``Mode
 Batch
 -----
 
-Tianshou provides :class:`~tianshou.data.Batch` as the internal data structure to pass any kind of data to other methods, for example, a collector gives a :class:`~tianshou.data.Batch` to policy for learning. Let's take a look at this script:
+天授提供了 :class:`~tianshou.data.Batch` 作为内部数据结构传递数据，它既像字典又像数组，可以以这两种方式组织数据和访问数据。例如，采集器向策略提供一个 :class:`~tianshou.data.Batch` 以进行学习。让我们来看看这个脚本：
 ::
 
     >>> import torch, numpy as np
@@ -45,10 +44,9 @@ Tianshou provides :class:`~tianshou.data.Batch` as the internal data structure t
         act: tensor([0., 6.]),
     )
 
-In short, you can define a :class:`~tianshou.data.Batch` with any key-value pair, and perform some common operations over it.
+总之就是可以定义任何 key-value 放在 :class:`~tianshou.data.Batch` 里面，然后可以做一些常规的操作比如 ``+-*``、 ``cat/stack`` 之类的。
 
-:ref:`batch_concept` is a dedicated tutorial for :class:`~tianshou.data.Batch`. We strongly recommend every user to read it so as to correctly understand and use :class:`~tianshou.data.Batch`.
-
+:ref:`batch_concept` 里面详细描述了 :class:`~tianshou.data.Batch` 的各种用法，非常值得一看。
 
 Buffer
 ------
