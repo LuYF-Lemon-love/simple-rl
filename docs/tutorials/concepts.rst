@@ -419,8 +419,3 @@ We give a high-level explanation through the pseudocode used in section :ref:`pr
             # update DQN policy
             agent.update(b_s, b_a, b_s_, b_r, b_d, b_ret)           # policy.learn(batch, ...)
 
-
-Conclusion
-----------
-
-So far, we go through the overall framework of Tianshou. Really simple, isn't it?
