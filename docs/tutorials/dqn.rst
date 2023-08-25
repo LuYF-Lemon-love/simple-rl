@@ -102,7 +102,7 @@ CartPole-v0 是一辆携带杆子在轨道上移动的推车。这是一个具�
 构建神经网络
 -----------------
 
-Tianshou supports any user-defined PyTorch networks and optimizers. Yet, of course, the inputs and outputs must comply with Tianshou's API. Here is an example:
+天授支持任意的用户定义的 PyTorch 网络和优化器，但是输入输出需要遵循既定 API，比如像下面这样：
 ::
 
     import torch, numpy as np
@@ -130,40 +130,38 @@ Tianshou supports any user-defined PyTorch networks and optimizers. Yet, of cour
     net = Net(state_shape, action_shape)
     optim = torch.optim.Adam(net.parameters(), lr=1e-3)
 
-You can also use pre-defined MLP networks in :mod:`~tianshou.utils.net.common`, :mod:`~tianshou.utils.net.discrete`, and :mod:`~tianshou.utils.net.continuous`. The rules of self-defined networks are:
+您还可以使用 :mod:`~tianshou.utils.net.common`, :mod:`~tianshou.utils.net.discrete`, 和 :mod:`~tianshou.utils.net.continuous` 的预定义 MLP 网络。自定义网络的规则是：
 
-1. Input: observation ``obs`` (may be a ``numpy.ndarray``, ``torch.Tensor``, dict, or self-defined class), hidden state ``state`` (for RNN usage), and other information ``info`` provided by the environment.
-2. Output: some ``logits``, the next hidden state ``state``. The logits could be a tuple instead of a ``torch.Tensor``, or some other useful variables or results during the policy forwarding procedure. It depends on how the policy class process the network output. For example, in PPO :cite:`PPO`, the return of the network might be ``(mu, sigma), state`` for Gaussian policy.
+1. 输入: observation ``obs`` (可能是 ``numpy.ndarray``, ``torch.Tensor``, dict, 或 self-defined class), hidden state ``state`` (用于 RNN), and 环境提供的其他信息 ``info``.
+2. 输出: some ``logits``, the next hidden state ``state``. logits 可以是 tuple 而不是 ``torch.Tensor``, 或者在策略 forward 过程中是一些其他有用的变量或结果。这取决于策略类如何处理网络输出。例如, 在 PPO :cite:`PPO`, 网络的返回可能是 ``(mu, sigma), state`` ，即高斯策略的状态.
 
 .. note::
 
-    The logits here indicates the raw output of the network. In supervised learning, the raw output of prediction/classification model is called logits, and here we extend this definition to any raw output of the neural network.
+    这里的 logits 表示网络的原始输出。在监督学习中，预测/分类模型的原始输出称为 logits，这里我们将此定义扩展到神经网络的任何原始输出。
 
 
-Setup Policy
+初始化策略
 ------------
 
-We use the defined ``net`` and ``optim`` above, with extra policy hyper-parameters, to define a policy. Here we define a DQN policy with a target network:
+我们使用上述代码中定义的 ``net`` 和 ``optim``，以及其他超参数，来定义一个策略。此处定义了一个有目标网络（Target Network）的 DQN 策略：
 ::
 
     policy = ts.policy.DQNPolicy(net, optim, discount_factor=0.9, estimation_step=3, target_update_freq=320)
 
 
-Setup Collector
+定义采集器
 ---------------
 
-The collector is a key concept in Tianshou. It allows the policy to interact with different types of environments conveniently.
-In each step, the collector will let the policy perform (at least) a specified number of steps or episodes and store the data in a replay buffer.
+采集器（Collector）是天授中的一个关键概念。它定义了策略与不同环境交互的逻辑。
+在每一回合（step）中，采集器会让策略与环境交互指定数目（至少）的步数或者轮数，并且会将产生的数据存储在重放缓冲区中。
 
-The following code shows how to set up a collector in practice. It is worth noticing that VectorReplayBuffer is to be used in vectorized environment scenarios, and the number of buffers, in the following case 10, is preferred to be set as the number of environments.
-
+以下代码演示如何在实践中设置采集器。值得注意的是，VectorReplayBuffer 将用于矢量化环境方案，并且缓冲区数（在以下情况下为 10）优先设置为环境数。
 ::
 
     train_collector = ts.data.Collector(policy, train_envs, ts.data.VectorReplayBuffer(20000, 10), exploration_noise=True)
     test_collector = ts.data.Collector(policy, test_envs, exploration_noise=True)
 
-The main function of collector is the collect function, which can be summarized in the following lines:
-
+采集器的主要功能是采集功能，可以概括为以下几行：
 ::
 
     result = self.policy(self.data, last_state)                         # the agent predicts the batch action from batch observation
