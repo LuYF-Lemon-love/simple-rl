@@ -253,7 +253,6 @@ Policy
 
 ``policy.updating`` is helpful to distinguish the different exploration state, for example, in DQN we don't have to use epsilon-greedy in a pure network update, so ``policy.updating`` is helpful for setting epsilon in this case.
 
-
 policy.forward
 ^^^^^^^^^^^^^^
 
