@@ -51,24 +51,23 @@ Batch
 Buffer
 ------
 
-:class:`~tianshou.data.ReplayBuffer` stores data generated from interaction between the policy and environment. ReplayBuffer can be considered as a specialized form (or management) of :class:`~tianshou.data.Batch`. It stores all the data in a batch with circular-queue style.
+:class:`~tianshou.data.ReplayBuffer` 存储从策略和环境之间的交互生成的数据。ReplayBuffer 可以被视为 :class:`~tianshou.data.Batch` 的特别的形式（或管理）。它将所有数据存储在具有循环队列样式的 :class:`~tianshou.data.Batch` 中。
 
-The current implementation of Tianshou typically use the following reserved keys in
-:class:`~tianshou.data.Batch`:
+天授的当前实现通常在 :class:`~tianshou.data.Batch` 中使用以下保留 ``keys``：
 
-* ``obs`` the observation of step :math:`t` ;
-* ``act`` the action of step :math:`t` ;
-* ``rew`` the reward of step :math:`t` ;
+* ``obs`` :math:`t` 时刻的观测值；
+* ``act`` :math:`t` 时刻采取的动作值；
+* ``rew`` :math:`t` 时刻环境返回的回报值；
 * ``terminated`` the terminated flag of step :math:`t` ;
 * ``truncated`` the truncated flag of step :math:`t` ;
 * ``done`` the done flag of step :math:`t` (can be inferred as ``terminated or truncated``);
-* ``obs_next`` the observation of step :math:`t+1` ;
+* ``obs_next`` :math:`t+1` 时刻的观测值；
 * ``info`` the info of step :math:`t` (in ``gym.Env``, the ``env.step()`` function returns 4 arguments, and the last one is ``info``);
-* ``policy`` the data computed by policy in step :math:`t`;
+* ``policy`` :math:`t` 时刻由 policy 计算出的需要额外存储的数据；
 
-When adding data to a replay buffer, the done flag will be inferred automatically from ``terminated``and ``truncated``.
+将数据添加到 ``replay`` 缓冲区时，将从 ``terminated`` 和 ``truncated`` 自动推断 ``done`` 标志。
 
-The following code snippet illustrates the usage, including:
+以下代码片段说明了用法，包括：
 
 - the basic data storage: ``add()``;
 - get attribute, get slicing data, ...;
@@ -137,7 +136,7 @@ The following code snippet illustrates the usage, including:
     >>> len(buf)
     3
 
-:class:`~tianshou.data.ReplayBuffer` also supports frame_stack sampling (typically for RNN usage, see issue#19), ignoring storing the next observation (save memory in Atari tasks), and multi-modal observation (see issue#38):
+:class:`~tianshou.data.ReplayBuffer` 还支持堆叠采样（为了RNN）、不存储 ``obs_next`` （为了省些内存），以及 multi-modal observation：
 
 .. raw:: html
 
@@ -215,8 +214,7 @@ The following code snippet illustrates the usage, including:
 
    </details><br>
 
-Tianshou provides other type of data buffer such as :class:`~tianshou.data.PrioritizedReplayBuffer` (based on Segment Tree and ``numpy.ndarray``) and :class:`~tianshou.data.VectorReplayBuffer` (add different episodes' data but without losing chronological order). Check out :class:`~tianshou.data.ReplayBuffer` for more detail.
-
+天授还提供了其他类型的 buffer 比如 :class:`~tianshou.data.PrioritizedReplayBuffer` （基于线段树 和 ``numpy.ndarray``）、:class:`~tianshou.data.VectorReplayBuffer` （能够向其中添加不同 episode 的数据的同时维护时间顺序）。可以访问对应的文档来查看。
 
 Policy
 ------
