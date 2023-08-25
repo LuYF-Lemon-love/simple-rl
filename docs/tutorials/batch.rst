@@ -1,6 +1,6 @@
 .. _batch_concept:
 
-Understand Batch
+了解 Batch
 ================
 
 :class:`~tianshou.data.Batch` is the internal data structure extensively used in Tianshou. It is designed to store and manipulate hierarchical named tensors. This tutorial aims to help users correctly understand the concept and the behavior of :class:`~tianshou.data.Batch` so that users can make the best of Tianshou.
