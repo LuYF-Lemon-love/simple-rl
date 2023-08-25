@@ -219,32 +219,27 @@ Buffer
 Policy
 ------
 
-Tianshou aims to modularize RL algorithms. It comes into several classes of policies in Tianshou. All of the policy classes must inherit :class:`~tianshou.policy.BasePolicy`.
+天授把一个 RL 算法用一个继承自 :class:`~tianshou.policy.BasePolicy` 的类来实现，主要的部分有如下几个：
 
-A policy class typically has the following parts:
-
-* :meth:`~tianshou.policy.BasePolicy.__init__`: initialize the policy, including copying the target network and so on;
-* :meth:`~tianshou.policy.BasePolicy.forward`: compute action with given observation;
-* :meth:`~tianshou.policy.BasePolicy.process_fn`: pre-process data from the replay buffer;
-* :meth:`~tianshou.policy.BasePolicy.learn`: update policy with a given batch of data.
-* :meth:`~tianshou.policy.BasePolicy.post_process_fn`: update the buffer with a given batch of data.
-* :meth:`~tianshou.policy.BasePolicy.update`: the main interface for training. This function samples data from buffer, pre-process data (such as computing n-step return), learn with the data, and finally post-process the data (such as updating prioritized replay buffer); in short, ``process_fn -> learn -> post_process_fn``.
-
+* :meth:`~tianshou.policy.BasePolicy.__init__`: 策略初始化，比如初始化自定义的模型等；
+* :meth:`~tianshou.policy.BasePolicy.forward`: 根据给定的观测值 obs，计算出动作值 action；
+* :meth:`~tianshou.policy.BasePolicy.process_fn`: 在获取训练数据之前和 buffer 进行交互，比如使用 GAE 或者 nstep 算法来估计优势函数；
+* :meth:`~tianshou.policy.BasePolicy.learn`: 使用一个 batch 的数据进行策略的更新；
+* :meth:`~tianshou.policy.BasePolicy.post_process_fn`: 使用一个 batch 的数据进行 buffer 的更新（比如更新 PER ）；
+* :meth:`~tianshou.policy.BasePolicy.update`: 最主要的训练接口。这个 ``update`` 函数先是从 ``buffer`` 采样数据，然后调用 ``process_fn`` 预处理数据 (such as computing n-step return)，然后学习并更新策略，然后调用 ``post_process_fn`` (such as updating prioritized replay buffer) 完成一次迭代： ``process_fn -> learn -> post_process_fn``。
 
 .. _policy_state:
 
-States for policy
+各种状态和阶段
 ^^^^^^^^^^^^^^^^^
 
-During the training process, the policy has two main states: training state and testing state. The training state can be further divided into the collecting state and updating state.
+强化学习训练流程可以分为两个部分：训练部分（Training state）和测试部分（Testing State），而训练部分可以细分为采集数据阶段（Collecting state）和更新策略阶段（Updating state），两个阶段在训练过程中交替进行。顾名思义，采集数据阶段是由 ``collector`` 负责的，而策略更新阶段是由 ``policy.update`` 负责的。
 
-The meaning of training and testing state is obvious: the agent interacts with environment, collects training data and performs update, that's training state; the testing state is to evaluate the performance of the current policy during training process.
+训练和测试状态的含义很明显：智能体与环境交互，收集训练数据并执行更新，这就是训练状态；测试状态是在训练过程中评估当前策略的性能。
 
-As for the collecting state, it is defined as interacting with environments and collecting training data into the buffer;
-we define the updating state as performing a model update by :meth:`~tianshou.policy.BasePolicy.update` during training process.
+至于采集状态，它被定义为与环境交互并将训练数据采集到缓冲区中;我们将更新状态定义为在训练过程中通过 :meth:`~tianshou.policy.BasePolicy.update` 执行模型更新。
 
-
-In order to distinguish these states, you can check the policy state by ``policy.training`` and ``policy.updating``. The state setting is as follows:
+为了区分上述这些状态，可以通过检查 ``policy.training`` 和 ``policy.updating`` 来确定处于哪个状态，这边列了一张表方便查看：
 
 +-----------------------------------+-----------------+-----------------+
 |          State for policy         | policy.training | policy.updating |
