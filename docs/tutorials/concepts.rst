@@ -256,13 +256,13 @@ Policy
 policy.forward
 ^^^^^^^^^^^^^^
 
-The ``forward`` function computes the action over given observations. The input and output is algorithm-specific but generally, the function is a mapping of ``(batch, state, ...) -> batch``.
+``forward`` 函数接收 ``obs`` 计算 ``action``，输入和输出由于算法的不同而不同，但大部分情况下是这样的： ``(batch, state, ...) -> batch``。
 
-The input batch is the environment data (e.g., observation, reward, done flag and info). It comes from either :meth:`~tianshou.data.Collector.collect` or :meth:`~tianshou.data.ReplayBuffer.sample`. The first dimension of all variables in the input ``batch`` should be equal to the batch-size.
+输入的 batch 是环境中给出的数据（observation、reward、done 和 info)，要么来自 :meth:`~tianshou.data.Collector.collect`，要么来自 :meth:`~tianshou.data.ReplayBuffer.sample`。 ``batch`` 里面的所有数据第一维都是 batch-size。
 
-The output is also a Batch which must contain "act" (action) and may contain "state" (hidden state of policy), "policy" (the intermediate result of policy which needs to save into the buffer, see :meth:`~tianshou.policy.BasePolicy.forward`), and some other algorithm-specific keys.
+The output is also a ``batch`` which must contain "act" (action) and may contain "state" (hidden state of policy), "policy" (the intermediate result of policy which needs to save into the buffer, see :meth:`~tianshou.policy.BasePolicy.forward`), and some other algorithm-specific keys.
 
-For example, if you try to use your policy to evaluate one episode (and don't want to use :meth:`~tianshou.data.Collector.collect`), use the following code-snippet:
+例如，如果您尝试使用策略来评估 1 episode（并且不想使用 :meth:`~tianshou.data.Collector.collect`），请使用以下代码片段：
 ::
 
     # assume env is a gym.Env
@@ -272,8 +272,7 @@ For example, if you try to use your policy to evaluate one episode (and don't wa
         act = policy(batch).act[0]  # policy.forward return a batch, use ".act" to extract the action
         obs, rew, done, info = env.step(act)
 
-Here, ``Batch(obs=[obs])`` will automatically create the 0-dimension to be the batch-size. Otherwise, the network cannot determine the batch-size.
-
+``Batch(obs=[obs])`` 会自动为 obs 下面的所有数据创建第 0 维，让它为 batch size=1，否则神经网络没法确定 batch-size。
 
 .. _process_fn:
 
