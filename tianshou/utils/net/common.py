@@ -1,3 +1,12 @@
+# coding:utf-8
+#
+# tianshou/utils/net/common.py
+#
+# git pull from thu-ml/tianshou by LuYF-Lemon-love <luyanfeng_nlp@qq.com> on Aug 24, 2023
+# updated by LuYF-Lemon-love <luyanfeng_nlp@qq.com> on Aug 28, 2023
+#
+# 该脚本定义了神经网络.
+
 from abc import ABC, abstractmethod
 from typing import (
     Any,
