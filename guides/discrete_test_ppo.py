@@ -92,6 +92,9 @@ args=get_args()
 env = gym.make(args.task)
 args.state_shape = env.observation_space.shape or env.observation_space.n
 args.action_shape = env.action_space.shape or env.action_space.n
+print(f"agrs.state_shape: {args.state_shape}")
+print(f"args.action_shape: {args.action_shape}")
+
 if args.reward_threshold is None:
     default_reward_threshold = {"CartPole-v1": 495}
     args.reward_threshold = default_reward_threshold.get(
