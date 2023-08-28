@@ -9,7 +9,7 @@ PPO-Discrete
 
 PPO 原论文：`Proximal Policy Optimization Algorithms <https://arxiv.org/abs/1707.06347>`__ 。
 
-Cart Pole： https://gymnasium.farama.org/environments/classic_control/cart_pole/
+Cart Pole：https://gymnasium.farama.org/environments/classic_control/cart_pole/
 
 导入第三方库
 -----------------
@@ -27,7 +27,7 @@ from gym.spaces import Box
 from torch.utils.tensorboard import SummaryWriter
 
 from tianshou.data import Collector, VectorReplayBuffer
-from tianshou.env import DummyVectorEnv
+from tianshou.env import SubprocVectorEnv
 from tianshou.policy import PPOPolicy
 from tianshou.trainer import OnpolicyTrainer
 from tianshou.utils import TensorboardLogger
@@ -87,7 +87,7 @@ args=get_args()
 ################################
 # 设置矢量化环境
 # ------------------
-# 首先获得环境观测空间和动作空间的形状，作为神经网络的超参数，
+# 首先获得环境观测空间和动作空间的形状，作为神经网络的超参数，然后利用 :py:class:`tianshou.env.SubprocVectorEnv` 构建矢量化环境。:py:class:`tianshou.env.SubprocVectorEnv` 使用 Python 多进程进行并发执行。
 
 env = gym.make(args.task)
 args.state_shape = env.observation_space.shape or env.observation_space.n
@@ -97,12 +97,11 @@ if args.reward_threshold is None:
     args.reward_threshold = default_reward_threshold.get(
         args.task, env.spec.reward_threshold
     )
-# you can also use tianshou.env.SubprocVectorEnv
-train_envs = DummyVectorEnv(
+train_envs = SubprocVectorEnv(
     [lambda: gym.make(args.task) for _ in range(args.training_num)]
 )
 # test_envs = gym.make(args.task)
-test_envs = DummyVectorEnv(
+test_envs = SubprocVectorEnv(
     [lambda: gym.make(args.task) for _ in range(args.test_num)]
 )
 # seed
