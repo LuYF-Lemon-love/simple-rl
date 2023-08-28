@@ -134,6 +134,16 @@ for m in actor_critic.modules():
         torch.nn.init.orthogonal_(m.weight)
         torch.nn.init.zeros_(m.bias)
 optim = torch.optim.Adam(actor_critic.parameters(), lr=args.lr)
+
+######################################################################
+# --------------
+#
+
+################################
+# 初始化策略
+# ------------------
+# 我们使用上述代码中定义的网络和优化器，以及其他超参数，来定义一个 :py:class:`tianshou.policy.PPOPolicy` 策略。
+
 dist = torch.distributions.Categorical
 policy = PPOPolicy(
     actor,
