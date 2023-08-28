@@ -165,7 +165,16 @@ policy = PPOPolicy(
     advantage_normalization=args.norm_adv,
     recompute_advantage=args.recompute_adv
 )
-# collector
+
+######################################################################
+# --------------
+#
+
+################################
+# 定义采集器
+# ------------------
+# 我们使用 :py:class:`tianshou.data.Collector`, :py:class:`tianshou.data.VectorReplayBuffer` 来定义一个采集器。
+
 train_collector = Collector(
     policy, train_envs, VectorReplayBuffer(args.buffer_size, len(train_envs))
 )
