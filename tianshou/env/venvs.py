@@ -1,3 +1,12 @@
+# coding:utf-8
+#
+# tianshou/env/venvs.py
+#
+# git pull from thu-ml/tianshou by LuYF-Lemon-love <luyanfeng_nlp@qq.com> on Aug 24, 2023
+# updated by LuYF-Lemon-love <luyanfeng_nlp@qq.com> on Aug 28, 2023
+#
+# 该脚本定义了矢量化环境.
+
 import warnings
 from typing import Any, Callable, List, Optional, Tuple, Union
 
