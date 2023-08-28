@@ -187,6 +187,7 @@ test_collector = Collector(policy, test_envs)
 ################################
 # 使用训练器训练策略
 # ------------------
+# 使用 :py:class:`torch.utils.tensorboard.writer.SummaryWriter` 和 :py:class:`tianshou.utils.TensorboardLogger` 来生成日志。
 # 我们使用 :py:class:`tianshou.trainer.OnpolicyTrainer` 来训练 ``PPO`` 策略。
 
 # log

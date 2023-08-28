@@ -53,6 +53,12 @@ sphinx_gallery_conf = {
      'gallery_dirs': ['auto_guides'],  # path to where to save gallery generated output
 }
 
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/3/", None),
+    "torch": ("https://pytorch.org/docs/stable/", None),
+    'numpy': ('https://numpy.org/doc/stable', None),
+}
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 source_suffix = [".rst"]
