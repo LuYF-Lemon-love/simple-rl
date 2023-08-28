@@ -179,6 +179,16 @@ train_collector = Collector(
     policy, train_envs, VectorReplayBuffer(args.buffer_size, len(train_envs))
 )
 test_collector = Collector(policy, test_envs)
+
+######################################################################
+# --------------
+#
+
+################################
+# 使用训练器训练策略
+# ------------------
+# 我们使用 :py:class:`tianshou.trainer.OnpolicyTrainer` 来训练 ``PPO`` 策略。
+
 # log
 log_path = os.path.join(args.logdir, args.task, 'ppo')
 writer = SummaryWriter(log_path)
