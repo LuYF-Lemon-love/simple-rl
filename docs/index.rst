@@ -118,15 +118,6 @@ Here is Tianshou's other features:
    api/tianshou.exploration
    api/tianshou.utils
 
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Community
-
-   contributing
-   contributor
-
-
 Indices and tables
 ------------------
 
