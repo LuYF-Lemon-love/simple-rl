@@ -1,3 +1,12 @@
+# coding:utf-8
+#
+# tianshou/policy/modelfree/ppo.py
+#
+# git pull from thu-ml/tianshou by LuYF-Lemon-love <luyanfeng_nlp@qq.com> on Aug 24, 2023
+# updated by LuYF-Lemon-love <luyanfeng_nlp@qq.com> on Aug 28, 2023
+#
+# 该脚本定义了 PPO 策略.
+
 from typing import Any, Callable, Dict, List, Optional
 
 import numpy as np
