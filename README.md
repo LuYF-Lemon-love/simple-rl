@@ -126,16 +126,16 @@ $ sudo systemctl restart nginx
 
 ## 模块化策略
 
-We decouple all of the algorithms roughly into the following parts:
+天授把所有的算法大致解耦为以下部分：
 
-- `__init__`: initialize the policy;
-- `forward`: to compute actions over given observations;
-- `process_fn`: to preprocess data from replay buffer (since we have reformulated all algorithms to replay-buffer based algorithms);
-- `learn`: to learn from a given batch data;
-- `post_process_fn`: to update the replay buffer from the learning process (e.g., prioritized replay buffer needs to update the weight);
-- `update`: the main interface for training, i.e., `process_fn -> learn -> post_process_fn`.
+- `__init__`: 策略初始化；
+- `forward`: 根据给定的观测值 obs，计算出动作值 action；
+- `process_fn`: 对来自重放缓冲区的数据进行预处理（因为我们已经将所有算法重新制定为基于重放缓冲区算法）；
+- `learn`: 使用一个 batch 的数据进行策略的更新；
+- `post_process_fn`: 从学习过程中更新重放缓冲区（例如，优先重放缓冲区需要更新权重）;
+- `update`: 最主要的训练接口。这个 ``update`` 函数先是从 ``buffer`` 采样数据，然后调用 ``process_fn`` 预处理数据 (such as computing n-step return)，然后学习并更新策略，然后调用 ``post_process_fn`` (such as updating prioritized replay buffer) 完成一次迭代： ``process_fn -> learn -> post_process_fn``。
 
-Within this API, we can interact with different policies conveniently.
+在此 API 中，我们可以方便地与不同的策略进行交互。
 
 ## Quick Start
 
