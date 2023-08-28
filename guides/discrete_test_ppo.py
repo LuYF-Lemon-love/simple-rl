@@ -100,7 +100,6 @@ if args.reward_threshold is None:
 train_envs = SubprocVectorEnv(
     [lambda: gym.make(args.task) for _ in range(args.training_num)]
 )
-# test_envs = gym.make(args.task)
 test_envs = SubprocVectorEnv(
     [lambda: gym.make(args.task) for _ in range(args.test_num)]
 )
@@ -109,7 +108,16 @@ np.random.seed(args.seed)
 torch.manual_seed(args.seed)
 train_envs.seed(args.seed)
 test_envs.seed(args.seed)
-# model
+
+######################################################################
+# --------------
+#
+
+################################
+# 构建神经网络
+# ------------------
+# 利用 :py:class:`tianshou.utils.net.common.ActorCritic`, :py:class:`tianshou.utils.net.common.DataParallelNet`, :py:class:`tianshou.utils.net.common.Net` 构建神经网络。
+
 net = Net(args.state_shape, hidden_sizes=args.hidden_sizes, device=args.device)
 if torch.cuda.is_available():
     actor = DataParallelNet(
