@@ -119,7 +119,7 @@ test_envs.seed(args.seed)
 ################################
 # 构建神经网络
 # ------------------
-# 利用 :py:class:`tianshou.utils.net.common.ActorCritic`, :py:class:`tianshou.utils.net.common.DataParallelNet`, :py:class:`tianshou.utils.net.common.Net` 构建神经网络。
+# 利用 :py:class:`tianshou.utils.net.common.Net`, :py:class:`tianshou.utils.net.discrete.Actor`, :py:class:`tianshou.utils.net.discrete.Critic`, :py:class:`tianshou.utils.net.common.DataParallelNet`, :py:class:`tianshou.utils.net.common.ActorCritic` 构建神经网络。
 
 net = Net(args.state_shape, hidden_sizes=args.hidden_sizes, device=args.device)
 if torch.cuda.is_available():
