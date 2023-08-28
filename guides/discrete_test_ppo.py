@@ -68,8 +68,10 @@ def get_args():
     args = parser.parse_known_args()[0]
     return args
 
+if __name__ == '__main__':
 
-def test_ppo(args=get_args()):
+    args=get_args()
+
     env = gym.make(args.task)
     args.state_shape = env.observation_space.shape or env.observation_space.n
     args.action_shape = env.action_space.shape or env.action_space.n
@@ -172,7 +174,3 @@ def test_ppo(args=get_args()):
         result = collector.collect(n_episode=1, render=args.render)
         rews, lens = result["rews"], result["lens"]
         print(f"Final reward: {rews.mean()}, length: {lens.mean()}")
-
-
-if __name__ == '__main__':
-    test_ppo()
