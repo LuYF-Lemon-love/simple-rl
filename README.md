@@ -1,5 +1,7 @@
 ## Simple-RL
 
+本项目是基于 [thu-ml/tianshou](https://github.com/thu-ml/tianshou) 开发的，主要用于个人学习，如果想要直接使用强化学习算法推荐直接查看源项目 [thu-ml/tianshou](https://github.com/thu-ml/tianshou)。
+
 >在开头，我想先表达一下对原作者的致敬：[我与清华学生的差距](https://www.zhihu.com/question/377263715)
 
 >**Tianshou** is a reinforcement learning platform based on pure PyTorch. The supported interface algorithms currently include:
