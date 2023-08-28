@@ -32,6 +32,13 @@ from tianshou.utils import TensorboardLogger
 from tianshou.utils.net.common import ActorCritic, DataParallelNet, Net
 from tianshou.utils.net.discrete import Actor, Critic
 
+######################################################################
+# --------------
+#
+
+################################
+# 定义超参数
+# ------------------
 
 def get_args():
     parser = argparse.ArgumentParser()

@@ -272,4 +272,6 @@ $ python3 test/discrete/test_pg.py --seed 0 --render 0.03
 
 [14] [原作者的毕业论文](https://tianshou.readthedocs.io/zh/master/_static/thesis.pdf)
 
+[15] [ArgumentParser.parse_known_args](https://docs.python.org/zh-cn/3/library/argparse.html#argparse.ArgumentParser.parse_known_args)
+
 </p></details>
