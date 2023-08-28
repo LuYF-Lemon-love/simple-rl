@@ -165,12 +165,11 @@ if __name__ == '__main__':
     ).run()
     assert stop_fn(result['best_reward'])
 
-    if __name__ == '__main__':
-        pprint.pprint(result)
-        # Let's watch its performance!
-        env = gym.make(args.task)
-        policy.eval()
-        collector = Collector(policy, env)
-        result = collector.collect(n_episode=1, render=args.render)
-        rews, lens = result["rews"], result["lens"]
-        print(f"Final reward: {rews.mean()}, length: {lens.mean()}")
+    pprint.pprint(result)
+    # Let's watch its performance!
+    env = gym.make(args.task)
+    policy.eval()
+    collector = Collector(policy, env)
+    result = collector.collect(n_episode=1, render=args.render)
+    rews, lens = result["rews"], result["lens"]
+    print(f"Final reward: {rews.mean()}, length: {lens.mean()}")
