@@ -23,9 +23,9 @@ version = tianshou.__version__
 
 # -- Project information -----------------------------------------------------
 
-project = "Tianshou"
-copyright = "2020, Tianshou contributors."
-author = "Tianshou contributors"
+project = "Simple-RL"
+copyright = "2023, LuYF-Lemon-love"
+author = "LuYF-Lemon-love"
 
 # The full version, including alpha/beta/rc tags
 release = version
@@ -40,13 +40,18 @@ extensions = [
     "sphinx.ext.doctest",
     "sphinx.ext.intersphinx",
     "sphinx.ext.coverage",
-    # 'sphinx.ext.imgmath',
     "sphinx.ext.mathjax",
     "sphinx.ext.ifconfig",
     "sphinx.ext.viewcode",
     "sphinx.ext.githubpages",
     "sphinxcontrib.bibtex",
+    'sphinx_gallery.gen_gallery',
 ]
+
+sphinx_gallery_conf = {
+     'examples_dirs': ['../guides'],   # path to your example scripts
+     'gallery_dirs': ['auto_guides'],  # path to where to save gallery generated output
+}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]

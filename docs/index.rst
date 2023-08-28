@@ -100,6 +100,12 @@ Here is Tianshou's other features:
    tutorials/benchmark
    tutorials/cheatsheet
 
+.. toctree::
+   :maxdepth: 1
+   :caption: Guides
+
+   auto_guides/train_rescal_FB15K237
+
 
 .. toctree::
    :maxdepth: 1

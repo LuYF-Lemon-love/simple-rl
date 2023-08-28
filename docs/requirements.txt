@@ -9,3 +9,4 @@ torch
 tqdm
 protobuf
 pettingzoo
+sphinx-gallery
