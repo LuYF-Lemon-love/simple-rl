@@ -102,9 +102,9 @@ Here is Tianshou's other features:
 
 .. toctree::
    :maxdepth: 1
-   :caption: Guides
+   :caption: Guides - Discrete
 
-   auto_guides/train_rescal_FB15K237
+   auto_guides/discrete_test_ppo
 
 
 .. toctree::

@@ -1,3 +1,30 @@
+"""
+`RESCAL-FB15K237 <train_rescal_FB15K237.html>`_ ||
+`TransE-FB15K237 <train_transe_FB15K237.html>`_ ||
+`TransE-WN18RR-adv <train_transe_WN18_adv_sigmoidloss.html>`_ ||
+`TransH-FB15K237 <train_transh_FB15K237.html>`_ ||
+`DistMult-WN18RR <train_distmult_WN18RR.html>`_ ||
+`DistMult-WN18RR-adv <train_distmult_WN18RR_adv.html>`_ ||
+`TransD-FB15K237 <train_transd_FB15K237.html>`_ ||
+`HolE-WN18RR <train_hole_WN18RR.html>`_ ||
+`ComplEx-WN18RR <train_complex_WN18RR.html>`_ ||
+**Analogy-WN18RR** ||
+`SimplE-WN18RR <train_simple_WN18RR.html>`_ ||
+`RotatE-WN18RR <train_rotate_WN18RR_adv.html>`_
+
+Analogy-WN18RR
+===================
+这一部分介绍如何用在 WN18RR 知识图谱上训练 Analogy。
+
+Analogy 原论文: `Analogical Inference for Multi-relational Embeddings <https://proceedings.mlr.press/v70/liu17d.html>`__ 。
+
+导入数据
+-----------------
+pybind11-OpenKE 有两个工具用于导入数据: :py:class:`pybind11_ke.data.TrainDataLoader` 和
+:py:class:`pybind11_ke.data.TestDataLoader`。
+
+"""
+
 import argparse
 import os
 import pprint
