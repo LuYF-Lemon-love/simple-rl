@@ -5,9 +5,11 @@
 
 PPO-Discrete
 ===================
-这一部分介绍如何用在 离散环境中 上训练 PPO。
+这一部分介绍如何用在 离散环境（Cart Pole）中 上训练 PPO。
 
-PPO 原论文: `Proximal Policy Optimization Algorithms <https://arxiv.org/abs/1707.06347>`__ 。
+PPO 原论文：`Proximal Policy Optimization Algorithms <https://arxiv.org/abs/1707.06347>`__ 。
+
+Cart Pole： https://gymnasium.farama.org/environments/classic_control/cart_pole/
 
 导入第三方库
 -----------------
@@ -43,6 +45,7 @@ from tianshou.utils.net.discrete import Actor, Critic
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--task', type=str, default='CartPole-v1')
+    # 停止条件，用于 stop_fn
     parser.add_argument('--reward-threshold', type=float, default=None)
     parser.add_argument('--seed', type=int, default=1626)
     parser.add_argument('--buffer-size', type=int, default=20000)
@@ -76,15 +79,24 @@ def get_args():
     return args
 
 args=get_args()
+
+######################################################################
+# --------------
+#
+
+################################
+# 设置矢量化环境
+# ------------------
+# 首先获得环境观测空间和动作空间的形状，作为神经网络的超参数，
+
 env = gym.make(args.task)
 args.state_shape = env.observation_space.shape or env.observation_space.n
 args.action_shape = env.action_space.shape or env.action_space.n
 if args.reward_threshold is None:
-    default_reward_threshold = {"CartPole-v0": 195}
+    default_reward_threshold = {"CartPole-v1": 495}
     args.reward_threshold = default_reward_threshold.get(
         args.task, env.spec.reward_threshold
     )
-# train_envs = gym.make(args.task)
 # you can also use tianshou.env.SubprocVectorEnv
 train_envs = DummyVectorEnv(
     [lambda: gym.make(args.task) for _ in range(args.training_num)]
