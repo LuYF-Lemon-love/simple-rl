@@ -1,3 +1,12 @@
+# coding:utf-8
+#
+# tianshou/utils/net/discrete.py
+#
+# git pull from thu-ml/tianshou by LuYF-Lemon-love <luyanfeng_nlp@qq.com> on Aug 24, 2023
+# updated by LuYF-Lemon-love <luyanfeng_nlp@qq.com> on Aug 28, 2023
+#
+# 该脚本定义了 Actor 和 Critic.
+
 from typing import Any, Dict, Optional, Sequence, Tuple, Union
 
 import numpy as np
