@@ -214,7 +214,16 @@ result = OnpolicyTrainer(
 ).run()
 assert stop_fn(result['best_reward'])
 pprint.pprint(result)
-# Let's watch its performance!
+
+######################################################################
+# --------------
+#
+
+################################
+# 查看智能体的表现
+# ------------------
+# 让我们看看它的性能！
+
 env = gym.make(args.task)
 policy.eval()
 collector = Collector(policy, env)
