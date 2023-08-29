@@ -26,6 +26,7 @@ version = tianshou.__version__
 project = "Simple-RL"
 copyright = "2023, LuYF-Lemon-love"
 author = "LuYF-Lemon-love"
+language = 'zh_CN'
 
 # The full version, including alpha/beta/rc tags
 release = version
