@@ -93,6 +93,7 @@ Here is Tianshou's other features:
    :caption: RL 算法简单实现
 
    auto_implementation/rl_utils
+   auto_implementation/ppo-discrete
 
 .. toctree::
    :maxdepth: 1
