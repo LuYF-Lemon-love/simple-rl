@@ -282,4 +282,6 @@ $ python3 test/discrete/test_pg.py --seed 0 --render 0.03
 
 [19] [UndefinedError: 'style' is undefined](https://github.com/readthedocs/readthedocs.org/issues/10279#issuecomment-1544411815)
 
+[20] [torch.distributions.categorical.Categorical](https://pytorch.org/docs/stable/distributions.html#torch.distributions.categorical.Categorical)
+
 </p></details>
