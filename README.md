@@ -276,4 +276,10 @@ $ python3 test/discrete/test_pg.py --seed 0 --render 0.03
 
 [16] [github_tag_no_valid 【最新】解决方法](https://blog.csdn.net/sandwich_iot/article/details/120452369)
 
+[17] [typing.cast(typ, val)](https://docs.python.org/zh-cn/3/library/typing.html#typing.cast)
+
+[18] [collections.deque](https://docs.python.org/zh-cn/3/library/collections.html#collections.deque)
+
+[19] [UndefinedError: 'style' is undefined](https://github.com/readthedocs/readthedocs.org/issues/10279#issuecomment-1544411815)
+
 </p></details>
