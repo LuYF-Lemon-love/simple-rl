@@ -90,6 +90,12 @@ Here is Tianshou's other features:
 
 .. toctree::
    :maxdepth: 1
+   :caption: RL 算法简单实现
+
+   auto_implementation/rl_utils
+
+.. toctree::
+   :maxdepth: 1
    :caption: Tutorials
 
    tutorials/dqn

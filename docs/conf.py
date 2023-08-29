@@ -50,8 +50,8 @@ extensions = [
 ]
 
 sphinx_gallery_conf = {
-     'examples_dirs': ['../guides'],   # path to your example scripts
-     'gallery_dirs': ['auto_guides'],  # path to where to save gallery generated output
+     'examples_dirs': ['../guides', '../simple-implementation'],   # path to your example scripts
+     'gallery_dirs': ['auto_guides', 'auto_implementation'],  # path to where to save gallery generated output
 }
 
 intersphinx_mapping = {
