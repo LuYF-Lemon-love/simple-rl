@@ -284,4 +284,10 @@ $ python3 test/discrete/test_pg.py --seed 0 --render 0.03
 
 [20] [torch.distributions.categorical.Categorical](https://pytorch.org/docs/stable/distributions.html#torch.distributions.categorical.Categorical)
 
+[21] [torch.distributions.normal.Normal](https://pytorch.org/docs/stable/distributions.html#torch.distributions.normal.Normal)
+
+[22] [torch.nn.Softplus](https://pytorch.org/docs/stable/generated/torch.nn.Softplus.html#torch.nn.Softplus)
+
+[23] [正态分布](https://baike.baidu.com/item/%E6%AD%A3%E6%80%81%E5%88%86%E5%B8%83/829892)
+
 </p></details>
