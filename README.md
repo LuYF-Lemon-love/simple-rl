@@ -314,4 +314,12 @@ $ python3 test/discrete/test_pg.py --seed 0 --render 0.03
 
 [35] [ageron/handson-ml2/blob/master/18_reinforcement_learning](https://github.com/ageron/handson-ml2/blob/master/18_reinforcement_learning.ipynb)
 
+[36] [.. figure:: /_static/img/seq-seq-images/seq2seq.png](https://github.com/pytorch/tutorials/blob/main/intermediate_source/seq2seq_translation_tutorial.py#L293)
+
+[37] [.. image:: ../_static/img/transformer_input_target.png](https://github.com/pytorch/tutorials/blob/main/beginner_source/transformer_tutorial.py#L230)
+
+[38] [directives.html#image](https://docutils.sourceforge.io/docs/ref/rst/directives.html#image)
+
+[39] [demo.html#figures](https://sphinx-rtd-theme.readthedocs.io/en/stable/demo/demo.html#figures)
+
 </p></details>

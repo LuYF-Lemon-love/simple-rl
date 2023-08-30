@@ -36,27 +36,22 @@ PPO 使用截断的方法在目标函数中进行限制，以保证新的参数�
 
 """
 
-import argparse
 import os
-import pprint
-
-######################################################################
-# --------------
-#
-
-################################
-# 定义超参数
-# ------------------
-
-import gymnasium as gym
 import torch
 import pickle
-import os
-import torch.nn.functional as F
 import numpy as np
+import gymnasium as gym
 import matplotlib.pyplot as plt
+import torch.nn.functional as F
 import rl_utils
 
+###############################################################################
+# ------------------------------
+#
+
+###############################################################################
+# 定义策略网络和价值网络
+# ------------------------------
 
 class PolicyNet(torch.nn.Module):
     def __init__(self, state_dim, hidden_dim, action_dim):
@@ -79,9 +74,16 @@ class ValueNet(torch.nn.Module):
         x = F.relu(self.fc1(x))
         return self.fc2(x)
 
+###############################################################################
+# ------------------------------
+#
+
+###############################################################################
+# 定义 PPO 算法
+# ------------------------------
+# PPO算法,采用截断方式
 
 class PPO:
-    ''' PPO算法,采用截断方式 '''
     def __init__(self, state_dim, hidden_dim, action_dim, actor_lr, critic_lr,
                  lmbda, epochs, eps, gamma, device):
         self.actor = PolicyNet(state_dim, hidden_dim, action_dim).to(device)
@@ -92,8 +94,8 @@ class PPO:
                                                  lr=critic_lr)
         self.gamma = gamma
         self.lmbda = lmbda
-        self.epochs = epochs  # 一条序列的数据用来训练轮数
-        self.eps = eps  # PPO中截断范围的参数
+        self.epochs = epochs
+        self.eps = eps
         self.device = device
 
     def take_action(self, state):
@@ -127,8 +129,8 @@ class PPO:
             ratio = torch.exp(log_probs - old_log_probs)
             surr1 = ratio * advantage
             surr2 = torch.clamp(ratio, 1 - self.eps,
-                                1 + self.eps) * advantage  # 截断
-            actor_loss = torch.mean(-torch.min(surr1, surr2))  # PPO损失函数
+                                1 + self.eps) * advantage
+            actor_loss = torch.mean(-torch.min(surr1, surr2))
             critic_loss = torch.mean(
                 F.mse_loss(self.critic(states), td_target.detach()))
             self.actor_optimizer.zero_grad()
@@ -138,10 +140,18 @@ class PPO:
             self.actor_optimizer.step()
             self.critic_optimizer.step()
 
+###############################################################################
+# ------------------------------
+#
+
+###############################################################################
+# 模型训练
+# ------------------------------
+# 在车杆环境中训练 PPO 算法
+
 actor_lr = 1e-3
 critic_lr = 1e-2
 num_episodes = 500
-# num_episodes = 50
 hidden_dim = 128
 gamma = 0.98
 lmbda = 0.95
@@ -173,6 +183,21 @@ plt.title('PPO on {}'.format(env_name))
 plt.legend()
 plt.savefig('./docs/_static/images/simple-implementation/ppo-discrete-returns.jpg')
 
+###############################################################################
+# .. figure:: /_static/images/simple-implementation/ppo-discrete-returns.jpg
+#      :align: center
+#      :height: 300
+#
+#      PPO 算法在训练过程中获得奖励
+
+###############################################################################
+# --------------
+#
+
+###############################################################################
+# PPO playground
+# ------------------
+
 temp_path = "./temp"
 if not os.path.exists(temp_path):
     os.makedirs(temp_path, exist_ok=True)
@@ -197,3 +222,10 @@ for step in range(500):
     
 anim = rl_utils.plot_animation(frames)
 anim.save('./docs/_static/images/simple-implementation/play-ppo-discrete.gif', writer='pillow')
+
+###############################################################################
+# .. figure:: /_static/images/simple-implementation/play-ppo-discrete.gif
+#      :align: center
+#      :height: 300
+#
+#      PPO 智能体的表现
