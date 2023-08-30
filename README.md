@@ -290,4 +290,20 @@ $ python3 test/discrete/test_pg.py --seed 0 --render 0.03
 
 [23] [正态分布](https://baike.baidu.com/item/%E6%AD%A3%E6%80%81%E5%88%86%E5%B8%83/829892)
 
+[24] [数据可视化——plt:用python画图（一）](https://zhuanlan.zhihu.com/p/457419869)
+
+[25] [Numpy怎样给数组增加一个维度 _](https://blog.csdn.net/hello_program_world/article/details/119417863)
+
+[26] [【Pytorch】Tensor张量增加维度的四种方法](https://blog.csdn.net/weixin_43941438/article/details/130906989)
+
+[27] [vscode ssh 远程ubuntu，plt.show不显示图片问题](https://blog.csdn.net/qq_42817826/article/details/129759368)
+
+[28] [python在VScode中使用matplotlib库的plt.show()无法显示图标窗口](https://blog.csdn.net/weixin_64709717/article/details/130814421)
+
+[29] [AttributeError:‘CartPoleEnv‘ object has no attribute ‘seed‘解决方案](https://blog.csdn.net/dream6985/article/details/126847399)
+
+[30] [Interacting with the Environment](https://gymnasium.farama.org/content/basic_usage/#interacting-with-the-environment)
+
+[31] [gymnasium.Env.reset](https://gymnasium.farama.org/api/env/#gymnasium.Env.reset)
+
 </p></details>

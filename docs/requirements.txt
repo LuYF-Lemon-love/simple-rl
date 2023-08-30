@@ -11,3 +11,4 @@ pillow
 protobuf
 pettingzoo
 sphinx-gallery
+matplotlib
