@@ -6,7 +6,7 @@
 离散动作空间下的 PPO 算法简洁实现
 =======================================================
 
-这一部分介绍如何用在车杆平衡环境（Cart Pole）中 上训练 PPO，倒立摆的是与离散动作交互的环境。。
+这一部分介绍如何用在车杆平衡环境（Cart Pole）中 上训练 PPO，车杆平衡是与离散动作交互的环境。。
 
 .. image:: /_static/images/simple-implementation/cart_pole.gif
     :align: center
