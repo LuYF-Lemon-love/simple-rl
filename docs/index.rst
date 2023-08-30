@@ -94,6 +94,7 @@ Here is Tianshou's other features:
 
    auto_implementation/rl_utils
    auto_implementation/ppo-discrete
+   auto_implementation/ppo-continuous
 
 .. toctree::
    :maxdepth: 1

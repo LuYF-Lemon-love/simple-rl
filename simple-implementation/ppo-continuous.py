@@ -1,12 +1,12 @@
 """
 `RL 工具 <rl_utils.html>`_ ||
-**离散动作空间环境下的 PPO 算法简洁实现** ||
-`连续动作空间环境下的 PPO 算法简洁实现 <ppo-continuous.html>`_
+`离散动作空间环境下的 PPO 算法简洁实现 <ppo-discrete.html>`_ ||
+**连续动作空间环境下的 PPO 算法简洁实现**
 
-离散动作空间下的 PPO 算法简洁实现
+连续动作空间下的 PPO 算法简洁实现
 =======================================================
 
-这一部分介绍如何用在车杆平衡环境（Cart Pole）中 上训练 PPO，倒立摆的是与离散动作交互的环境。。
+这一部分介绍如何用在倒立摆环境（Pendulum）上训练 PPO，倒立摆的是与连续动作交互的环境。
 
 .. image:: /_static/images/simple-implementation/cart_pole.gif
     :align: center
@@ -18,7 +18,7 @@ PPO 原论文：`Proximal Policy Optimization Algorithms <https://arxiv.org/abs/
 
 我的论文笔记：https://cdn.jsdelivr.net/gh/LuYF-Lemon-love/susu-rl-papers/papers/01-PPO.pdf
 
-Cart Pole：https://gymnasium.farama.org/environments/classic_control/cart_pole/
+Pendulum：https://gymnasium.farama.org/environments/classic_control/pendulum/
 
 PPO 是 TRPO 算法的改进版，实现更加简洁，而且更快。PPO 的优化目标与 TRPO 相同，但 PPO 用了一些相对简单的方法来求解。
 
@@ -52,16 +52,20 @@ import rl_utils
 ###############################################################################
 # 定义策略网络和价值网络
 # ------------------------------
+# 倒立摆是与连续动作交互的环境，因此我们做一些修改，让策略网络输出连续动作高斯分布（Gaussian distribution）的均值和标准差。后续的连续动作则在该高斯分布中采样得到。
 
-class PolicyNet(torch.nn.Module):
+class PolicyNetContinuous(torch.nn.Module):
     def __init__(self, state_dim, hidden_dim, action_dim):
-        super(PolicyNet, self).__init__()
+        super(PolicyNetContinuous, self).__init__()
         self.fc1 = torch.nn.Linear(state_dim, hidden_dim)
-        self.fc2 = torch.nn.Linear(hidden_dim, action_dim)
+        self.fc_mu = torch.nn.Linear(hidden_dim, action_dim)
+        self.fc_std = torch.nn.Linear(hidden_dim, action_dim)
 
     def forward(self, x):
         x = F.relu(self.fc1(x))
-        return F.softmax(self.fc2(x), dim=1)
+        mu = 2.0 * torch.tanh(self.fc_mu(x)) # x2 很重要
+        std = F.softplus(self.fc_std(x))
+        return mu, std
 
 
 class ValueNet(torch.nn.Module):
@@ -81,12 +85,13 @@ class ValueNet(torch.nn.Module):
 ###############################################################################
 # 定义 PPO 算法
 # ------------------------------
-# 采用截断方式处理离散动作。
+# 采用截断方式处理连续动作。
 
-class PPO:
+class PPOContinuous:
     def __init__(self, state_dim, hidden_dim, action_dim, actor_lr, critic_lr,
                  lmbda, epochs, eps, gamma, device):
-        self.actor = PolicyNet(state_dim, hidden_dim, action_dim).to(device)
+        self.actor = PolicyNetContinuous(state_dim, hidden_dim,
+                                         action_dim).to(device)
         self.critic = ValueNet(state_dim, hidden_dim).to(device)
         self.actor_optimizer = torch.optim.Adam(self.actor.parameters(),
                                                 lr=actor_lr)
@@ -100,36 +105,39 @@ class PPO:
 
     def take_action(self, state):
         state = torch.tensor(state, dtype=torch.float).view(1,-1).to(self.device)
-        probs = self.actor(state)
-        action_dist = torch.distributions.Categorical(probs)
+        mu, sigma = self.actor(state)
+        action_dist = torch.distributions.Normal(mu, sigma)
         action = action_dist.sample()
-        return action.item()
+        return [action.item()]
 
     def update(self, transition_dict):
         states = torch.tensor(np.array(transition_dict['states']),
                               dtype=torch.float).to(self.device)
-        actions = torch.tensor(transition_dict['actions']).view(-1, 1).to(
-            self.device)
+        actions = torch.tensor(transition_dict['actions'],
+                               dtype=torch.float).view(-1, 1).to(self.device)
         rewards = torch.tensor(transition_dict['rewards'],
                                dtype=torch.float).view(-1, 1).to(self.device)
         next_states = torch.tensor(np.array(transition_dict['next_states']),
                                    dtype=torch.float).to(self.device)
         dones = torch.tensor(transition_dict['dones'],
                              dtype=torch.float).view(-1, 1).to(self.device)
+        rewards = (rewards + 8.0) / 8.0  # 很重要，需要对奖励进行修改才能快速收敛
         td_target = rewards + self.gamma * self.critic(next_states) * (1 -
                                                                        dones)
         td_delta = td_target - self.critic(states)
         advantage = rl_utils.compute_advantage(self.gamma, self.lmbda,
                                                td_delta.cpu()).to(self.device)
-        old_log_probs = torch.log(self.actor(states).gather(1,
-                                                            actions)).detach()
+        mu, std = self.actor(states)
+        action_dists = torch.distributions.Normal(mu.detach(), std.detach())
+        old_log_probs = action_dists.log_prob(actions)
 
         for _ in range(self.epochs):
-            log_probs = torch.log(self.actor(states).gather(1, actions))
+            mu, std = self.actor(states)
+            action_dists = torch.distributions.Normal(mu, std)
+            log_probs = action_dists.log_prob(actions)
             ratio = torch.exp(log_probs - old_log_probs)
             surr1 = ratio * advantage
-            surr2 = torch.clamp(ratio, 1 - self.eps,
-                                1 + self.eps) * advantage
+            surr2 = torch.clamp(ratio, 1 - self.eps, 1 + self.eps) * advantage
             actor_loss = torch.mean(-torch.min(surr1, surr2))
             critic_loss = torch.mean(
                 F.mse_loss(self.critic(states), td_target.detach()))
@@ -147,44 +155,44 @@ class PPO:
 ###############################################################################
 # 模型训练
 # ------------------------------
-# 在车杆平衡环境中训练 PPO 算法
+# 在倒立摆环境中训练 PPO 算法
 
-actor_lr = 1e-3
-critic_lr = 1e-2
-num_episodes = 500
+actor_lr = 1e-4
+critic_lr = 5e-3
+num_episodes = 2000
 hidden_dim = 128
-gamma = 0.98
-lmbda = 0.95
+gamma = 0.9
+lmbda = 0.9
 epochs = 10
 eps = 0.2
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device(
     "cpu")
 
-env_name = 'CartPole-v1'
+env_name = 'Pendulum-v1'
 env = gym.make(env_name, render_mode='rgb_array')
 env.reset(seed=0)
 torch.manual_seed(0)
 state_dim = env.observation_space.shape[0]
-action_dim = env.action_space.n
-agent = PPO(state_dim, hidden_dim, action_dim, actor_lr, critic_lr, lmbda,
-            epochs, eps, gamma, device)
+action_dim = env.action_space.shape[0]
+agent = PPOContinuous(state_dim, hidden_dim, action_dim, actor_lr, critic_lr,
+                      lmbda, epochs, eps, gamma, device)
 
 return_list = rl_utils.train_on_policy_agent(env, agent, num_episodes)
 
 print(return_list[-1])
 
 episodes_list = list(range(len(return_list)))
-mv_return = rl_utils.moving_average(return_list, 9)
+mv_return = rl_utils.moving_average(return_list, 21)
 plt.plot(episodes_list, return_list, color='pink', label='raw')
 plt.plot(episodes_list, mv_return, color='green', label='moving_average')
 plt.xlabel('Episodes')
 plt.ylabel('Returns')
 plt.title('PPO on {}'.format(env_name))
 plt.legend()
-plt.savefig('./docs/_static/images/simple-implementation/ppo-discrete-returns.jpg')
+plt.savefig('./docs/_static/images/simple-implementation/ppo-continuous-returns.jpg')
 
 ###############################################################################
-# .. figure:: /_static/images/simple-implementation/ppo-discrete-returns.jpg
+# .. figure:: /_static/images/simple-implementation/ppo-continuous-returns.jpg
 #      :align: center
 #      :height: 300
 #
@@ -212,7 +220,7 @@ state, info = env.reset()
 
 frames = []
 
-for step in range(500):
+for step in range(200):
     action = best_agent.take_action(state)
     state, reward, terminated, truncated, info = env.step(action)
     if terminated or truncated:
@@ -221,10 +229,10 @@ for step in range(500):
     frames.append(img)
     
 anim = rl_utils.plot_animation(frames)
-anim.save('./docs/_static/images/simple-implementation/play-ppo-discrete.gif', writer='pillow')
+anim.save('./docs/_static/images/simple-implementation/play-ppo-continuous.gif', writer='pillow')
 
 ###############################################################################
-# .. figure:: /_static/images/simple-implementation/play-ppo-discrete.gif
+# .. figure:: /_static/images/simple-implementation/play-ppo-continuous.gif
 #      :align: center
 #      :height: 300
 #

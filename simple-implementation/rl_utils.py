@@ -1,7 +1,7 @@
 """
 **RL 工具** ||
 `离散动作空间环境下的 PPO 算法简洁实现 <ppo-discrete.html>`_ ||
-`RotatE-WN18RR <train_rotate_WN18RR_adv.html>`_
+`连续动作空间环境下的 PPO 算法简洁实现 <ppo-continuous.html>`_
 
 RL 工具
 ===================
@@ -67,7 +67,7 @@ def moving_average(a, window_size):
 #
 
 ################################
-# 同策模型训练循环
+# 在线策略学习算法
 # ------------------
 # 可以训练 PPO 等算法。
 
