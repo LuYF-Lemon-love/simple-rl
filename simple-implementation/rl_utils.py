@@ -19,6 +19,8 @@ import numpy as np
 import torch
 import collections
 import random
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 
 ######################################################################
 # --------------
@@ -139,3 +141,17 @@ def compute_advantage(gamma, lmbda, td_delta):
         advantage_list.append(advantage)
     advantage_list.reverse()
     return torch.tensor(np.array(advantage_list), dtype=torch.float)
+
+def update_scene(num, frames, patch):
+    patch.set_data(frames[num])
+    return patch,
+
+def plot_animation(frames, repeat=False, interval=40):
+    fig = plt.figure()
+    patch = plt.imshow(frames[0])
+    plt.axis('off')
+    anim = animation.FuncAnimation(
+        fig, update_scene, fargs=(frames, patch),
+        frames=len(frames), repeat=repeat, interval=interval)
+    plt.close()
+    return anim

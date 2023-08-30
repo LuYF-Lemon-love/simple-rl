@@ -306,4 +306,12 @@ $ python3 test/discrete/test_pg.py --seed 0 --render 0.03
 
 [31] [gymnasium.Env.reset](https://gymnasium.farama.org/api/env/#gymnasium.Env.reset)
 
+[32] [python之matplotlib画图教程(3)--如何画动图](https://zhuanlan.zhihu.com/p/72589083)
+
+[33] [pickle.html#examples](https://docs.python.org/zh-cn/3/library/pickle.html#examples)
+
+[34] [gymnasium.Env.render](https://gymnasium.farama.org/api/env/#gymnasium.Env.render)
+
+[35] [ageron/handson-ml2/blob/master/18_reinforcement_learning](https://github.com/ageron/handson-ml2/blob/master/18_reinforcement_learning.ipynb)
+
 </p></details>

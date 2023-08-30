@@ -50,6 +50,8 @@ import pprint
 
 import gymnasium as gym
 import torch
+import pickle
+import os
 import torch.nn.functional as F
 import numpy as np
 import matplotlib.pyplot as plt
@@ -139,6 +141,7 @@ class PPO:
 actor_lr = 1e-3
 critic_lr = 1e-2
 num_episodes = 500
+# num_episodes = 50
 hidden_dim = 128
 gamma = 0.98
 lmbda = 0.95
@@ -148,7 +151,7 @@ device = torch.device("cuda") if torch.cuda.is_available() else torch.device(
     "cpu")
 
 env_name = 'CartPole-v1'
-env = gym.make(env_name)
+env = gym.make(env_name, render_mode='rgb_array')
 env.reset(seed=0)
 torch.manual_seed(0)
 state_dim = env.observation_space.shape[0]
@@ -162,10 +165,35 @@ print(return_list[-1])
 
 episodes_list = list(range(len(return_list)))
 mv_return = rl_utils.moving_average(return_list, 9)
-plt.plot(episodes_list, return_list, color='orange', label='raw')
+plt.plot(episodes_list, return_list, color='pink', label='raw')
 plt.plot(episodes_list, mv_return, color='green', label='moving_average')
 plt.xlabel('Episodes')
 plt.ylabel('Returns')
 plt.title('PPO on {}'.format(env_name))
 plt.legend()
 plt.savefig('./docs/_static/images/simple-implementation/ppo-discrete-returns.jpg')
+
+temp_path = "./temp"
+if not os.path.exists(temp_path):
+    os.makedirs(temp_path, exist_ok=True)
+
+with open(os.path.join(temp_path, 'ppo.pickle'), 'wb') as f:
+    pickle.dump(agent, f)
+
+with open(os.path.join(temp_path, 'ppo.pickle'), 'rb') as f:
+    best_agent = pickle.load(f)
+
+state, info = env.reset()
+
+frames = []
+
+for step in range(500):
+    action = best_agent.take_action(state)
+    state, reward, terminated, truncated, info = env.step(action)
+    if terminated or truncated:
+        break
+    img = env.render()
+    frames.append(img)
+    
+anim = rl_utils.plot_animation(frames)
+anim.save('./docs/_static/images/simple-implementation/play-ppo-discrete.gif', writer='pillow')
