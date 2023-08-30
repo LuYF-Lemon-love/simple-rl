@@ -1,6 +1,6 @@
 """
 **RL 工具** ||
-`SimplE-WN18RR <train_simple_WN18RR.html>`_ ||
+`离散动作空间环境下的 PPO 算法简洁实现 <ppo-discrete.html>`_ ||
 `RotatE-WN18RR <train_rotate_WN18RR_adv.html>`_
 
 RL 工具
@@ -27,9 +27,8 @@ import matplotlib.animation as animation
 #
 
 ################################
-# xxxx
+# ReplayBuffer
 # ------------------
-# 利用 
 
 class ReplayBuffer:
     def __init__(self, capacity):
@@ -141,6 +140,14 @@ def compute_advantage(gamma, lmbda, td_delta):
         advantage_list.append(advantage)
     advantage_list.reverse()
     return torch.tensor(np.array(advantage_list), dtype=torch.float)
+
+######################################################################
+# --------------
+#
+
+################################
+# GIF 绘制器
+# ------------------
 
 def update_scene(num, frames, patch):
     patch.set_data(frames[num])
