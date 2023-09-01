@@ -8,7 +8,7 @@
 
 这一部分介绍如何用在倒立摆环境（Pendulum）上训练 PPO，倒立摆的是与连续动作交互的环境。
 
-.. image:: /_static/images/simple-implementation/cart_pole.gif
+.. image:: /_static/images/simple-implementation/pendulum.gif
     :align: center
     :height: 300
 
