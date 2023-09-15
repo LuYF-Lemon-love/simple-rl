@@ -98,6 +98,12 @@ Here is Tianshou's other features:
 
 .. toctree::
    :maxdepth: 1
+   :caption: 大语言模型
+
+   llm/dpo
+
+.. toctree::
+   :maxdepth: 1
    :caption: Tutorials
 
    tutorials/dqn
